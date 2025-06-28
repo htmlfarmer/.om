@@ -1,5 +1,5 @@
 // popup_reflection.js
-
+ 
 document.addEventListener('DOMContentLoaded', function() {
   // Inject advanced styles for consistency
   if (!document.getElementById('advancedPopupStyles')) {

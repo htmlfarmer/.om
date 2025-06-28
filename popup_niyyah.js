@@ -1,5 +1,5 @@
 // popup_niyyah.js
-
+ 
 // Reference to DOM elements
 /*
 const niyyahInput = document.getElementById('niyyahInput');

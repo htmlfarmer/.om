@@ -1,7 +1,5 @@
 // options.js
 
-// options.js
-
 [cite_start]// Helper function to show confirmation messages [cite: 4]
 [cite_start]function showConfirmation(message, isError = false) { [cite: 4]
   [cite_start]const msgDiv = document.getElementById('confirmationMessage'); [cite: 4]

@@ -1,5 +1,5 @@
 // background.js
-
+ 
 // Listen for when the extension is first installed or updated
 chrome.runtime.onInstalled.addListener(() => {
   console.log("Dil ki Dastak installed. Alhamdulillah. Jai Mata Di.");
