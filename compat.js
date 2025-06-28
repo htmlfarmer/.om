@@ -1,5 +1,5 @@
 // compat.js
-
+ 
 // Cross-browser compatibility layer for browser.* API with Promises
 if (typeof window.browser === 'undefined') {
   window.browser = (function() {

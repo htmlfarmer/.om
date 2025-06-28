@@ -1,5 +1,5 @@
 // content_script.js
-
+ 
 // --- GLOBALS ---
 // Remove duplicate declarations of activeSettings and other globals
 if (typeof window.activeSettings === 'undefined') {

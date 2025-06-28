@@ -1,7 +1,7 @@
-{
+{ 
   "manifest_version": 3,
   "name": "Dil ki Dastak (Heart's Gentle Knock)",
-  "version": "0.2.0", // Elevated version for new layers of grace
+  "version": "0.2.0",
   "description": "A Ruhani Raahbar for devotional Browse, guided by the Tri Devis. Now with expanded sensory contemplation.",
   "permissions": [
     "storage",          // To remember your Niyyah, Shukr count, etc.
