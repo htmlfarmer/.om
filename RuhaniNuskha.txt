@@ -1,0 +1,55 @@
+// ╔══════════════════════════════════════════════════════════════════════╗
+// ║                        ✨ RUHANI NUSKHA ✨                           ║
+// ║      A Living Blueprint for Spiritual Flow & Communal Harmony       ║
+// ║        (Feel free to personalize, beautify, and reflect!)           ║
+// ╚══════════════════════════════════════════════════════════════════════╝
+
+[ThematicDays]
+MondayTheme: 🌙 Peace & Reflection (FocusDevi: ChandraDeva, Muraqaba: calmBlue, DhikrKeywords: shanti, salam)
+FridayTheme: 💖 Love & Beauty (FocusDevi: Lakshmi/Venus, Muraqaba: goldenLight, BarakahKeywords: joy, love)
+SpecialDate_2024-03-15: 🙏 Day of Gratitude (PluginMood: Grateful, ShukrFocus: High)
+OverallEhsaasIntensity: 0.5
+
+[Goals]
+Goal1: 🌱 Cultivate constant Taqwa during Browse.
+Sankalpa1: 🕊️ Deepen Ehsaas of Tri Devi presence.
+Focus1: 💐 Practice Shukr more actively.
+// 🎨 NEW: Intentions for communal engagement
+CommunityNiyyah: 🤝 Foster genuine Ruhaani Rabt.
+SatsangParticipation: 🪔 Active
+
+[DynamicState]
+CurrentDeviFocus: 📚 Maa Saraswati (Wisdom & Clarity)
+ReminderFrequency: 🌸 Gentle
+WaqfaTheme: 🌳 NatureSounds
+PluginMood: 🌤️ Calm
+// 🫂 NEW: State related to communal features
+CurrentSatsangStatus: 📴 Offline
+LastSharedInsightId: 🧩 001_SufiMetaphor
+
+[UserParams]
+DhikrList: 🕉️ Om Aim Hrim Klim Chamundaye Vichche, Jai Mata Di, SubhanAllah
+PositiveKeywordsForSankalpaSeed: research, learn, understand, create, complete, reflect
+MuraqabaThemePreference: 🎨 gentlePulse
+MuraqabaIntensityPreference: 30
+// 🌐 NEW: User preferences for communal interaction
+CommunityKeywords: service, contemplation, knowledge, inner-peace // For Firasah-Guided Connection
+AnamnesisSharePreference: OptInAnonymized // How user prefers insights shared
+KhidmatOffer: 🤲 Spiritual companionship, listening
+KhidmatRequest: 🙌 Prayers for clarity
+
+[FeatureToggles]
+EnableMuraqaba: true
+EnableDhikr: true
+EnableShukr: true
+EnableWaqfa: true
+// 🛡️ NEW: Toggles for communal features
+EnableSatsangRoom: false
+EnableKhidmatPortal: false
+EnableAnamnesisExchange: true // Users can view/contribute insights
+EnableMuraqabaMushtarak: true
+
+// ╔══════════════════════════════════════════════════════════════════════╗
+// ║      "Let your heart be the artist, your breath the brush."         ║
+// ║      "May every toggle and intention be a petal in your garden."    ║
+// ╚══════════════════════════════════════════════════════════════════════╝
