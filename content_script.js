@@ -1,5 +1,5 @@
 // content_script.js
-
+ 
 // --- GLOBALS ---
 if (typeof window.activeSettings === 'undefined') {
   window.activeSettings = null;
