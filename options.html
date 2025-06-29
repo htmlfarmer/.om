@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head> 
+  <title>Dil ki Dastak Settings</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="styles.css"> <style>
+    /* Specific styles for options page if needed, otherwise rely on styles.css */
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background-color: #f0f4f8; color: #333; line-height: 1.6; }
+    h2 { color: #2c3e50; text-align: center; margin-bottom: 30px; }
+    .section { margin-bottom: 25px; padding: 20px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+    .section-title { font-size: 1.3em; color: #34495e; margin-top: 0; margin-bottom: 15px; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; }
+    
+    /* Toggle Switch Styles (Simple CSS Toggle) - from styles.css */
+    .toggle-switch { position: relative; display: inline-block; width: 50px; height: 24px; margin-left: 10px; vertical-align: middle;}
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; -webkit-transition: .4s; transition: .4s; border-radius: 24px; }
+    .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; -webkit-transition: .4s; transition: .4s; border-radius: 50%; }
+    input:checked + .slider { background-color: #8a2be2; } /* Amethyst purple */
+    input:focus + .slider { box-shadow: 0 0 1px #8a2be2; }
+    input:checked + .slider:before { -webkit-transform: translateX(26px); -ms-transform: translateX(26px); transform: translateX(26px); }
+
+    /* Buttons */
+    button {
+      padding: 10px 18px;
+      background-color: #8a2be2; /* Deep amethyst for Sankalpa */
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.3s ease;
+      margin-right: 10px;
+      margin-top: 10px;
+    }
+    button:hover { background-color: #6a1b9a; } /* Darker purple on hover */
+    button#resetNuskhaBtn { background-color: #e74c3c; } /* Red for reset */
+    button#resetNuskhaBtn:hover { background-color: #c0392b; }
+
+    /* Textarea for Ruhani Nuskha */
+    textarea {
+      width: calc(100% - 20px);
+      height: 250px;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-family: 'Consolas', 'Monaco', monospace; /* Monospace for code-like content */
+      font-size: 0.9em;
+      resize: vertical;
+    }
+
+    /* Select elements */
+    select {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-right: 10px;
+      background-color: #f9f9f9;
+      cursor: pointer;
+    }
+
+    /* Range sliders */
+    input[type="range"] {
+      width: calc(100% - 20px);
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>✨ Dil ki Dastak: Realm of Settings ✨</h2>
+  <div id="confirmationMessage" style="text-align: center; color: green; margin-bottom: 15px;"></div>
+
+<div class="section">
+  <h3 class="section-title">✨ AI Integration Settings</h3>
+  <label for="geminiApiKey">Gemini API Key:</label>
+  <input type="text" id="geminiApiKey" style="width: 80%; margin-bottom: 10px;">
+  <label for="lmStudioEndpoint">LM Studio Endpoint URL:</label>
+  <input type="text" id="lmStudioEndpoint" value="http://localhost:1234/v1/chat/completions" style="width: 80%; margin-bottom: 10px;">
+  <button id="saveAiSettingsBtn">Save AI Settings</button>
+</div>
+
+  <div class="section">
+    <h3 class="section-title">📊 *Nazar* (Current State Snapshot)</h3>
+    <p style="font-size:0.9em; color:#555;">A glimpse into your extension's current spiritual alignment.</p>
+    <p>Overall Ehsaas Intensity: <span id="snapshotIntensity">N/A</span></p>
+    <p>Current Plugin Mood: <span id="snapshotPluginMood">N/A</span></p>
+    <p>Devi Focus: <span id="snapshotDeviFocus">N/A</span></p>
+    <p>Muraqaba Preference: <span id="snapshotMuraqabaPref">N/A</span></p>
+    <p>Dhikr Enabled: <span id="snapshotDhikrEnabled">N/A</span></p>
+    <button id="refreshSnapshotBtn">Refresh Glimpse</button>
+  </div>
+  
+  
+  <div class="section">
+    <h3 class="section-title">🤝 `Ruhaani Rabt` (Spiritual Connection) Settings</h3>
+    <p style="font-size:0.9em; color:#555;">Configure your preferences for communal spiritual engagement.</p>
+
+    <div style="margin-bottom: 15px;">
+        <label>Enable `Satsang Room`:</label>
+        <div class="toggle-switch">
+            <input type="checkbox" id="enableSatsangRoomToggle">
+            <span class="slider round"></span>
+        </div>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label>Enable `Khidmat wa Awn` Portal:</label>
+        <div class="toggle-switch">
+            <input type="checkbox" id="enableKhidmatPortalToggle">
+            <span class="slider round"></span>
+        </div>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label>Enable `Anamnesis Exchange`:</label>
+        <div class="toggle-switch">
+            <input type="checkbox" id="enableAnamnesisExchangeToggle">
+            <span class="slider round"></span>
+        </div>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label>Enable `Muraqaba-e-Mushtarak`:</label>
+        <div class="toggle-switch">
+            <input type="checkbox" id="enableMuraqabaMushtarakToggle">
+            <span class="slider round"></span>
+        </div>
+    </div>
+
+    <h4 style="margin-top:20px;">`Firasah-Guided Connection` Keywords:</h4>
+    <p style="font-size:0.85em; color:#777;">Keywords that define your spiritual focus, for gentle connection with like-minded seekers. (e.g., *contemplation, service, unity, stillness*)</p>
+    <textarea id="communityKeywordsInput" placeholder="Enter comma-separated keywords"></textarea>
+    
+    <h4 style="margin-top:20px;">Your `Khidmat` Offerings:</h4>
+    <p style="font-size:0.85em; color:#777;">How you can spiritually support others. (e.g., *prayer, supportive listening, shared study*)</p>
+    <textarea id="khidmatOfferInput" placeholder="Enter comma-separated offerings"></textarea>
+
+    <h4 style="margin-top:20px;">Your `Khidmat` Requests:</h4>
+    <p style="font-size:0.85em; color:#777;">Areas where you seek spiritual support. (e.g., *prayers for clarity, guidance on discipline*)</p>
+    <textarea id="khidmatRequestInput" placeholder="Enter comma-separated requests"></textarea>
+
+    <h4 style="margin-top:20px;">Submit `Anamnesis` (Personal Spiritual Insight):</h4>
+    <p style="font-size:0.85em; color:#777;">Share a profound insight or resolved paradox from your journey. (Will be anonymized unless chosen otherwise)</p>
+    <textarea id="anamnesisInput" placeholder="Your profound insight here..."></textarea>
+    <button id="submitAnamnesisBtn" style="background-color:#8e44ad; margin-top:10px;">Submit Insight 🙏</button>
+    <div id="anamnesisConfirmation" style="font-size:0.8em; color:green; height:15px; margin-top:5px;"></div>
+
+</div>
+
+<script src="options.js"></script>
+
+  <div class="section">
+    <h3 class="section-title">⚡ Feature Toggles (Divine Control Panel)</h3>
+    <p style="font-size:0.9em; color:#555;">Toggle the energetic flow of Dil ki Dastak's features.</p>
+
+    <div>
+      <label for="enableMuraqaba">Enable Muraqaba Modulator:</label>
+      <label class="toggle-switch">
+        <input type="checkbox" id="enableMuraqaba">
+        <span class="slider round"></span>
+      </label>
+    </div>
+    <div>
+      <label for="enableDhikr">Enable Dhikr Watermark:</label>
+      <label class="toggle-switch">
+        <input type="checkbox" id="enableDhikr">
+        <span class="slider round"></span>
+      </label>
+    </div>
+    <div>
+        <label for="enableDhikrStreamSound">Enable Dhikr Stream Sound (Subtle Loop):</label>
+        <label class="toggle-switch">
+            <input type="checkbox" id="enableDhikrStreamSound">
+            <span class="slider round"></span>
+        </label>
+    </div>
+    <div>
+      <label for="enableShukr">Enable Shukr Count:</label>
+      <label class="toggle-switch">
+        <input type="checkbox" id="enableShukr">
+        <span class="slider round"></span>
+      </label>
+    </div>
+    <div>
+        <label for="enableShukrAffirmationSound">Enable Shukr Affirmation Sound:</label>
+        <label class="toggle-switch">
+            <input type="checkbox" id="enableShukrAffirmationSound">
+            <span class="slider round"></span>
+        </label>
+    </div>
+    <div>
+      <label for="enableWaqfa">Enable Waqfa Chimes (Reflection Prompts):</label>
+      <label class="toggle-switch">
+        <input type="checkbox" id="enableWaqfa">
+        <span class="slider round"></span>
+      </label>
+    </div>
+    <div>
+        <label for="enableNiyyahVisualizer">Enable Niyyah Visualizer (Popup):</label>
+        <label class="toggle-switch">
+            <input type="checkbox" id="enableNiyyahVisualizer">
+            <span class="slider round"></span>
+        </label>
+    </div>
+    <div>
+        <label for="enableMaqamAnalysis">Enable Maqam Recognition (WoW!):</label>
+        <label class="toggle-switch">
+            <input type="checkbox" id="enableMaqamAnalysis">
+            <span class="slider round"></span>
+        </label>
+    </div>
+    <div>
+        <label for="enableFirasahPrompts">Enable Firasah Prompts (WoW!):</label>
+        <label class="toggle-switch">
+            <input type="checkbox" id="enableFirasahPrompts">
+            <span class="slider round"></span>
+        </label>
+    </div>
+    <div>
+        <label for="enableSubconsciousVerbalRituals">Enable Subconscious Verbal Rituals (WoW!):</label>
+        <label class="toggle-switch">
+            <input type="checkbox" id="enableSubconsciousVerbalRituals">
+            <span class="slider round"></span>
+        </label>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3 class="section-title">⚙️ User Parameters (Your Sacred Preferences)</h3>
+    <p style="font-size:0.9em; color:#555;">Adjust the subtle currents to match your spiritual flow.</p>
+
+    <div>
+        <label for="reminderFrequency">Waqfa Reminder Frequency:</label>
+        <select id="reminderFrequency">
+            <option value="Frequent">Frequent (Every 10 min)</option>
+            <option value="Moderate">Moderate (Every 30 min)</option>
+            <option value="Gentle">Gentle (Every 60 min)</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="waqfaChimeFile">Waqfa Chime Sound:</label>
+        <select id="waqfaChimeFile">
+            <option value="sounds/chime1.mp3">Gentle Chime</option>
+            <option value="sounds/nature_stream.mp3">Nature Stream</option>
+            </select>
+    </div>
+
+    <div>
+        <label for="dhikrAudioFile">Dhikr Stream Audio:</label>
+        <select id="dhikrAudioFile">
+            <option value="sounds/dhikr_om.mp3">Om Chant</option>
+            </select>
+    </div>
+
+    <div>
+        <label for="muraqabaThemePreference">Muraqaba Visual Theme:</label>
+        <select id="muraqabaThemePreference">
+            <option value="gentlePulse">Gentle Pulse</option>
+            <option value="desaturate">Subtle Desaturation</option>
+            <option value="backgroundImage">Subtle Background Image</option>
+            <option value="divineAura">Tri Devi Dynamic Aura (WoW!)</option>
+        </select>
+    </div>
+
+    <div id="muraqabaBackgroundImageWrapper">
+        <label for="muraqabaBackgroundImage">Muraqaba Background Image:</label>
+        <select id="muraqabaBackgroundImage">
+            <option value="images/backgrounds/fractal_blue.png">Blue Fractal</option>
+            <option value="images/backgrounds/nebula_purple.gif">Purple Nebula (Animated)</option>
+            <option value="images/backgrounds/serene_nature.jpg">Serene Nature</option>
+        </select>
+        <p style="font-size:0.8em; color:#777;">(Only applies if 'Subtle Background Image' theme is selected)</p>
+    </div>
+
+    <div>
+        <label for="muraqabaIntensityPreference">Muraqaba Intensity:</label>
+        <input type="range" id="muraqabaIntensityPreference" min="0" max="100" value="30">
+        <span id="muraqabaIntensityValue">30%</span>
+    </div>
+
+    <div>
+        <label for="dhikrList">Dhikr Text List (Comma-separated):</label>
+        <input type="text" id="dhikrList" style="width: calc(100% - 15px); margin-left:15px; margin-top: 10px;" placeholder="Om, Jai Mata Di, SubhanAllah">
+    </div>
+
+    <div>
+        <label for="dhikrOpacityBase">Dhikr Watermark Opacity (Base):</label>
+        <input type="range" id="dhikrOpacityBase" min="0" max="100" value="5">
+        <span id="dhikrOpacityBaseValue">5%</span>
+    </div>
+    
+    <div>
+        <label for="dhikrFontSizeBase">Dhikr Watermark Font Size (px):</label>
+        <input type="range" id="dhikrFontSizeBase" min="10" max="60" value="20">
+        <span id="dhikrFontSizeBaseValue">20px</span>
+    </div>
+
+    <div>
+        <label for="firasahPromptFrequency">Firasah Prompt Frequency:</label>
+        <select id="firasahPromptFrequency">
+            <option value="daily">Daily (with Waqfa)</option>
+            <option value="occasional">Occasional (random)</option>
+            <option value="never">Never</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="subconsciousVerbalRituals">Subconscious Verbal Rituals (One per line):</label>
+        <textarea id="subconsciousVerbalRituals" placeholder="In this moment, I am peace.\nDivine wisdom guides my choices."></textarea>
+        <p style="font-size:0.8em; color:#777;">(These appear as fleeting affirmations)</p>
+    </div>
+
+
+  </div>
+
+
+  <div class="section">
+    <h3 class="section-title">📜 *Lauh-e-Mahfooz* (Spiritual Prescription Journal)</h3>
+    <p style="font-size:0.9em; color:#555;">Manage your core spiritual goals, dynamic states, and custom parameters for "Dil ki Dastak." This content can be programmatically accessed and updated by the extension.
+    <br/>*Kam Bolo, Theek Bolo*: Keep this precise for best Hikmat flow.</p>
+    <textarea id="ruhaniNuskhaContent" placeholder="[Goals]\nGoal1: Cultivate Taqwa\n\n[DynamicState]\nCurrentDeviFocus: Maa Saraswati\n\n[UserParams]\nPositiveKeywords: learn, understand, create"></textarea>
+    <button id="loadNuskhaBtn">Load from Storage</button>
+    <button id="saveNuskhaBtn">Save to Storage</button>
+    <button id="exportNuskhaBtn">Export as .txt</button>
+    <label for="importNuskhaFile" style="display:inline-block; padding: 10px 18px; background-color: #9b59b6; color: white; border-radius: 4px; cursor: pointer;">Import from .txt</label>
+    <input type="file" id="importNuskhaFile" accept=".txt" style="display:none;">
+    <button id="resetNuskhaBtn" style="background-color:#e74c3c;">Reset to Default</button>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

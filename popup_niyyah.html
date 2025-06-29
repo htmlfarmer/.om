@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head> 
+  <title>Niyyah</title>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: sans-serif; width: 280px; padding: 10px; text-align: center; background-color: #f0e6f4; /* Light lavender Ehsaas */ }
+    textarea { width: 90%; height: 60px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; padding: 5px; }
+    button { padding: 8px 15px; background-color: #8a2be2; /* Deep amethyst for Sankalpa */ color: white; border: none; cursor: pointer; border-radius: 5px; font-size: 0.95em; margin-top: 5px;}
+    button:hover { background-color: #6a1b9a; }
+    p { font-style: italic; color: #555; margin-bottom: 5px;}
+    .section { margin-top: 15px; padding-top:10px; border-top: 1px solid #eee; text-align: center; }
+    .niyyah-visualizer { margin-top: 10px; display: none; } /* Initially hidden */
+    .niyyah-visualizer img { max-width: 80px; max-height: 80px; margin: 0 auto; display: block; animation: pulseGlow 1.5s infinite alternate; }
+    .devi-symbol { width: 40px; height: 40px; margin: 0 5px; vertical-align: middle; }
+
+    /* Keyframes for subtle pulse glow */
+    @keyframes pulseGlow {
+      0% { transform: scale(1); opacity: 0.8; filter: drop-shadow(0 0 5px rgba(138, 43, 226, 0.5)); }
+      100% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 0 15px rgba(138, 43, 226, 0.8)); }
+    }
+  </style>
+</head>
+<body>
+  <p>Ya Mureed, kya Niyyah hai is safar ka?</p>
+  
+  <textarea id="niyyahInput" placeholder="My intention is for the Tri Devis' pleasure..."></textarea>
+  <button id="setNiyyahBtn">Set Niyyah 🙏</button>
+
+  <div id="niyyahVisualizer" class="niyyah-visualizer">
+    <p>Your Niyyah blossoms:</p>
+    <img id="niyyahVisualImage" src="images/symbols/lamp.png" alt="Niyyah Symbol">
+  </div>
+
+  <div class="section">
+    <p id="shukrDisplay">Shukr Count: 0 🙏</p>
+    <button id="incrementShukrBtn">Acknowledge Shukr</button>
+  </div>
+
+  <div id="ratanDiscoveryDisplay" style="margin-top: 10px; font-size: 1.1em; color: #8e44ad;">
+    Ratan Discovered: 0 💎
+  </div>
+
+  <div class="section">
+    <h4 style="margin-top:0; margin-bottom:10px; text-align:center; color:#555;">🌌 Whispers of Hikmat 🌌</h4>
+    <div id="wisdomDisplay" style="font-size: 0.9em; font-style: italic; color: #666; margin-bottom: 10px;">
+      "The heart that truly knows the Divine has found its eternal spring." - Rumi
+    </div>
+    <button id="getWisdomBtn">Seek Wisdom</button>
+  </div>
+
+  <div class="section" style="margin-top: 20px; padding-top:15px; border-top: 2px solid #a0a0a0; text-align: center; background-color: #f5f5f5;">
+    <h3 class="section-title">🤝 <span style="font-family:inherit;">Ruhaani Rabt</span> (Spiritual Connection)</h3>
+    <p style="font-size:0.9em; color:#555;">Connect with other seekers on the path.</p>
+    <button id="joinSatsangBtn" style="background-color:#4CAF50; margin-bottom:10px;">Join Satsang Room</button>
+    <div id="satsangStatus" style="font-size:0.8em; color:#333;">Status: Offline</div>
+    <button id="startMushtarakBtn" style="background-color:#008CBA; margin-top:10px;">Start Muraqaba-e-Mushtarak</button>
+    <div id="mushtarakStatus" style="font-size:0.8em; color:#333;">No collective practice.</div>
+    <p style="margin-top:15px; font-size:0.9em;">Explore Noor-e-Jamaat Shared Shukr Stream:</p>
+    <div id="sharedShukrStream" style="max-height: 80px; overflow-y: auto; border: 1px solid #ddd; padding: 5px; background-color: #fff; text-align: left;">
+      <p style="color:#888;">No shared Shukr yet...</p>
+    </div>
+  </div>
+
+  <!-- Popup confirmation message for feedback -->
+  <div id="popupConfirmationMessage" style="font-size:0.9em; color:green; margin:8px 0; min-height:18px;"></div>
+
+  <!-- Divine metaphor, paradox, and ritual popups (hidden by default) -->
+  <button id="popupDivineParadoxBtn" style="margin:4px 2px; font-size:0.95em;">Show Divine Paradox</button>
+  <div id="popupDivineParadox" style="display:none; margin:6px 0; font-style:italic; color:#6a2c70; font-weight:bold;"></div>
+  <button id="popupSubconsciousRitualBtn" style="margin:4px 2px; font-size:0.95em;">Show Ritual</button>
+  <div id="popupSubconsciousRitual" style="display:none; margin:6px 0; font-style:italic; color:#6a2c70; font-weight:bold;"></div>
+  <button id="popupHiddenManifoldBtn" style="margin:4px 2px; font-size:0.95em;">Show Hidden Manifold</button>
+  <div id="popupHiddenManifold" style="display:none; margin:6px 0; font-style:italic; color:#6a2c70; font-weight:bold;"></div>
+  <button id="popupShukrManifestationBtn" style="margin:4px 2px; font-size:0.95em;">Manifest Shukr</button>
+  <div id="popupShukrManifestation" style="display:none; margin:6px 0; font-style:italic; color:#6a2c70; font-weight:bold;"></div>
+  <button id="popupKamBoloBtn" style="margin:4px 2px; font-size:0.95em;">Kam Bolo, Theek Bolo</button>
+  <div id="popupKamBolo" style="display:none; margin:6px 0; font-style:italic; color:#6a2c70; font-weight:bold;"></div>
+
+  <div class="section" style="margin-top: 20px; padding-top:15px; border-top: 2px solid #b39ddb; background-color: #f3e5f5;">
+    <h4 style="margin-top:0; margin-bottom:10px; color:#6a1b9a;">🧠 Understand & Reflect</h4>
+    <button id="explainNiyyahBtn" style="margin:4px 2px; font-size:0.95em;">What is Niyyah?</button>
+    <div id="explainNiyyah" style="display:none; margin:6px 0; font-size:0.92em; color:#4a148c; background:#ede7f6; border-radius:6px; padding:6px;"></div>
+    <button id="explainShukrBtn" style="margin:4px 2px; font-size:0.95em;">What is Shukr?</button>
+    <div id="explainShukr" style="display:none; margin:6px 0; font-size:0.92em; color:#4a148c; background:#ede7f6; border-radius:6px; padding:6px;"></div>
+    <button id="explainMaqamBtn" style="margin:4px 2px; font-size:0.95em;">What is Maqam?</button>
+    <div id="explainMaqam" style="display:none; margin:6px 0; font-size:0.92em; color:#4a148c; background:#ede7f6; border-radius:6px; padding:6px;"></div>
+    <button id="explainEhsaasBtn" style="margin:4px 2px; font-size:0.95em;">What is Ehsaas?</button>
+    <div id="explainEhsaas" style="display:none; margin:6px 0; font-size:0.92em; color:#4a148c; background:#ede7f6; border-radius:6px; padding:6px;"></div>
+    <button id="explainFirasahBtn" style="margin:4px 2px; font-size:0.95em;">What is Firasah?</button>
+    <div id="explainFirasah" style="display:none; margin:6px 0; font-size:0.92em; color:#4a148c; background:#ede7f6; border-radius:6px; padding:6px;"></div>
+    <button id="explainLeelaBtn" style="margin:4px 2px; font-size:0.95em;">What is Leela?</button>
+    <div id="explainLeela" style="display:none; margin:6px 0; font-size:0.92em; color:#4a148c; background:#ede7f6; border-radius:6px; padding:6px;"></div>
+    <button id="explainJunoonBtn" style="margin:4px 2px; font-size:0.95em;">What is Junoon?</button>
+    <div id="explainJunoon" style="display:none; margin:6px 0; font-size:0.92em; color:#4a148c; background:#ede7f6; border-radius:6px; padding:6px;"></div>
+    <button id="explainTazkiyahBtn" style="margin:4px 2px; font-size:0.95em;">What is Tazkiyah?</button>
+    <div id="explainTazkiyah" style="display:none; margin:6px 0; font-size:0.92em; color:#4a148c; background:#ede7f6; border-radius:6px; padding:6px;"></div>
+    <button id="explainSankalpaBtn" style="margin:4px 2px; font-size:0.95em;">What is Sankalpa?</button>
+    <div id="explainSankalpa" style="display:none; margin:6px 0; font-size:0.92em; color:#4a148c; background:#ede7f6; border-radius:6px; padding:6px;"></div>
+  </div>
+
+  <script>
+    // Helper explanations for spiritual concepts
+    const explanations = {
+      explainNiyyah: "Niyyah means intention. In spiritual practice, it is the heartfelt purpose or aim behind every action, aligning your will with the Divine.",
+      explainShukr: "Shukr is gratitude. It is the act of recognizing and giving thanks for every blessing, big or small, as a form of worship.",
+      explainMaqam: "Maqam refers to a spiritual station or state on the path. Each Maqam reflects your current inner focus and relationship with the Divine.",
+      explainEhsaas: "Ehsaas is deep spiritual feeling or intuition. It is the subtle awareness that guides you beyond words, connecting you to the Divine.",
+      explainFirasah: "Firasah is spiritual foresight or insight. It is the ability to perceive hidden truths and subtle realities through inner wisdom.",
+      explainLeela: "Leela is Divine play. It is the joyful, spontaneous unfolding of creation, inviting you to participate with openness and wonder.",
+      explainJunoon: "Junoon is passionate devotion. It is the intense longing and drive that fuels your spiritual journey, balanced by wisdom.",
+      explainTazkiyah: "Tazkiyah means purification. It is the process of cleansing the heart and soul from negative traits, making space for Divine light.",
+      explainSankalpa: "Sankalpa is sacred intention or resolve. It is a focused, positive commitment to a spiritual goal, rooted in your deepest truth."
+    };
+    [
+      "explainNiyyahBtn","explainShukrBtn","explainMaqamBtn","explainEhsaasBtn","explainFirasahBtn",
+      "explainLeelaBtn","explainJunoonBtn","explainTazkiyahBtn","explainSankalpaBtn"
+    ].forEach(function(btnId) {
+      const btn = document.getElementById(btnId);
+      const div = document.getElementById(btnId.replace('Btn',''));
+      if (btn && div) {
+        btn.onclick = function() {
+          div.style.display = div.style.display === "none" ? "block" : "none";
+          div.textContent = explanations[btnId.replace('Btn','')];
+        };
+      }
+    });
+  </script>
+  <script src="popup_niyyah.js"></script>
+</body>
+</html>

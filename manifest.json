@@ -1,0 +1,88 @@
+{
+  "manifest_version": 3,
+  "name": "Dil ki Dastak (Heart's Gentle Knock)",
+  "version": "0.2.0",
+  "description": "A Ruhani Raahbar for devotional Browse, guided by the Tri Devis. Now with expanded sensory contemplation.",
+  "permissions": [
+    "storage",
+    "tabs",
+    "activeTab",
+    "scripting",
+    "alarms"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup_niyyah.html",
+    "default_icon": {
+      "16": "images/icon16.png",
+      "48": "images/icon48.png",
+      "128": "images/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content_script.js"],
+      "css": ["styles.css"]
+    }
+  ],
+  "icons": {
+    "16": "images/icon16.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "sounds/*.mp3",
+        "images/*.png",
+        "images/backgrounds/*.png",
+        "popup_reflection.html"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "optional_permissions": [
+    "notifications",
+    "clipboardWrite",
+    "clipboardRead",
+    "contextMenus",
+    "idle",
+    "cookies"
+  ],
+  "commands": {
+    "open-options": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+O"
+      },
+      "description": "Open Dil ki Dastak Settings (for troubleshooting or reset)"
+    },
+    "show-blessing": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+B"
+      },
+      "description": "Show a silent blessing for the next stranger"
+    },
+    "show-kindness-prompt": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+K"
+      },
+      "description": "Prompt for a subtle act of kindness"
+    },
+    "show-ehsaas-pause": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+E"
+      },
+      "description": "Prompt for an Ehsaas pause in dialogue"
+    }
+  }
+}
