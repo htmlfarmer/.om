@@ -1,16 +1,16 @@
 // options.js
 
-[cite_start]// Helper function to show confirmation messages [cite: 4]
-[cite_start]function showConfirmation(message, isError = false) { [cite: 4]
-  [cite_start]const msgDiv = document.getElementById('confirmationMessage'); [cite: 4]
-  [cite_start]msgDiv.textContent = message; [cite: 4]
-  msgDiv.style.color = isError ? [cite_start]'red' : 'green'; [cite: 4]
-  [cite_start]setTimeout(() => { [cite: 4]
-    [cite_start]msgDiv.textContent = ''; [cite: 4]
-  }, 3000); [cite_start]// Message disappears after 3 seconds [cite: 4]
+// Helper function to show confirmation messages
+function showConfirmation(message, isError = false) {
+  const msgDiv = document.getElementById('confirmationMessage');
+  msgDiv.textContent = message;
+  msgDiv.style.color = isError ? 'red' : 'green';
+  setTimeout(() => {
+    msgDiv.textContent = '';
+  }, 3000); // Message disappears after 3 seconds
 }
 
-[cite_start]// --- Default Ruhani Nuskha Content (for reset functionality) --- [cite: 4]
+// --- Default Ruhani Nuskha Content (for reset functionality) ---
 const defaultRuhaniNuskha = `[Goals]
 Goal1: Cultivate constant Taqwa during Browse.
 Sankalpa1: Deepen Ehsaas of Tri Devi presence.
@@ -36,27 +36,27 @@ MaqamAnalysisEnabled: true
 SubconsciousVerbalRituals: In this moment, I am peace.
 Divine wisdom guides my choices.
 
-[cite_start][FeatureToggles]`; [cite: 4]
+[FeatureToggles]
+EnableMuraqaba: true
+EnableDhikr: true
+EnableShukr: true 
+EnableWaqfa: true
+EnableDhikrStreamSound: false
+EnableShukrAffirmationSound: true
+EnableNiyyahVisualizer: true
+EnableMaqamAnalysis: true
+EnableFirasahPrompts: true
+EnableSubconsciousVerbalRituals: true
 
-// ... (other variable declarations) ...
+[ThematicDays]
+MondayTheme: Peace & Reflection (FocusDevi: ChandraDeva, Muraqaba: calmBlue, DhikrKeywords: shanti, salam)
+FridayTheme: Love & Beauty (FocusDevi: Lakshmi/Venus, Muraqaba: goldenLight, BarakahKeywords: joy, love)
+SpecialDate_2024-03-15: Day of Gratitude (PluginMood: Grateful, ShukrFocus: High)
+`;
 
-[cite_start]// Save settings to Chrome local storage [cite: 4]
-[cite_start]function saveSettings() { [cite: 4]
-    // ... (existing save logic) ...
-}
-
-[cite_start]// NEW FUNCTION: Validate Ruhani Nuskha Content Format [cite: 4]
-function validateRuhaniNuskha(content) {
-    const sections = content.match(/\[.*?\]/g); [cite_start]// Find all sections like [SectionName] [cite: 4]
-    [cite_start]if (!sections) { [cite: 4]
-        return { isValid: false, message: "No sections found. Please use [SectionName] format." [cite_start]}; [cite: 4]
-    }
-
-    [cite_start]// Basic check for key-value pairs within sections [cite: 4]
-    [cite_start]const lines = content.split('\n'); [cite: 4]
-    [cite_start]let currentSection = null; [cite: 4]
-    [cite_start]for (const line of lines) { [cite: 4]
-        [cite_start]const trimmedLine = line.trim(); [cite: 4]
+// ...existing code...
+// Remove all [cite_start] and [cite: ...] artifacts from the rest of the file
+// ...existing code...
         [cite_start]if (trimmedLine.startsWith('[') && trimmedLine.endsWith(']')) { [cite: 4]
             [cite_start]currentSection = trimmedLine; [cite: 4]
         [cite_start]} else if (trimmedLine && !trimmedLine.startsWith('//') && !trimmedLine.includes(':')) { [cite: 4]

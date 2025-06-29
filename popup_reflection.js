@@ -1,5 +1,5 @@
 // popup_reflection.js
- 
+
 document.addEventListener('DOMContentLoaded', function() {
   // Inject advanced styles for consistency
   if (!document.getElementById('advancedPopupStyles')) {
@@ -13,61 +13,61 @@ document.addEventListener('DOMContentLoaded', function() {
         color: #311b92;
         margin: 0;
         padding: 18px 10px 10px 10px;
-        min-width: 340px;
-        min-height: 420px;
+        min-width: 360px;
+        min-height: 440px;
         border-radius: 18px;
         box-shadow: 0 8px 32px 0 rgba(49,27,146,0.18), 0 1.5px 6px 0 rgba(0,0,0,0.08);
       }
       .reflection-section {
-        background: rgba(255,255,255,0.92);
-        border-radius: 12px;
-        margin-bottom: 18px;
-        padding: 16px 14px 14px 14px;
-        box-shadow: 0 2px 8px rgba(49,27,146,0.06);
+        background: rgba(255,255,255,0.96);
+        border-radius: 14px;
+        margin-bottom: 22px;
+        padding: 20px 18px 18px 18px;
+        box-shadow: 0 2px 12px rgba(49,27,146,0.08);
       }
       .reflection-title {
         color: #4527a0;
-        font-size: 1.2em;
+        font-size: 1.25em;
         font-weight: 700;
-        margin-bottom: 10px;
-        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+        letter-spacing: 0.7px;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
       }
       .reflection-prompt {
-        font-size: 1.08em;
+        font-size: 1.13em;
         color: #4a148c;
         background: #f3e5f5;
-        border-radius: 8px;
-        padding: 10px 14px;
-        margin: 10px 0 18px 0;
-        box-shadow: 0 1px 4px rgba(49,27,146,0.06);
+        border-radius: 10px;
+        padding: 14px 18px;
+        margin: 14px 0 22px 0;
         font-style: italic;
         display: flex;
         align-items: flex-start;
-        gap: 10px;
+        gap: 12px;
+        box-shadow: 0 1px 6px rgba(49,27,146,0.08);
       }
       .reflection-btn {
         background: linear-gradient(90deg, #ffd54f 0%, #7e57c2 100%);
         color: #311b92;
         border: none;
-        border-radius: 8px;
-        padding: 7px 18px;
-        margin: 6px 4px;
-        font-size: 1em;
+        border-radius: 9px;
+        padding: 9px 22px;
+        margin: 8px 4px;
+        font-size: 1.07em;
         font-weight: 600;
-        box-shadow: 0 2px 8px rgba(49,27,146,0.08);
+        box-shadow: 0 2px 8px rgba(49,27,146,0.10);
         cursor: pointer;
         transition: background 0.2s, color 0.2s, transform 0.1s;
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
       }
       .reflection-btn:hover {
         background: linear-gradient(90deg, #7e57c2 0%, #ffd54f 100%);
         color: #fff;
-        transform: scale(1.04);
+        transform: scale(1.045);
       }
       .material-symbols-outlined {
         font-family: 'Material Symbols Outlined', sans-serif;
@@ -76,9 +76,9 @@ document.addEventListener('DOMContentLoaded', function() {
         vertical-align: middle;
       }
       .emoji {
-        font-size: 1.3em;
+        font-size: 1.35em;
         vertical-align: middle;
-        margin-right: 2px;
+        margin-right: 3px;
       }
       .info-icon {
         font-size: 1.1em;
@@ -93,6 +93,16 @@ document.addEventListener('DOMContentLoaded', function() {
         font-size: 1.3em;
         margin-right: 4px;
         vertical-align: middle;
+      }
+      .reflection-wisdom {
+        background: #ede7f6;
+        color: #4527a0;
+        border-radius: 8px;
+        padding: 10px 14px;
+        margin: 12px 0 8px 0;
+        font-size: 1.05em;
+        box-shadow: 0 1px 4px rgba(49,27,146,0.06);
+        font-style: italic;
       }
     `;
     document.head.appendChild(style);
@@ -118,8 +128,12 @@ document.addEventListener('DOMContentLoaded', function() {
   btn.className = 'reflection-btn';
   btn.innerHTML = `<span class="material-symbols-outlined">refresh</span>Show Another Reflection`;
 
-  // Prompts (import or define here)
-  // Updated: Focus on offline passion, helpfulness, and real-world kindness
+  // Wisdom area
+  const wisdomDiv = document.createElement('div');
+  wisdomDiv.className = 'reflection-wisdom';
+  wisdomDiv.id = 'reflectionWisdomDiv';
+
+  // Prompts (offline, wise, sophisticated, and actionable)
   const reflectionPrompts = [
     "🌱 What is one small act of kindness you can do for someone offline today?",
     "🤲 How can you help a neighbor or family member without expecting anything in return?",
@@ -140,31 +154,61 @@ document.addEventListener('DOMContentLoaded', function() {
     "📦 Donate an item you no longer need to someone who could use it.",
     "🧡 Recall a time someone helped you offline. How did it feel? How can you pass it on?",
     "🕊️ Practice patience with someone who tests your limits today.",
-    "🌞 Smile at a stranger and notice how it changes your mood and theirs."
+    "🌞 Smile at a stranger and notice how it changes your mood and theirs.",
+    "🧭 What is your guiding value for this week? How can you embody it in small ways?",
+    "🦋 What is one habit you could gently release to make space for something new?",
+    "🌊 When you feel resistance, what is the wisdom hidden beneath it?",
+    "🌠 What is a dream you have not shared with anyone? What is one step you could take toward it?",
+    "🌿 How can you honor your own boundaries while remaining open-hearted?",
+    "🪶 What is a gentle message your intuition is whispering to you today?",
+    "🧩 What paradox in your life could become a source of creative energy?",
+    "🪔 What ritual brings you back to your center when you feel scattered?",
+    "🧘‍♂️ How can you bring more presence to your daily routines?",
+    "🌺 What beauty can you create or notice today, even in the smallest detail?"
   ];
 
+  // Wisdoms (sophisticated, poetic, and wise)
+  const wisdoms = [
+    "“The quieter you become, the more you can hear.” – Ram Dass",
+    "“Let your life be your message.” – Mahatma Gandhi",
+    "“In the depth of winter, I finally learned that within me there lay an invincible summer.” – Albert Camus",
+    "“The wound is the place where the Light enters you.” – Rumi",
+    "“Kindness is a language which the deaf can hear and the blind can see.” – Mark Twain",
+    "“The universe is not outside of you. Look inside yourself; everything that you want, you already are.” – Rumi",
+    "“The best way to find yourself is to lose yourself in the service of others.” – Gandhi",
+    "“Between stimulus and response there is a space. In that space is our power to choose our response.” – Viktor Frankl",
+    "“The soul always knows what to do to heal itself. The challenge is to silence the mind.” – Caroline Myss",
+    "“Let yourself be silently drawn by the strange pull of what you really love.” – Rumi"
+  ];
+
+  // Show a random prompt
   function showRandomPrompt() {
     const idx = Math.floor(Math.random() * reflectionPrompts.length);
-    const prompt = reflectionPrompts[idx];
-    const langSelector = document.getElementById('langSelector');
-    const langCode = langSelector ? langSelector.value : 'en';
-    // Show a loading spinner while translating
-    promptDiv.innerHTML = `<span class="emoji">🌐</span> <span class="material-symbols-outlined" style="font-size:1.1em;vertical-align:middle;">hourglass_top</span> Translating...`;
-    translatePrompt(prompt, langCode).then(translated => {
-      promptDiv.innerHTML = `<span class="emoji">💡</span> ${translated}`;
-    });
+    promptDiv.innerHTML = `<span class="emoji">💡</span> ${reflectionPrompts[idx]}`;
+    // Also show a random wisdom
+    const widx = Math.floor(Math.random() * wisdoms.length);
+    wisdomDiv.innerHTML = `<span class="emoji">🦉</span> ${wisdoms[widx]}`;
   }
 
   btn.onclick = showRandomPrompt;
-
-  // Initial prompt
   showRandomPrompt();
 
   // Assemble
   section.appendChild(title);
   section.appendChild(promptDiv);
   section.appendChild(btn);
+  section.appendChild(wisdomDiv);
   document.body.appendChild(section);
+
+  // Add a subtle footer for extra wisdom
+  const footer = document.createElement('div');
+  footer.style.textAlign = 'center';
+  footer.style.marginTop = '18px';
+  footer.style.fontSize = '0.98em';
+  footer.style.color = '#7e57c2';
+  footer.innerHTML = `<span class="material-symbols-outlined" style="vertical-align:middle;">psychology</span>
+    <span style="font-style:italic;">“Reflection is the lamp of the heart. Let it illuminate your path.”</span>`;
+  document.body.appendChild(footer);
 });
 
 // --- Helper: Info about LM Studio and Llama for users ---
@@ -994,7 +1038,6 @@ function addGlobalCultureFeatures() {
     { text: "Xin chào", lang: "Vietnamese", meaning: "Hello" },
     { text: "Hallo", lang: "German", meaning: "Hello" },
     { text: "Merhaba", lang: "Turkish", meaning: "Hello" }
-    // ...existing code...
   ];
   let greetIdx = 0;
   greetBtn.onclick = function() {
@@ -1031,7 +1074,6 @@ function addGlobalCultureFeatures() {
     { text: "Justice, justice you shall pursue.", source: "Judaism" },
     { text: "Let your heart be at peace.", source: "Taoism" },
     { text: "Kindness is the highest wisdom.", source: "Sikhism" }
-    // ...existing code...
   ];
   let wisdomIdx = 0;
   wisdomBtn.onclick = function() {
@@ -1081,7 +1123,6 @@ function addGlobalCultureFeatures() {
     "Try a Jewish Shabbat candle lighting.",
     "Try a Brazilian samba dance step.",
     "Try a French cheese tasting (or any local cheese)."
-    // ...existing code...
   ];
   let practiceIdx = 0;
   cultureBtn.onclick = function() {

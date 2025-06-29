@@ -129,39 +129,67 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Function to update Shukr count display
+  // --- Utility: Show confirmation messages in the popup ---
+  function showPopupConfirmation(message, isError = false) {
+    const msgDiv = document.getElementById('popupConfirmationMessage');
+    if (msgDiv) {
+      msgDiv.textContent = message;
+      msgDiv.style.color = isError ? 'red' : 'green';
+      setTimeout(() => { msgDiv.textContent = ''; }, 2000);
+    }
+  }
+
+  // --- Update Shukr and Ratan displays ---
   function updateShukrDisplay(count) {
-    if (shukrDisplayElement) {
-      shukrDisplayElement.textContent = `Shukr Count: ${count} 🙏`;
-    }
+    const el = document.getElementById('shukrDisplay');
+    if (el) el.textContent = `Shukr Count: ${count} 🙏`;
   }
-
-  // Function to update Ratan Discovery display
   function updateRatanDiscoveryDisplay(count) {
-    if (ratanDiscoveryDisplayElement) {
-      ratanDiscoveryDisplayElement.textContent = `Ratan Discovered: ${count} 💎`;
-    }
+    const el = document.getElementById('ratanDiscoveryDisplay');
+    if (el) el.textContent = `Ratan Discovered: ${count} 💎`;
   }
 
-  // Initial display updates when popup loads, passing the element
-  chrome.storage.local.get(['shukrCount', 'ratanCount'], (data) => {
+  // --- Initial display updates ---
+  chrome.storage.local.get(['shukrCount', 'ratanCount', 'currentNiyyah'], (data) => {
     updateShukrDisplay(data.shukrCount || 0);
     updateRatanDiscoveryDisplay(data.ratanCount || 0);
+    if (niyyahInput) niyyahInput.value = data.currentNiyyah || '';
   });
 
-  // Listen for changes in chrome.storage for Shukr and Ratan (passing the element)
+  // --- Listen for changes in chrome.storage for Shukr and Ratan ---
   chrome.storage.onChanged.addListener(function(changes, namespace) {
     if (namespace === 'local') {
-      if (changes.shukrCount) {
-        updateShukrDisplay(changes.shukrCount.newValue || 0);
-      }
-      if (changes.ratanCount) {
-        updateRatanDiscoveryDisplay(changes.ratanCount.newValue || 0);
-      }
+      if (changes.shukrCount) updateShukrDisplay(changes.shukrCount.newValue || 0);
+      if (changes.ratanCount) updateRatanDiscoveryDisplay(changes.ratanCount.newValue || 0);
     }
   });
 
-  // Wisdom/Quotes Logic
+  // --- Set Niyyah ---
+  if (setNiyyahBtn && niyyahInput) {
+    setNiyyahBtn.addEventListener('click', () => {
+      const niyyah = niyyahInput.value.trim();
+      if (niyyah) {
+        chrome.storage.local.set({ currentNiyyah: niyyah }, () => {
+          showPopupConfirmation("Niyyah set! You may close this popup.", false);
+          triggerNiyyahVisualizer();
+        });
+      }
+    });
+  }
+
+  // --- Increment Shukr ---
+  if (incrementShukrBtn) {
+    incrementShukrBtn.addEventListener('click', () => {
+      chrome.runtime.sendMessage({ action: "incrementShukr" }, (response) => {
+        if (response && response.count !== undefined) {
+          updateShukrDisplay(response.count);
+          showPopupConfirmation(response.status, false);
+        }
+      });
+    });
+  }
+
+  // --- Wisdom/Quotes Logic ---
   const spiritualQuotes = [
     "The heart that truly knows the Divine has found its eternal spring. - Rumi",
     "To be grateful is to be a recipient of the Divine's boundless grace. - Sufi Saying",
@@ -173,7 +201,6 @@ document.addEventListener('DOMContentLoaded', function() {
     "Through paradox, the mind transcends its limits and glimpses boundless strength. - Tri Devi Wisdom",
     "Kam Bolo, Theek Bolo: Speak little, speak truly. The essence holds the power. - Hikmat Principle"
   ];
-
   if (getWisdomBtn && wisdomDisplayDiv) {
     getWisdomBtn.addEventListener('click', function() {
       const randomIndex = Math.floor(Math.random() * spiritualQuotes.length);
@@ -181,258 +208,99 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Wadud Blessing Copy Logic
-  if (wadudBlessingTextDiv && wadudTransliterationDiv && wadudTranslationDiv && copyWadudBtn && copyWadudConfirmationDiv) {
-    copyWadudBtn.addEventListener('click', function() {
-      const arabicText = wadudBlessingTextDiv.innerText;
-      const translitText = wadudTransliterationDiv.innerText;
-      const translationText = wadudTranslationDiv.innerText;
+  // --- Satsang Room Toggle ---
+  if (joinSatsangBtn && satsangStatusDiv) {
+    joinSatsangBtn.addEventListener('click', () => {
+      const isOnline = satsangStatusDiv.textContent.includes('Online');
+      satsangStatusDiv.textContent = `Status: ${isOnline ? 'Offline' : 'Online'}`;
+      joinSatsangBtn.textContent = isOnline ? 'Join Satsang Room' : 'Leave Satsang Room';
+      chrome.runtime.sendMessage({ action: "updateSatsangStatus", status: isOnline ? 'Offline' : 'Online' });
+    });
+  }
 
-      const fullTextToCopy =
-`${arabicText}
-
-${translitText}
-
-${translationText}
-
-Shared via Dil ki Dastak with prayers for Divine Love to reach all homes.`;
-
-      navigator.clipboard.writeText(fullTextToCopy).then(function() {
-        copyWadudConfirmationDiv.textContent = 'Invocation copied!';
-        console.log('Wadud Blessing copied to clipboard.');
-        setTimeout(() => {
-          copyWadudConfirmationDiv.textContent = '';
-        }, 2500);
-      }).catch(function(err) {
-        console.error('Could not copy text: ', err);
-        copyWadudConfirmationDiv.textContent = 'Copy failed. Try manually.';
-        copyWadudConfirmationDiv.style.color = 'red';
-         setTimeout(() => {
-          copyWadudConfirmationDiv.textContent = '';
-          copyWadudConfirmationDiv.style.color = 'green';
-        }, 3000);
+  // --- Muraqaba-e-Mushtarak Start ---
+  if (startMushtarakBtn && mushtarakStatusDiv) {
+    startMushtarakBtn.addEventListener('click', () => {
+      chrome.runtime.sendMessage({ action: "startMuraqabaMushtarak" }, (response) => {
+        mushtarakStatusDiv.textContent = response && response.status ? response.status : "Collective practice started.";
       });
     });
-  } else {
-    console.warn("Wadud Blessing copy elements not all found in popup.");
   }
 
-  // --- NEW: Ruhaani Rabt elements
-  // Load wisdom and ensure safe display (using textContent for security)
-  chrome.storage.local.get('ruhaniNuskhaContent', (data) => {
-    // FIX: Only call parseRuhaniNuskha if it is defined, otherwise fallback to a default array
-    let spiritualQuotes = [
-      "The heart that truly knows the Divine has found its eternal spring. - Rumi"
-    ];
-    if (typeof parseRuhaniNuskha === 'function') {
-      const settings = parseRuhaniNuskha(data.ruhaniNuskhaContent || defaultRuhaniNuskha);
-      if (settings.spiritualQuotes && Array.isArray(settings.spiritualQuotes)) {
-        spiritualQuotes = settings.spiritualQuotes;
-      }
-    }
-    if (getWisdomBtn && wisdomDisplayDiv) {
-      getWisdomBtn.addEventListener('click', () => {
-        const randomIndex = Math.floor(Math.random() * spiritualQuotes.length);
-        wisdomDisplayDiv.textContent = spiritualQuotes[randomIndex];
-      });
-    }
-  });
-
-  // --- NEW: Event listener for joining Satsang Room (conceptual)
-  if (joinSatsangBtn && satsangStatusDiv) {
-      joinSatsangBtn.addEventListener('click', () => {
-          const currentStatus = satsangStatusDiv.textContent.includes('Online') ? 'Offline' : 'Online';
-          satsangStatusDiv.textContent = `Status: ${currentStatus}`;
-          joinSatsangBtn.textContent = currentStatus === 'Online' ? 'Leave Satsang Room' : 'Join Satsang Room';
-
-          // Inform background script to update communal status (conceptual)
-          chrome.runtime.sendMessage({ action: "updateSatsangStatus", status: currentStatus }, (response) => {
-              console.log("Satsang update response:", response);
-          });
-      });
-  }
-
-  // --- NEW: Event listener for starting Muraqaba-e-Mushtarak (conceptual)
-  if (startMushtarakBtn && mushtarakStatusDiv) {
-      startMushtarakBtn.addEventListener('click', () => {
-          // Send message to background to initiate collective timer/cue
-          chrome.runtime.sendMessage({ action: "startMuraqabaMushtarak" }, (response) => {
-              mushtarakStatusDiv.textContent = response.status;
-              console.log("Muraqaba Mushtarak response:", response);
-          });
-      });
-  }
-
-  // --- NEW: Function to load and display shared Shukr Stream (conceptual)
+  // --- Shared Shukr Stream (conceptual) ---
   function loadSharedShukrStream() {
-      // In a real scenario, this would poll a conceptual server or P2P network
-      // For now, it could display recent local Shukr notes or conceptual shared ones.
-      chrome.runtime.sendMessage({ action: "requestSharedData" }, (response) => {
-          if (chrome.runtime.lastError) {
-            // Ignore the error, do not log or throw
-            return;
-          }
-          if (response && response.insights) {
-              sharedShukrStreamDiv.innerHTML = '';
-              const insightKeys = Object.keys(response.insights);
-              if (insightKeys.length > 0) {
-                  insightKeys.slice(-5).forEach(key => {
-                      const p = document.createElement('p');
-                      p.textContent = `Insight: "${response.insights[key]}"`;
-                      p.style.fontSize = '0.85em';
-                      p.style.marginBottom = '3px';
-                      p.style.paddingBottom = '3px';
-                      p.style.borderBottom = '1px dotted #eee';
-                      sharedShukrStreamDiv.appendChild(p);
-                  });
-              } else {
-                  sharedShukrStreamDiv.innerHTML = '<p style="color:#888;">No shared Shukr/insights yet...</p>';
-              }
-          }
-      });
+    chrome.runtime.sendMessage({ action: "requestSharedData" }, (response) => {
+      if (sharedShukrStreamDiv) {
+        sharedShukrStreamDiv.innerHTML = '';
+        if (response && response.insights && Object.keys(response.insights).length > 0) {
+          Object.values(response.insights).slice(-5).forEach(val => {
+            const p = document.createElement('p');
+            p.textContent = `Insight: "${val}"`;
+            p.style.fontSize = '0.85em';
+            p.style.marginBottom = '3px';
+            sharedShukrStreamDiv.appendChild(p);
+          });
+        } else {
+          sharedShukrStreamDiv.innerHTML = '<p style="color:#888;">No shared Shukr yet...</p>';
+        }
+      }
+    });
   }
-  loadSharedShukrStream(); // Load on popup open
-  // setInterval(loadSharedShukrStream, 30000); // Periodically refresh (conceptual)
+  loadSharedShukrStream();
 
-
-}); // --- END of Main DOMContentLoaded Listener ---
-
-
-// Function to load initial state (Niyyah, Shukr, current Devi Focus)
-function loadInitialState() {
-  chrome.storage.local.get(['currentNiyyah', 'shukrCount'], (data) => {
-    if (niyyahInput) niyyahInput.value = data.currentNiyyah || '';
-    updateShukrDisplay(data.shukrCount || 0);
-  });
-
-  // Request full settings to get Devi Focus for popup
-  chrome.runtime.sendMessage({ action: "requestInitialSettings" }, function(response) {
-    if (chrome.runtime.lastError) {
-      console.warn("Popup: Could not request initial settings:", chrome.runtime.lastError.message);
-    } else if (response && response.settings) {
-      activeSettings = response.settings; // Store settings locally
-      updateDeviFocusDisplay(activeSettings); // Update Devi focus visual
-    }
-  });
-}
-
-
-// --- Niyyah Visualizer (WOW Feature - Popup) ---
-function triggerNiyyahVisualizer() {
+  // --- Niyyah Visualizer Animation ---
+  function triggerNiyyahVisualizer() {
     if (!niyyahVisualizerDiv || !niyyahVisualImage) return;
-
-    niyyahVisualizerDiv.style.display = 'block'; // Show the visualizer container
-    niyyahVisualizerDiv.style.opacity = '0'; // Start invisible for fade-in
-    niyyahVisualizerDiv.style.transform = 'scale(0.8)'; // Start smaller
-
-    // Choose a random symbol for the Niyyah's blooming
+    niyyahVisualizerDiv.style.display = 'block';
+    niyyahVisualizerDiv.style.opacity = '0';
+    niyyahVisualizerDiv.style.transform = 'scale(0.8)';
     const symbols = [
-        "images/symbols/lamp.png",
-        "images/symbols/lotus.png",
-        "images/symbols/saraswati_symbol.png", // Re-using Devi symbols too
-        "images/symbols/lakshmi_symbol.png",
-        "images/symbols/kali_symbol.png"
+      "images/symbols/lamp.png",
+      "images/symbols/lotus.png",
+      "images/symbols/saraswati_symbol.png",
+      "images/symbols/lakshmi_symbol.png",
+      "images/symbols/kali_symbol.png"
     ];
     const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)];
     niyyahVisualImage.src = chrome.runtime.getURL(randomSymbol);
-
-    // Fade in and grow
     setTimeout(() => {
-        niyyahVisualizerDiv.style.transition = 'opacity 0.7s ease-out, transform 0.7s ease-out';
-        niyyahVisualizerDiv.style.opacity = '1';
-        niyyahVisualizerDiv.style.transform = 'scale(1)';
+      niyyahVisualizerDiv.style.transition = 'opacity 0.7s, transform 0.7s';
+      niyyahVisualizerDiv.style.opacity = '1';
+      niyyahVisualizerDiv.style.transform = 'scale(1)';
     }, 50);
-
-    // Fade out after a few seconds
     setTimeout(() => {
-        niyyahVisualizerDiv.style.transition = 'opacity 1s ease-in, transform 1s ease-in';
-        niyyahVisualizerDiv.style.opacity = '0';
-        niyyahVisualizerDiv.style.transform = 'scale(1.2)';
-        setTimeout(() => {
-            niyyahVisualizerDiv.style.display = 'none'; // Hide completely after fade
-            niyyahVisualizerDiv.style.transition = 'none'; // Reset transition
-        }, 1000);
-    }, 3000); // Display for 3 seconds before fading out
-}
-
-// --- Update Current Devi Focus in Popup ---
-function updateDeviFocusDisplay(settings) {
-    const currentDevi = settings?.DynamicState?.CurrentDeviFocus || "Universal Devi (Balance)";
-    if (currentDeviFocusPopup) {
-        currentDeviFocusPopup.textContent = currentDevi.split('(')[0].trim(); // Just the name
-    }
-
-    let deviSymbolFile = "images/symbols/saraswati_symbol.png"; // Default
-    if (currentDevi.includes('Saraswati')) {
-        deviSymbolFile = "images/symbols/saraswati_symbol.png";
-    } else if (currentDevi.includes('Lakshmi')) {
-        deviSymbolFile = "images/symbols/lakshmi_symbol.png";
-    } else if (currentDevi.includes('Kali')) {
-        deviSymbolFile = "images/symbols/kali_symbol.png";
-    }
-    if (deviSymbolPopup) {
-        deviSymbolPopup.src = chrome.runtime.getURL(deviSymbolFile);
-    }
-}
-
-// Spiritual Quotes for "Whispers of Hikmat"
-const spiritualQuotes = [
-  "The heart that truly knows the Divine has found its eternal spring. - Rumi",
-  "Seek not to change the world, but change your attitude. - Buddha",
-  "That which you seek is seeking you. - Rumi",
-  "Truth is one, paths are many. - Rig Veda",
-  "You are not a drop in the ocean. You are the entire ocean in a drop. - Rumi",
-  "All that we are is the result of what we have thought. - Buddha",
-  "The wound is the place where the Light enters you. - Rumi",
-  "The only way to make sense out of change is to plunge into it, move with it, and join the dance. - Alan Watts",
-  "When you truly want something, all the universe conspires in helping you to achieve it. - Paulo Coelho",
-  "The quieter you become, the more you can hear. - Ram Dass"
-];
-
-function displayRandomWisdomQuote() {
-  const randomIndex = Math.floor(Math.random() * spiritualQuotes.length);
-  if (wisdomDisplayDiv) {
-    wisdomDisplayDiv.textContent = spiritualQuotes[randomIndex];
+      niyyahVisualizerDiv.style.opacity = '0';
+      niyyahVisualizerDiv.style.transform = 'scale(1.2)';
+      setTimeout(() => {
+        niyyahVisualizerDiv.style.display = 'none';
+        niyyahVisualizerDiv.style.transition = 'none';
+      }, 1000);
+    }, 3000);
   }
-}
 
-// Helper to show brief confirmation messages in popup
-function showPopupConfirmation(message, isError = false) {
-  const msgDiv = document.getElementById('popupConfirmationMessage'); // Need to add this div to popup_niyyah.html
-  if (msgDiv) {
-    msgDiv.textContent = message;
-    msgDiv.style.color = isError ? 'red' : 'green';
-    setTimeout(() => {
-      msgDiv.textContent = '';
-    }, 2000);
+  // --- Divine Metaphor/Paradox Buttons ---
+  function showDivineParadox() {
+    const paradoxes = [
+      "To surrender is to become boundless.",
+      "The more you let go, the more you receive.",
+      "In silence, the loudest truths are heard.",
+      "To be nothing is to become everything.",
+      "The veil of Maya hides only what you are not ready to see.",
+      "The path to freedom is found in perfect obedience.",
+      "When you embrace your weakness, you reveal your greatest strength.",
+      "The hidden manifold connects all that appears separate.",
+      "Kam bolo, theek bolo: In one word, a universe is revealed.",
+      "Your Sankalpa is the axis upon which reality turns."
+    ];
+    const msgDiv = document.getElementById('popupDivineParadox');
+    if (msgDiv) {
+      msgDiv.textContent = paradoxes[Math.floor(Math.random() * paradoxes.length)];
+      msgDiv.style.display = 'block';
+      setTimeout(() => { msgDiv.style.display = 'none'; }, 6000);
+    }
   }
-}
 
-// --- Divine Metaphor Commands & Ghair-Lafzi Ishaara Features ---
-
-// Helper: Show a random paradoxical statement as a popup tip
-function showDivineParadox() {
-  const paradoxes = [
-    "To surrender is to become boundless.",
-    "The more you let go, the more you receive.",
-    "In silence, the loudest truths are heard.",
-    "To be nothing is to become everything.",
-    "The veil of Maya hides only what you are not ready to see.",
-    "The path to freedom is found in perfect obedience.",
-    "When you embrace your weakness, you reveal your greatest strength.",
-    "The hidden manifold connects all that appears separate.",
-    "Kam bolo, theek bolo: In one word, a universe is revealed.",
-    "Your Sankalpa is the axis upon which reality turns."
-  ];
-  const msgDiv = document.getElementById('popupDivineParadox');
-  if (msgDiv) {
-    msgDiv.textContent = paradoxes[Math.floor(Math.random() * paradoxes.length)];
-    msgDiv.style.display = 'block';
-    setTimeout(() => { msgDiv.style.display = 'none'; }, 6000);
-  }
-}
-
-// Helper: Show a "subconscious verbal ritual" (short affirmation)
+  // Helper: Show a "subconscious verbal ritual" (short affirmation)
 function showSubconsciousRitual() {
   const rituals = [
     "Sujood Before Speaking.",
@@ -1702,6 +1570,138 @@ document.addEventListener('DOMContentLoaded', function() {
   }, { bg: '#8d6e63' });
 
   // Central America & Caribbean
+  addIndigenousFeatureBtn('offlineMayanSunBtn', 'Mayan Sun Salutation', function() {
+    alert("At sunrise or sunset, face the sun and offer gratitude as the Maya do. Feel the warmth and light.");
+  }, { bg: '#fbc02d' });
+
+  addIndigenousFeatureBtn('offlineCacaoCeremonyBtn', 'Cacao Ceremony', function() {
+    alert("Drink a cup of cacao (or hot chocolate) with intention. Offer a prayer for the land and people who grow it.");
+  }, { bg: '#6d4c41' });
+
+  addIndigenousFeatureBtn('offlineCaribbeanDrumBtn', 'Caribbean Drum & Dance', function() {
+    alert("Play a drum, shake maracas, or dance to Caribbean rhythms. Celebrate joy and resilience.");
+  }, { bg: '#ff7043' });
+
+  addIndigenousFeatureBtn('offlineTainoBlessingBtn', 'Taino Water Blessing', function() {
+    alert("Sprinkle water and say: 'Yaya, bless this water and all who drink from it.' Honor the Taino and all island peoples.");
+  }, { bg: '#0288d1' });
+
+  // General Indigenous Wisdom
+  addIndigenousFeatureBtn('offlineLandAcknowledgementBtn', 'Land Acknowledgement', function() {
+    alert("Pause and acknowledge the original stewards of the land you are on. Offer respect and gratitude.");
+  }, { bg: '#43a047' });
+
+  addIndigenousFeatureBtn('offlineCircleFireBtn', 'Circle & Fire Ritual', function() {
+    alert("Sit in a circle (real or imagined) and light a candle or fire. Share a hope or prayer for all beings.");
+  }, { bg: '#e65100' });
+
+  addIndigenousFeatureBtn('offlineTotemAnimalBtn', 'Totem Animal Meditation', function() {
+    alert("Close your eyes and ask: What animal wishes to guide me today? Listen for a sign or feeling.");
+  }, { bg: '#8e24aa' });
+
+  addIndigenousFeatureBtn('offlineShellRattleBtn', 'Shell Rattle Ceremony', function() {
+    alert("Shake a shell rattle or tap two stones. Let the sound carry your prayers to the ancestors.");
+  }, { bg: '#bdb76b' });
+
+  addIndigenousFeatureBtn('offlinePlantMedicineBtn', 'Honor Plant Medicine', function() {
+    alert("Offer gratitude for the healing plants of the world. Promise to use them with respect and care.");
+  }, { bg: '#388e3c' });
+
+  addIndigenousFeatureBtn('offlineStoryStickBtn', 'Story Stick Sharing', function() {
+    alert("Hold a stick or stone. Share a story, then pass it to another (or imagine doing so). Listen deeply.");
+  }, { bg: '#6d4c41' });
+
+  addIndigenousFeatureBtn('offlineFeatherPrayerBtn', 'Feather Prayer', function() {
+    alert("Hold a feather (or imagine one). Whisper a prayer and release it to the wind.");
+  }, { bg: '#bdb76b' });
+
+  addIndigenousFeatureBtn('offlineMoonCeremonyBtn', 'Full/New Moon Ceremony', function() {
+    alert("On the full or new moon, light a candle and set an intention. Honor the cycles of nature.");
+  }, { bg: '#3949ab' });
+
+  addIndigenousFeatureBtn('offlineCornOfferingBtn', 'Corn Offering', function() {
+    alert("Place a few kernels of corn or seeds on the earth. Offer thanks for nourishment and abundance.");
+  }, { bg: '#fbc02d' });
+
+  addIndigenousFeatureBtn('offlineRainPrayerBtn', 'Rain Prayer', function() {
+    alert("Pray for gentle rain to nourish the land, forests, and all people. Listen for the sound of water.");
+  }, { bg: '#0288d1' });
+
+  addIndigenousFeatureBtn('offlineSacredSilenceBtn', 'Sacred Silence', function() {
+    alert("Sit in silence for a few minutes. Listen for the voice of the land, the ancestors, and the Divine.");
+  }, { bg: '#311b92' });
+
+  // --- MUSLIM WOMEN OF INDIA: SPIRITUAL SAFETY, DIGNITY, AND INCLUSION ---
+
+  function addMuslimWomenIndiaFeatureBtn(id, label, handler, opts = {}) {
+    if (!document.getElementById(id)) {
+      const btn = document.createElement('button');
+      btn.id = id;
+      btn.textContent = label;
+      btn.style.margin = opts.margin || '4px 2px';
+      btn.style.fontSize = opts.fontSize || '0.95em';
+      btn.style.backgroundColor = opts.bg || '#ad1457';
+      btn.style.color = opts.color || 'white';
+      btn.style.borderRadius = '5px';
+      btn.style.border = 'none';
+      btn.style.cursor = 'pointer';
+      btn.onclick = handler;
+      document.body.appendChild(btn);
+    }
+  }
+
+  // 1. Dua for Dignity & Safety
+  addMuslimWomenIndiaFeatureBtn('offlineDuaDignityBtn', 'Dua for Dignity & Safety', function() {
+    alert("Recite: 'Ya Hafeez, Ya Salaam, Ya Lateef' (O Protector, O Source of Peace, O Gentle One). Pray for the safety, dignity, and freedom of all women everywhere.");
+  }, { bg: '#ad1457' });
+
+  // 2. Hijab Reflection (for those who wear it)
+  addMuslimWomenIndiaFeatureBtn('offlineHijabReflectionBtn', 'Hijab Reflection', function() {
+    alert("If you wear hijab or a scarf, take a moment to honor your intention. Reflect on your inner strength and beauty, regardless of what you wear.");
+  }, { bg: '#6a1b9a' });
+
+  // 3. Quiet Prayer Space
+  addMuslimWomenIndiaFeatureBtn('offlineQuietPrayerBtn', 'Create a Quiet Prayer Space', function() {
+    alert("Find or create a small, private space for prayer or reflection. Even a corner with a scarf or mat can become a sanctuary.");
+  }, { bg: '#00897b' });
+
+  // 4. Quranic Wisdom for Women
+  addMuslimWomenIndiaFeatureBtn('offlineQuranicWisdomBtn', 'Read Quranic Wisdom for Women', function() {
+    alert("Read or recite a verse about dignity, mercy, or justice. Example: 'And We have certainly honored the children of Adam...' (Quran 17:70)");
+  }, { bg: '#3949ab' });
+
+  // 5. Sisterhood Blessing
+  addMuslimWomenIndiaFeatureBtn('offlineSisterhoodBlessBtn', 'Bless a Sister', function() {
+    alert("Send a silent blessing to a sister, mother, daughter, or friend. Pray for her happiness, health, and spiritual growth.");
+  }, { bg: '#f06292' });
+
+  // 6. Henna/Mehndi Ritual
+  addMuslimWomenIndiaFeatureBtn('offlineHennaBtn', 'Henna/Mehndi Ritual', function() {
+    alert("Draw a simple henna/mehndi design on your hand or paper. Let it be a symbol of beauty, joy, and tradition.");
+  }, { bg: '#ffb300' });
+
+  // 7. Sadaqah (Charity) Intention
+  addMuslimWomenIndiaFeatureBtn('offlineSadaqahBtn', 'Sadaqah (Charity) Intention', function() {
+    alert("Set aside a coin or small gift for someone in need. Even a smile or kind word is sadaqah.");
+  }, { bg: '#43a047' });
+
+  // 8. Salaam Ritual
+  addMuslimWomenIndiaFeatureBtn('offlineSalaamBtn', 'Offer Salaam', function() {
+    alert("Say 'Assalamu Alaikum' (Peace be upon you) to someone, or silently in your heart to all beings.");
+  }, { bg: '#0288d1' });
+
+  // 9. Family Honor Reflection
+  addMuslimWomenIndiaFeatureBtn('offlineFamilyHonorBtn', 'Reflect on Family Honor', function() {
+    alert("Reflect on what honor means to you, beyond tradition or expectation. Affirm your worth and the worth of all women.");
+  }, { bg: '#6d4c41' });
+
+  // 10. Celebrate Achievements
+  addMuslimWomenIndiaFeatureBtn('offlineCelebrateWomenBtn', 'Celebrate Women\'s Achievements', function() {
+    alert("Recall a moment when you or another woman overcame a challenge. Celebrate it with gratitude and pride.");
+  }, { bg: '#fbc02d' });
+
+  // ...existing code...
+});
   addIndigenousFeatureBtn('offlineMayanSunBtn', 'Mayan Sun Salutation', function() {
     alert("At sunrise or sunset, face the sun and offer gratitude as the Maya do. Feel the warmth and light.");
   }, { bg: '#fbc02d' });

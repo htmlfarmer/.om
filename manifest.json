@@ -1,21 +1,20 @@
-{ 
+{
   "manifest_version": 3,
   "name": "Dil ki Dastak (Heart's Gentle Knock)",
   "version": "0.2.0",
   "description": "A Ruhani Raahbar for devotional Browse, guided by the Tri Devis. Now with expanded sensory contemplation.",
   "permissions": [
-    "storage",          // To remember your Niyyah, Shukr count, etc.
-    "tabs",             // To interact with new tabs (for Waqfa, Maqam analysis)
-    "activeTab",        // To interact with the current page
-    "scripting",        // To inject content scripts and potentially analyze content for Ehsaas feedback
-    "alarms"            // For time-based Waqfa chimes
+    "storage",
+    "tabs",
+    "activeTab",
+    "scripting",
+    "alarms"
   ],
   "host_permissions": [
-    "<all_urls>"        // Needed for content_script to operate across all sites and for potential sentiment analysis
+    "<all_urls>"
   ],
   "background": {
-  	//"service_worker": "background.js"
-    "scripts": ["background.js"] // Corrected for Firefox compatibility
+    "service_worker": "background.js"
   },
   "action": {
     "default_popup": "popup_niyyah.html",
@@ -27,9 +26,9 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"], // Runs on all pages
+      "matches": ["<all_urls>"],
       "js": ["content_script.js"],
-      "css": ["styles.css"]      // For Muraqaba Modulator styles
+      "css": ["styles.css"]
     }
   ],
   "icons": {
@@ -40,13 +39,12 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "sounds/*.mp3",       // All mp3 sounds for chimes, dhikr, affirmations
-        "images/backgrounds/*.png", // Muraqaba backgrounds
-        "images/backgrounds/*.gif",
-        "images/backgrounds/*.jpg",
-        "images/symbols/*.png" // Tri Devis symbols, Niyyah visualizers
+        "sounds/*.mp3",
+        "images/*.png",
+        "images/backgrounds/*.png",
+        "popup_reflection.html"
       ],
-      "matches": ["<all_urls>"] // Make them accessible to content scripts
+      "matches": ["<all_urls>"]
     }
   ],
   "options_ui": {
@@ -54,13 +52,12 @@
     "open_in_tab": true
   },
   "optional_permissions": [
-    "notifications",                // For gentle reminders, blessings, or reflection prompts
-    "clipboardWrite",               // For copying affirmations, blessings, or insights
-    "clipboardRead",                // For advanced ritual/affirmation sharing
-    "contextMenus",                 // For right-click spiritual actions
-    "unlimitedStorage",             // For storing deep reflection logs, user Sankalpa, etc.
-    "idle",                         // For awareness prompts during inactivity
-    "cookies"                       // For session-based spiritual state (if needed)
+    "notifications",
+    "clipboardWrite",
+    "clipboardRead",
+    "contextMenus",
+    "idle",
+    "cookies"
   ],
   "commands": {
     "open-options": {
@@ -86,168 +83,6 @@
         "default": "Ctrl+Shift+E"
       },
       "description": "Prompt for an Ehsaas pause in dialogue"
-    },
-    "show-ghair-lafzi-ishara": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+G"
-      },
-      "description": "Prompt for a Ghair-Lafzi Ishaara reflection"
-    },
-    "show-tafakkur": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+T"
-      },
-      "description": "Prompt for a deep Tafakkur moment"
-    },
-    "show-shukr-manifestation": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+S"
-      },
-      "description": "Prompt for a Shukr Manifestation"
-    },
-    "show-leela-junoon-balance": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+L"
-      },
-      "description": "Prompt for Leela/Junoon balance reflection"
-    },
-    "show-maqam-dialogue": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+M"
-      },
-      "description": "Prompt for Maqam as a guiding principle"
-    },
-    "show-hidden-manifold": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+H"
-      },
-      "description": "Prompt for hidden manifold connection"
-    },
-    "show-paradox-courage": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+P"
-      },
-      "description": "Prompt for paradox/courage reflection"
-    },
-    "show-sankalpa-clarity": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+N"
-      },
-      "description": "Prompt for Sankalpa clarity"
-    },
-    "show-maya-veil": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+V"
-      },
-      "description": "Prompt for Maya Devi veil awareness"
-    },
-    "show-ritual": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+R"
-      },
-      "description": "Prompt for a subconscious ritual"
-    },
-    "show-feedback-nuance": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+F"
-      },
-      "description": "Prompt for feedback as ishqiya gesture"
-    },
-    "show-affirmation": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+A"
-      },
-      "description": "Prompt for a spiritual affirmation"
-    },
-    "show-compassion": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+C"
-      },
-      "description": "Prompt for compassion/mercy reflection"
-    },
-    "show-tazkiyah": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+Z"
-      },
-      "description": "Prompt for Tazkiyah (purification) reflection"
-    },
-    "show-wu-wei": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+W"
-      },
-      "description": "Prompt for Wu Wei (effortless flow)"
-    },
-    "show-shame-tawakkul": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+U"
-      },
-      "description": "Prompt for shame as a prompt for Tawakkul"
-    },
-    "show-muhasabah": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+Q"
-      },
-      "description": "Prompt for Muhasabah (self-accounting)"
-    },
-    "show-creative-leela": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+Y"
-      },
-      "description": "Prompt for creative Leela"
-    },
-    "show-privacy-hijab": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+J"
-      },
-      "description": "Prompt for privacy/hijab reflection"
-    },
-    "show-joy-gratitude": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+G"
-      },
-      "description": "Prompt for joy and gratitude"
-    },
-    "show-clarity": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+D"
-      },
-      "description": "Prompt for clarity and discernment"
-    },
-    "show-connection": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+X"
-      },
-      "description": "Prompt for connection and unity"
-    },
-    "show-boundaries": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+B"
-      },
-      "description": "Prompt for sacred boundaries"
-    },
-    "show-metamorphosis": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+M"
-      },
-      "description": "Prompt for spiritual metamorphosis"
-    },
-    "show-acceptance": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+E"
-      },
-      "description": "Prompt for acceptance and surrender"
-    },
-    "show-intuition": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+I"
-      },
-      "description": "Prompt for intuition and Firasah"
-    },
-    "show-silence": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+S"
-      },
-      "description": "Prompt for silence and presence"
     }
   }
 }
