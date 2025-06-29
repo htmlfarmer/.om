@@ -1,11 +1,15 @@
 // compat.js
- 
+
 // Cross-browser compatibility layer for browser.* API with Promises
 if (typeof window.browser === 'undefined') {
   window.browser = (function() {
-    // Use native browser API if available (Firefox, some Chromium)
-    if (typeof window.navigator !== 'undefined' && window.navigator.userAgent && window.navigator.userAgent.includes('Firefox') && typeof window.browser !== 'undefined') {
-      // On Firefox, use the native browser API
+    // Use native browser API if available (Firefox)
+    if (
+      typeof window.navigator !== 'undefined' &&
+      window.navigator.userAgent &&
+      window.navigator.userAgent.includes('Firefox') &&
+      typeof window.browser !== 'undefined'
+    ) {
       console.log("Using native browser API (Firefox).");
       return window.browser;
     }
@@ -156,17 +160,8 @@ function safeGet(obj, path, fallback = undefined) {
   }
 }
 
-// Example usage elsewhere in your code:
-// Instead of: const sharedInsights = allSettings.anamnesisExchangeContent || {};
-// Use:
-const sharedInsights = safeGet(allSettings, 'anamnesisExchangeContent', {});
-
 // --- International Spiritual & Cultural Compatibility Helpers ---
 
-/**
- * Returns a localized greeting or blessing based on language/culture code.
- * Supports spiritual/religious diversity for UI or notifications.
- */
 function getSpiritualGreeting(lang = 'en') {
   const greetings = {
     en: "Peace and blessings upon you.",
@@ -184,14 +179,10 @@ function getSpiritualGreeting(lang = 'en') {
     id: "Salam sejahtera untukmu",
     tr: "Selam ve esenlik üzerinize olsun.",
     ja: "あなたに平安がありますように",
-    // Add more as needed
   };
   return greetings[lang] || greetings['en'];
 }
 
-/**
- * Returns a spiritual/religious symbol or emoji for a given culture/religion.
- */
 function getSpiritualSymbol(culture = 'universal') {
   const symbols = {
     universal: "☀️",
@@ -209,14 +200,10 @@ function getSpiritualSymbol(culture = 'universal') {
     zoroastrian: "🔥",
     tao: "☯️",
     shinto: "⛩️",
-    // Add more as needed
   };
   return symbols[culture] || symbols['universal'];
 }
 
-/**
- * Returns a short wisdom saying or blessing from a given tradition.
- */
 function getCulturalWisdom(tradition = 'universal') {
   const wisdoms = {
     universal: "May your path be filled with light.",
@@ -232,16 +219,29 @@ function getCulturalWisdom(tradition = 'universal') {
     eastasian: "Let your heart be at peace. (Tao Te Ching)",
     baha'i: "So powerful is the light of unity that it can illuminate the whole earth.",
     zoroastrian: "Good thoughts, good words, good deeds.",
-    // Add more as needed
   };
   return wisdoms[tradition] || wisdoms['universal'];
 }
 
-/**
- * Returns a list of supported spiritual/cultural languages for UI selection.
- */
 function getSupportedSpiritualLanguages() {
   return [
+    { code: 'en', name: 'English' },
+    { code: 'ur', name: 'اردو (Urdu)' },
+    { code: 'ar', name: 'العربية (Arabic)' },
+    { code: 'hi', name: 'हिन्दी (Hindi)' },
+    { code: 'sw', name: 'Kiswahili' },
+    { code: 'zh', name: '中文 (Chinese)' },
+    { code: 'es', name: 'Español' },
+    { code: 'fr', name: 'Français' },
+    { code: 'he', name: 'עברית (Hebrew)' },
+    { code: 'fa', name: 'فارسی (Persian)' },
+    { code: 'ru', name: 'Русский' },
+    { code: 'th', name: 'ไทย (Thai)' },
+    { code: 'id', name: 'Bahasa Indonesia' },
+    { code: 'tr', name: 'Türkçe' },
+    { code: 'ja', name: '日本語 (Japanese)' }
+  ];
+}
     { code: 'en', name: 'English' },
     { code: 'ur', name: 'اردو (Urdu)' },
     { code: 'ar', name: 'العربية (Arabic)' },

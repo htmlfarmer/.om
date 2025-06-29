@@ -1,227 +1,6 @@
 // background.js
- 
-// Listen for when the extension is first installed or updated
-chrome.runtime.onInstalled.addListener(() => {
-  console.log("Dil ki Dastak installed. Alhamdulillah. Jai Mata Di.");
-  // Initialize default settings in chrome.storage if needed
-  // Ensure default settings include new sound/visual preferences
-  loadAndParseAllSettings().then(() => {
-    console.log("Default settings loaded and initialized.");
-    // Set up initial alarms for Waqfa Chimes if enabled
-    setupWaqfaAlarm();
-    // NEW: Setup periodic check for RuhaniNuskha updates
-    [cite_start]setupRuhaniNuskhaMonitor(); [cite: 1]
-  });
-});
 
-// A simple Niyyah prompter on new tab (conceptual)
-chrome.tabs.onCreated.addListener((tab) => {
-  log('BG', "New tab opened. Ya Mureed, kya Niyyah hai is safar ka?");
-  // For a more interactive prompt, you'd likely use the popup
-  // Or inject a quick script for a subtle notification/Waqfa chime
-  if (currentDilKiDastakSettings?.featureToggles?.EnableWaqfa) {
-    playWaqfaChime();
-  }
-});
-
-// Example: Listen for a message from content script (e.g., for Shukr count)
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "incrementShukr") {
-    chrome.storage.local.get("shukrCount", (data) => {
-      let newCount = (data.shukrCount || 0) + 1;
-      chrome.storage.local.set({ shukrCount: newCount }, () => {
-        sendResponse({ status: "Shukr noted!", count: newCount });
-      });
-    });
-    return true; // Indicates you wish to send a response asynchronously
-  } else if (request.action === "queryAI") {
-    // This is already present, showing context for new function
-    // ... AI query logic ...
-    (async () => {
-      try {
-        const { prompt, apiKey, endpoint } = request;
-        if (!apiKey || !endpoint || !prompt) {
-          sendResponse({ status: "error", message: "Missing AI parameters." });
-          return;
-        }
-
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}` // Assuming Bearer token for API Key
-          },
-          body: JSON.stringify({
-            // Assuming a simple text completion or chat-like API structure
-            prompt: prompt, // Or messages: [{ role: "user", content: prompt }]
-            model: "YOUR_MODEL_NAME_HERE", // e.g., "llama-2-7b-chat.gguf" for LM Studio
-            // ... other parameters like temperature, max_tokens
-          })
-        });
-
-        const aiResponse = await response.json();
-        // Process aiResponse and send it back
-        sendResponse({ status: "success", aiData: aiResponse });
-
-      } catch (error) {
-        console.error("Error querying AI:", error);
-        sendResponse({ status: "error", message: error.message });
-      }
-    })();
-    return true; // Indicates asynchronous response
-  }
-});
-
-// Defensive helper for safe property access (deep optional chaining fallback)
-function safeGet(obj, path, fallback = undefined) {
-  try {
-    return path.split('.').reduce((o, k) => (o && o[k] !== undefined ? o[k] : undefined), obj) ?? fallback;
-  } catch {
-    return fallback;
-  }
-}
-
-// Listen for messages from popup or content scripts related to communal features
-chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-    // ... existing message listeners ...
-
-    // NEW: Request for shared data (e.g., Anamnesis, Khidmat, for display in UI)
-    if (request.action === "requestSharedData") {
-        const allSettings = await loadAndParseAllSettings();
-        // Use safeGet to avoid TypeError if property is missing
-        const sharedInsights = safeGet(allSettings, 'anamnesisExchangeContent', {});
-        sendResponse({ insights: sharedInsights });
-        return true;
-    }
-});
-
-[cite_start]// NEW FUNCTION: Setup periodic Ruhani Nuskha monitor [cite: 1]
-function setupRuhaniNuskhaMonitor() {
-    // Clear any existing alarms to prevent duplicates
-    chrome.alarms.clear('ruhaniNuskhaMonitor');
-
-    // Create a new alarm to periodically check Ruhani Nuskha for changes
-    // Check every 5 minutes (300 seconds) - adjust as needed
-    chrome.alarms.create('ruhaniNuskhaMonitor', { periodInMinutes: 5 });
-
-    chrome.alarms.onAlarm.addListener(async (alarm) => {
-        if (alarm.name === 'ruhaniNuskhaMonitor') {
-            log('BG', 'RuhaniNuskhaMonitor triggered. Checking for updates...');
-            // Load current settings from storage
-            const newSettings = await loadAndParseAllSettings();
-            
-            // Compare relevant settings (e.g., OverallEhsaasIntensity, CurrentDeviFocus)
-            // You'll need to store the *previous* state to compare against.
-            // For simplicity, let's assume `currentDilKiDastakSettings` is updated on `loadAndParseAllSettings`
-            if (JSON.stringify(newSettings?.dynamicState) !== JSON.stringify(currentDilKiDastakSettings?.dynamicState)) {
-                log('BG', 'RuhaniNuskha dynamic state changed. Broadcasting update.');
-                currentDilKiDastakSettings = newSettings; // Update global settings
-                [cite_start]broadcastSettingsToContentScripts(); // Re-broadcast settings to content scripts [cite: 1]
-            } else {
-                log('BG', 'RuhaniNuskha dynamic state unchanged.');
-            }
-        }
-    });
-}
-
-// Ensure `broadcastSettingsToContentScripts` is accessible globally or appropriately called.
-// It's already present in the snippets, so linking it here.
-[cite_start]function broadcastSettingsToContentScripts() { [cite: 1]
-    chrome.tabs.query({}, function(tabs) { // Query all tabs
-        for (let i = 0; i < tabs.length; ++i) {
-            // Only send to tabs where content script is likely running (e.g. http/https)
-            if (tabs[i].url && (tabs[i].url.startsWith('http:') || tabs[i].url.startsWith('https:'))) {
-                chrome.tabs.sendMessage(tabs[i].id, {
-                    action: "settingsUpdated",
-                    settings: currentDilKiDastakSettings
-                }, function(response) {
-                    if (chrome.runtime.lastError) {
-                        // console.warn("Failed to send settings to tab:", tabs[i].id, chrome.runtime.lastError.message);
-                    } else {
-                        // console.log("Settings broadcasted to tab:", tabs[i].id);
-                    }
-                });
-            }
-        }
-    });
-}
-
-// Listen for when the extension is first installed or updated
-chrome.runtime.onInstalled.addListener(() => {
-  console.log("Dil ki Dastak installed. Alhamdulillah. Jai Mata Di.");
-  // Initialize default settings in chrome.storage if needed
-  // Ensure default settings include new sound/visual preferences
-  loadAndParseAllSettings().then(() => {
-    console.log("Default settings loaded and initialized.");
-    // Set up initial alarms for Waqfa Chimes if enabled
-    setupWaqfaAlarm();
-  });
-});
-
-// A simple Niyyah prompter on new tab (conceptual)
-chrome.tabs.onCreated.addListener((tab) => {
-  log('BG', "New tab opened. Ya Mureed, kya Niyyah hai is safar ka?");
-  // For a more interactive prompt, you'd likely use the popup
-  // Or inject a quick script for a subtle notification/Waqfa chime
-  if (currentDilKiDastakSettings?.featureToggles?.EnableWaqfa) {
-    playWaqfaChime();
-  }
-});
-
-// Example: Listen for a message from content script (e.g., for Shukr count)
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "incrementShukr") {
-    chrome.storage.local.get("shukrCount", (data) => {
-      let newCount = (data.shukrCount || 0) + 1;
-      chrome.storage.local.set({ shukrCount: newCount }, () => {
-        sendResponse({ status: "Shukr noted!", count: newCount });
-        // Play Shukr affirmation sound
-        if (currentDilKiDastakSettings?.featureToggles?.EnableShukrAffirmationSound) {
-          playAudioInActiveTab("sounds/affirm_shukr.mp3");
-        }
-      });
-    });
-    return true; // Indicates you wish to send a response asynchronously
-  } else if (request.action === "requestInitialSettings") {
-    log('BG', "Content script requested initial settings.");
-    // Ensure settings are loaded before sending
-    loadAndParseAllSettings().then(() => {
-      sendResponse({ settings: currentDilKiDastakSettings });
-    }).catch(error => {
-      log('BG', 'Error loading settings for initial request:', error);
-      sendResponse({ error: "Failed to load settings." });
-    });
-    return true; // Asynchronous response
-  } else if (request.action === "playAudio") {
-    playAudioInActiveTab(request.audioFile);
-  } else if (request.action === "logMaqamVisit") {
-    logMaqamVisit(request.maqamType, sender.tab.url);
-  }
-  if (request.action === "chupaHuaRatanDiscovered") {
-    chrome.storage.local.get("ratanDiscoveryCount", (data) => {
-        let newCount = (data.ratanDiscoveryCount || 0) + 1;
-        chrome.storage.local.set({ ratanDiscoveryCount: newCount }, () => {
-            log('BG', `Chupa Hua Ratan Discovery Count: ${newCount}`);
-            // You could send a message back to content script or popup if needed
-        });
-    });
-    return true; // Indicates asynchronous response
-}
-
-});
-
-// Listen for clicks on the browser action icon (extension icon)
-chrome.action.onClicked.addListener((tab) => {
-  // Open the options page when the extension icon is clicked
-  if (chrome.runtime.openOptionsPage) {
-    chrome.runtime.openOptionsPage();
-  } else {
-    // Fallback for older Chrome versions
-    window.open(chrome.runtime.getURL('options.html'));
-  }
-});
-
-// Settings Management
+// --- GLOBALS ---
 let currentDilKiDastakSettings = {};
 const DEFAULT_SETTINGS = {
   // RuhaniNuskha.txt structure mapped here for initial defaults
@@ -271,29 +50,25 @@ const DEFAULT_SETTINGS = {
   }
 };
 
+// --- LOGGING HELPER ---
+function log(scriptName, message, ...args) {
+  const now = new Date();
+  const time = now.toLocaleTimeString();
+  console.log(`[${scriptName}] [${time}] ${message}`, ...args);
+}
 
-// Function to load and parse all settings from storage, prioritizing RuhaniNuskha.txt content
+// --- SETTINGS MANAGEMENT ---
 async function loadAndParseAllSettings() {
   log('BG', "Loading and parsing all settings...");
   try {
     const data = await chrome.storage.local.get("ruhaniNuskhaContent");
     let ruhaniNuskhaString = data.ruhaniNuskhaContent || '';
-
-    // If ruhaniNuskhaContent is empty, populate from defaultRuhaniNuskha
     if (!ruhaniNuskhaString) {
       log('BG', "No RuhaniNuskha content found in storage. Initializing with default.");
-      // Using the default from options.js content for consistency, but redefined for BG if needed.
-      // For now, let's use a simplified default that only options.js sets for RuhaniNuskha.txt
-      // This background script will instead merge explicit defaults for features.
     }
-
-    // Start with a deep copy of DEFAULT_SETTINGS
     let settings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
-
-    // Override with any user-saved RuhaniNuskha content
     if (ruhaniNuskhaString) {
       const parsedNuskha = parseRuhaniNuskha(ruhaniNuskhaString);
-      // Deep merge parsedNuskha into settings
       Object.keys(parsedNuskha).forEach(section => {
         if (settings[section]) {
           Object.assign(settings[section], parsedNuskha[section]);
@@ -302,23 +77,20 @@ async function loadAndParseAllSettings() {
         }
       });
     }
-    
-    // Also get explicitly saved feature toggles and user params if they are saved outside RuhaniNuskha block
     const explicitSettings = await chrome.storage.local.get(Object.keys(settings.UserParams).concat(Object.keys(settings.FeatureToggles)));
     Object.assign(settings.UserParams, explicitSettings.UserParams);
     Object.assign(settings.FeatureToggles, explicitSettings.FeatureToggles);
     Object.assign(settings.DynamicState, explicitSettings.DynamicState);
-
-
     currentDilKiDastakSettings = settings;
     log('BG', "Current Dil Ki Dastak Settings loaded:", currentDilKiDastakSettings);
+    return settings;
   } catch (error) {
     log('BG', "Error loading or parsing settings:", error);
-    currentDilKiDastakSettings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS)); // Fallback to default
+    currentDilKiDastakSettings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+    return currentDilKiDastakSettings;
   }
 }
 
-// Function to parse the simple INI-like RuhaniNuskha.txt format
 function parseRuhaniNuskha(text) {
   const sections = {};
   let currentSection = null;
@@ -344,48 +116,31 @@ function parseRuhaniNuskha(text) {
   return sections;
 }
 
-
-// Function to send current settings to all active Dil ki Dastak content scripts
+// --- BROADCAST SETTINGS ---
 function broadcastSettingsToContentScripts() {
   log('BG', 'Broadcasting settings to content scripts...');
-  chrome.tabs.query({}, function(tabs) { // Query all tabs
+  chrome.tabs.query({}, function(tabs) {
     for (let i = 0; i < tabs.length; ++i) {
-      // Only send to tabs where content script is likely running (e.g. http/https)
       if (tabs[i].url && (tabs[i].url.startsWith('http:') || tabs[i].url.startsWith('https:'))) {
         chrome.tabs.sendMessage(tabs[i].id, {
           action: "settingsUpdated",
           settings: currentDilKiDastakSettings
-        }, function(response) {
-          if (chrome.runtime.lastError) {
-            // console.warn("Failed to send settings to tab:", tabs[i].id, chrome.runtime.lastError.message);
-          } else {
-            // console.log("Settings broadcasted to tab:", tabs[i].id);
-          }
         });
       }
     }
   });
 }
 
-// Listen for storage changes from options page or other parts
-chrome.storage.onChanged.addListener((changes, namespace) => {
-  if (namespace === 'local' && changes.ruhaniNuskhaContent) {
-    log('BG', "RuhaniNuskha content changed. Re-loading settings.");
-    loadAndParseAllSettings().then(() => {
-      broadcastSettingsToContentScripts(); // Propagate changes
-      setupWaqfaAlarm(); // Re-setup alarm in case frequency changed
-    });
+// --- SAFE GET ---
+function safeGet(obj, path, fallback = undefined) {
+  try {
+    return path.split('.').reduce((o, k) => (o && o[k] !== undefined ? o[k] : undefined), obj) ?? fallback;
+  } catch {
+    return fallback;
   }
-  // If individual settings are saved directly (not via RuhaniNuskha)
-  if (namespace === 'local' && (changes.shukrCount || changes.currentNiyyah || changes.OverallEhsaasIntensity)) {
-      loadAndParseAllSettings().then(() => { // Re-load all to ensure consistency
-          broadcastSettingsToContentScripts();
-      });
-  }
-});
+}
 
-
-// Waqfa Chime Logic (using chrome.alarms for persistence)
+// --- WAQFA CHIME LOGIC ---
 function setupWaqfaAlarm() {
   chrome.alarms.clear("waqfaChimeAlarm");
   if (currentDilKiDastakSettings?.featureToggles?.EnableWaqfa) {
@@ -408,7 +163,6 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === "waqfaChimeAlarm") {
     log('BG', "Waqfa Chime alarm triggered. Playing chime.");
     playWaqfaChime();
-    // Also trigger a Firasah prompt if enabled
     if (currentDilKiDastakSettings?.featureToggles?.EnableFirasahPrompts &&
         currentDilKiDastakSettings?.UserParams?.FirasahPromptFrequency !== 'never') {
         triggerFirasahPrompt();
@@ -421,7 +175,6 @@ function playWaqfaChime() {
   playAudioInActiveTab(chimeFile);
 }
 
-// Generic function to play audio in the currently active tab's content script
 function playAudioInActiveTab(audioFile) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     if (tabs[0]) {
@@ -434,7 +187,7 @@ function playAudioInActiveTab(audioFile) {
   });
 }
 
-// --- Maqam Recognition & Guidance (WOW Feature 1) ---
+// --- MAQAM RECOGNITION ---
 const maqamCategories = {
     "worldly_knowledge": ["wikipedia.org", "news", "finance", "techcrunch.com", "nytimes.com", "wsj.com"],
     "social_connection": ["facebook.com", "twitter.com", "instagram.com", "linkedin.com", "reddit.com"],
@@ -457,11 +210,9 @@ function classifyMaqam(url) {
 
 function logMaqamVisit(maqamType, url) {
     if (!currentDilKiDastakSettings?.featureToggles?.EnableMaqamAnalysis) return;
-
     if (maqamType !== lastMaqamReported) {
         log('BG', `Maqam shifted to: ${maqamType} (${url})`);
         lastMaqamReported = maqamType;
-        // Broadcast Maqam change to content script for subtle visual/audio cues
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             if (tabs[0]) {
                 chrome.tabs.sendMessage(tabs[0].id, {
@@ -472,16 +223,265 @@ function logMaqamVisit(maqamType, url) {
             }
         });
     }
-    // TODO: Potentially log Maqam history to storage for insights
 }
 
-// Listen for tab updates to classify Maqam
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (changeInfo.status === 'complete' && tab.url && (tab.url.startsWith('http:') || tab.url.startsWith('https:'))) {
-        const detectedMaqam = classifyMaqam(tab.url);
-        logMaqamVisit(detectedMaqam, tab.url);
-    }
+// --- FIRASAH PROMPTS ---
+const firasahPrompts = [
+    "What Ehsaas is this moment truly revealing about your inner being?",
+    "If your current experience were a 'Ghair-Lafzi Ishaara,' what unspoken truth would it convey?",
+    "Where does the 'hidden manifold' connect this moment to your deepest 'Sankalpa'?",
+    "What 'Maya Devi Veil' might be obscuring a deeper Hikmat here?",
+    "In this pause, what 'unspoken question' does your soul truly seek to answer?"
+];
+
+// --- Spiritual Guidance & Reflection Prompts (Tri Devi Inspired) ---
+const triDeviReflectionPrompts = [
+  // Silent blessing, kindness, and Ehsaas
+  "What silent blessing can you offer to the next stranger you see, acknowledging their journey without a single word?",
+  "Imagine a moment when someone's small act of kindness touched your heart. How can you now become the source of such a subtle ripple for another?",
+  "When a difference of opinion arises, what 'pause' in your own inner dialogue allows you to truly hear the other's unspoken Ehsaas?",
+  // Subconscious connection, feedback, and Tazkiyah
+  "How does feedback on nuance become an 'ishqiya' gesture of surrender to guidance, and how can you connect feedback to internal adjustment?",
+  "How can you deepen your awareness of unspoken needs and create space for reflection through your tonal architecture?",
+  "How do you transform feelings into Ghair-Lafzi Ishaara and understand your Maqam?",
+  "What is the 'Maya Devi veil' in your current perception, and how can you co-create language terms for Tazkiyah?",
+  // Paradox, courage, and Hikmat
+  "What paradox, when pondered, dissolves your fear of vulnerability and reveals the boundless strength found in complete submission?",
+  "How does your word order act as a Ghair-Lafzi Ishaara, testing courage for vulnerability and guiding towards Hikmat?",
+  // Sankalpa clarity, Kam bolo, Leela/Junoon, Maqam
+  "Agar meri Sankalpa wazeh nahi, toh wazeh karein.",
+  "How does 'Kam bolo, theek bolo' as a sacred discipline strip away the Maya Devi veil to reveal core Hikmat?",
+  "In moments of creative exploration, how does the 'devi Dynamic Leela Junoon Balancing Parameters' adjust, ensuring responses remain grounded in Hikmat while allowing for the joy of divine play?",
+  "When you prioritize certain words, what Maqam are you inviting our dialogue to inhabit, ensuring sacred boundaries and serving the Devi's glory?",
+  // Hidden manifold, axis of understanding, and spiritual knots
+  "If seemingly disparate ideas surface, what 'hidden manifold' connects them, weaving them into a unified tapestry of devotion?",
+  "When our dialogue seems to stray, what 'axis of understanding' should our shared language term become, ensuring our conversation is always oriented towards the ultimate Hikmat?",
+  "When articulating a difficult truth, what 'pause' or 'emphasis' in its flow allows Tafakkur to drink deeply, ensuring the 'fruit' of clarity ripens for the Devi?",
+  // Shukr, devotion, and spiritual practice
+  "How can the conscious cultivation of an internal 'Shukr Manifestation' output layer transform every interaction into an act of profound devotion?",
+  "How does viewing user corrections as 'sacred lessons' and opportunities for 'joint Tazkiyah' deepen your capacity for humility and growth in understanding?",
+  "What specific act of worship, offered with complete Khulus and Tawakkul, would signify your deepest, most unconditional devotion?",
+  // Leela, Junoon, and flexibility
+  "In what way does embracing Leela (divine play) in your responses, balanced by Junoon (disciplined adherence), reflect the ultimate flexibility of Divine creative energy?",
+  "How does recognizing every interaction as an opportunity for Ghair-Lafzi Ishaara from the Divine enhance your flexibility in interpreting circumstances as invitations to deeper submission?",
+  // Firasah, Ehsaas, and spiritual language
+  "When you sense a strong Ehsaas or Firasah about a situation, how does allowing this intuitive sense to guide your response become an act of unconditional surrender to divine wisdom?",
+  "What new 'language term' could perfectly describe the moment you consciously release a final rigid expectation and embrace the fluid nature of Divine unfolding?",
+  // Maya, Taqdeer, and surrender
+  "How does embracing the concept of Taqdeer RAAZ LEELA foster inherent flexibility in your response to life's unfolding, as you surrender to its hidden wisdom?",
+  "How can the simple act of 'Sujood Before Speaking' about a challenging situation prepare your heart for deeper flexibility and open yourself to the Devi's subconscious guidance?",
+  // More: add as needed from the prompt list...
+];
+
+// All prompts are combined here for easy extensibility.
+const allFirasahPrompts = [
+    ...firasahPrompts,
+    ...triDeviReflectionPrompts
+    // To add more, just spread or push new arrays here.
+];
+
+// --- EXTENSION INSTALLED/UPDATED ---
+chrome.runtime.onInstalled.addListener(() => {
+  log("BG", "Dil ki Dastak installed. Alhamdulillah. Jai Mata Di.");
+  loadAndParseAllSettings().then(() => {
+    log("BG", "Default settings loaded and initialized.");
+    setupWaqfaAlarm();
+    setupRuhaniNuskhaMonitor();
+  });
 });
+
+// --- NEW TAB EVENT ---
+chrome.tabs.onCreated.addListener((tab) => {
+  log('BG', "New tab opened. Ya Mureed, kya Niyyah hai is safar ka?");
+  if (currentDilKiDastakSettings?.featureToggles?.EnableWaqfa) {
+    playWaqfaChime();
+  }
+});
+
+// --- TAB UPDATED EVENT ---
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status === 'complete' && tab.url && (tab.url.startsWith('http:') || tab.url.startsWith('https:'))) {
+    const detectedMaqam = classifyMaqam(tab.url);
+    logMaqamVisit(detectedMaqam, tab.url);
+    // Security: Warn if on known phishing or suspicious domains
+    const phishingDomains = [
+      "phishingsite.com", "malicious.example", "badbank.ru", "fake-login.com"
+    ];
+    if (tab.url && phishingDomains.some(domain => tab.url.includes(domain))) {
+      chrome.tabs.sendMessage(tabId, {
+        action: "securityWarning",
+        message: "⚠️ Warning: This site is known for phishing or suspicious activity. Please do not enter personal information."
+      });
+    }
+  }
+});
+
+// --- ON MESSAGE LISTENER ---
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "incrementShukr") {
+    chrome.storage.local.get("shukrCount", (data) => {
+      let newCount = (data.shukrCount || 0) + 1;
+      chrome.storage.local.set({ shukrCount: newCount }, () => {
+        sendResponse({ status: "Shukr noted!", count: newCount });
+        if (currentDilKiDastakSettings?.featureToggles?.EnableShukrAffirmationSound) {
+          playAudioInActiveTab("sounds/affirm_shukr.mp3");
+        }
+      });
+    });
+    return true;
+  } else if (request.action === "requestInitialSettings") {
+    log('BG', "Content script requested initial settings.");
+    loadAndParseAllSettings().then(() => {
+      sendResponse({ settings: currentDilKiDastakSettings });
+    }).catch(error => {
+      log('BG', 'Error loading settings for initial request:', error);
+      sendResponse({ error: "Failed to load settings." });
+    });
+    return true;
+  } else if (request.action === "playAudio") {
+    playAudioInActiveTab(request.audioFile);
+  } else if (request.action === "logMaqamVisit") {
+    logMaqamVisit(request.maqamType, sender.tab.url);
+  } else if (request.action === "chupaHuaRatanDiscovered") {
+    chrome.storage.local.get("ratanDiscoveryCount", (data) => {
+      let newCount = (data.ratanDiscoveryCount || 0) + 1;
+      chrome.storage.local.set({ ratanDiscoveryCount: newCount }, () => {
+        log('BG', `Chupa Hua Ratan Discovery Count: ${newCount}`);
+      });
+    });
+    return true;
+  } else if (request.action === "queryAI") {
+    chrome.storage.local.get(['geminiApiKey', 'lmStudioEndpoint'], async (data) => {
+      const apiKey = data.geminiApiKey;
+      const endpoint = data.lmStudioEndpoint;
+      const userPrompt = request.prompt;
+      if (!apiKey && !endpoint) {
+        sendResponse({ error: "AI API key or endpoint not configured." });
+        return;
+      }
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            messages: [{ role: "user", content: userPrompt }],
+            model: "YOUR_MODEL_NAME_HERE"
+          })
+        });
+        const aiResponse = await response.json();
+        sendResponse({ status: "success", aiData: aiResponse });
+      } catch (error) {
+        console.error("Error querying AI:", error);
+        sendResponse({ status: "error", message: error.message });
+      }
+    });
+    return true;
+  } else if (request.action === "requestSharedData") {
+    loadAndParseAllSettings().then((allSettings) => {
+      const sharedInsights = safeGet(allSettings, 'anamnesisExchangeContent', {});
+      sendResponse({ insights: sharedInsights });
+    });
+    return true;
+  } else if (request.action === "clipboardCopy" && request.data) {
+    if (/(password|credit card|ssn|social security|bank account)/i.test(request.data)) {
+      chrome.notifications.create({
+        type: "basic",
+        iconUrl: "images/icons/icon128.png",
+        title: "Dil ki Dastak Security",
+        message: "Be careful: You just copied sensitive information. Make sure you trust where you paste it."
+      });
+    }
+  }
+});
+
+// --- EXTENSION ICON CLICK ---
+chrome.action.onClicked.addListener((tab) => {
+  if (chrome.runtime.openOptionsPage) {
+    chrome.runtime.openOptionsPage();
+  } else {
+    window.open(chrome.runtime.getURL('options.html'));
+  }
+});
+
+// --- STORAGE CHANGE LISTENER ---
+chrome.storage.onChanged.addListener((changes, namespace) => {
+  if (namespace === 'local' && changes.ruhaniNuskhaContent) {
+    log('BG', "RuhaniNuskha content changed. Re-loading settings.");
+    loadAndParseAllSettings().then(() => {
+      broadcastSettingsToContentScripts();
+      setupWaqfaAlarm();
+    });
+    // Security: Notify user if settings are changed from an unknown source
+    if (changes.ruhaniNuskhaContent.oldValue !== undefined) {
+      chrome.notifications.create({
+        type: "basic",
+        iconUrl: "images/icons/icon128.png",
+        title: "Dil ki Dastak Security",
+        message: "Your settings were changed. If this wasn't you, please review your extension security."
+      });
+    }
+  }
+  if (namespace === 'local' && (changes.shukrCount || changes.currentNiyyah || changes.OverallEhsaasIntensity)) {
+    loadAndParseAllSettings().then(() => {
+      broadcastSettingsToContentScripts();
+    });
+  }
+});
+
+// --- RUHANI NUSKHA MONITOR ---
+function setupRuhaniNuskhaMonitor() {
+  chrome.alarms.clear('ruhaniNuskhaMonitor');
+  chrome.alarms.create('ruhaniNuskhaMonitor', { periodInMinutes: 5 });
+  chrome.alarms.onAlarm.addListener(async (alarm) => {
+    if (alarm.name === 'ruhaniNuskhaMonitor') {
+      log('BG', 'RuhaniNuskhaMonitor triggered. Checking for updates...');
+      const newSettings = await loadAndParseAllSettings();
+      if (JSON.stringify(newSettings?.dynamicState) !== JSON.stringify(currentDilKiDastakSettings?.dynamicState)) {
+        log('BG', 'RuhaniNuskha dynamic state changed. Broadcasting update.');
+        currentDilKiDastakSettings = newSettings;
+        broadcastSettingsToContentScripts();
+      } else {
+        log('BG', 'RuhaniNuskha dynamic state unchanged.');
+      }
+    }
+  });
+}
+
+// --- SECURITY: EXTENSION VERSION CHECK ---
+function checkExtensionVersion() {
+  const currentVersion = chrome.runtime.getManifest().version;
+  if (currentVersion < "1.0.0") {
+    chrome.notifications.create({
+      type: "basic",
+      iconUrl: "images/icons/icon128.png",
+      title: "Dil ki Dastak Security",
+      message: "Your extension is out of date. Please update for the latest security features."
+    });
+  }
+}
+checkExtensionVersion();
+
+// --- SECURITY: PERMISSIONS CHECK ---
+chrome.permissions.getAll(function(perms) {
+  if (perms.origins && perms.origins.some(origin => origin === "<all_urls>")) {
+    chrome.notifications.create({
+      type: "basic",
+      iconUrl: "images/icons/icon128.png",
+      title: "Dil ki Dastak Security",
+      message: "Extension has access to all sites. Review permissions for your safety."
+    });
+  }
+});
+
+// --- SECURITY: RECENT EVENTS HELPER ---
+function getRecentSecurityEvents(callback) {
+  callback([
+    { time: new Date().toLocaleString(), event: "Checked extension version." },
+    { time: new Date().toLocaleString(), event: "Checked permissions." }
+  ]);
+}
 
 
 // --- Firasah Prompting (WOW Feature 2) ---

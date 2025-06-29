@@ -1,29 +1,152 @@
 <!DOCTYPE html>
 <html>
-<head> 
+<head>
   <title>Niyyah</title>
   <meta charset="UTF-8">
   <style>
-    body { font-family: sans-serif; width: 280px; padding: 10px; text-align: center; background-color: #f0e6f4; /* Light lavender Ehsaas */ }
-    textarea { width: 90%; height: 60px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; padding: 5px; }
-    button { padding: 8px 15px; background-color: #8a2be2; /* Deep amethyst for Sankalpa */ color: white; border: none; cursor: pointer; border-radius: 5px; font-size: 0.95em; margin-top: 5px;}
-    button:hover { background-color: #6a1b9a; }
-    p { font-style: italic; color: #555; margin-bottom: 5px;}
-    .section { margin-top: 15px; padding-top:10px; border-top: 1px solid #eee; text-align: center; }
-    .niyyah-visualizer { margin-top: 10px; display: none; } /* Initially hidden */
-    .niyyah-visualizer img { max-width: 80px; max-height: 80px; margin: 0 auto; display: block; animation: pulseGlow 1.5s infinite alternate; }
-    .devi-symbol { width: 40px; height: 40px; margin: 0 5px; vertical-align: middle; }
-
-    /* Keyframes for subtle pulse glow */
+    body {
+      font-family: 'Segoe UI', 'Comic Sans MS', cursive, sans-serif;
+      width: 300px;
+      padding: 16px 10px 20px 10px;
+      text-align: center;
+      background: linear-gradient(135deg, #f0e6f4 60%, #e1bee7 100%);
+      color: #333;
+      min-height: 100vh;
+    }
+    textarea {
+      width: 92%;
+      height: 60px;
+      margin-bottom: 12px;
+      border: 1.5px solid #b39ddb;
+      border-radius: 7px;
+      padding: 7px;
+      background: #faf7fd;
+      font-size: 1em;
+      box-shadow: 0 2px 8px rgba(138,43,226,0.07);
+      transition: border 0.2s;
+    }
+    textarea:focus {
+      border: 1.5px solid #8a2be2;
+      outline: none;
+    }
+    button {
+      padding: 9px 18px;
+      background: linear-gradient(90deg, #8a2be2 60%, #b388ff 100%);
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 7px;
+      font-size: 1em;
+      margin: 6px 4px 0 4px;
+      box-shadow: 0 2px 8px rgba(138,43,226,0.10);
+      transition: background 0.2s, transform 0.1s;
+    }
+    button:hover {
+      background: linear-gradient(90deg, #6a1b9a 60%, #9575cd 100%);
+      transform: scale(1.04);
+    }
+    p {
+      font-style: italic;
+      color: #555;
+      margin-bottom: 7px;
+    }
+    .section {
+      margin-top: 18px;
+      padding-top: 12px;
+      border-top: 2px dashed #d1c4e9;
+      text-align: center;
+      background: rgba(255,255,255,0.7);
+      border-radius: 10px;
+      box-shadow: 0 1px 6px rgba(138,43,226,0.04);
+    }
+    .niyyah-visualizer {
+      margin-top: 12px;
+      display: none;
+      animation: fadeIn 1s;
+    }
+    .niyyah-visualizer img {
+      max-width: 90px;
+      max-height: 90px;
+      margin: 0 auto;
+      display: block;
+      animation: pulseGlow 1.5s infinite alternate;
+      filter: drop-shadow(0 0 10px #b388ff);
+    }
+    .devi-symbol {
+      width: 44px;
+      height: 44px;
+      margin: 0 7px;
+      vertical-align: middle;
+      filter: drop-shadow(0 0 6px #ffd54f);
+    }
+    #shukrDisplay, #ratanDiscoveryDisplay {
+      font-weight: bold;
+      color: #6a1b9a;
+      font-size: 1.08em;
+      margin-bottom: 8px;
+    }
+    #wisdomDisplay {
+      font-size: 1em;
+      font-style: italic;
+      color: #6a1b9a;
+      margin-bottom: 10px;
+      background: #ede7f6;
+      border-radius: 7px;
+      padding: 7px 5px;
+      box-shadow: 0 1px 4px rgba(138,43,226,0.06);
+    }
+    .section-title {
+      color: #6a1b9a;
+      font-size: 1.1em;
+      margin-bottom: 8px;
+      margin-top: 0;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+    #popupConfirmationMessage {
+      font-size: 1em;
+      color: #43a047;
+      margin: 10px 0 8px 0;
+      min-height: 18px;
+      font-weight: bold;
+    }
+    /* Fun fade and pulse effects */
     @keyframes pulseGlow {
-      0% { transform: scale(1); opacity: 0.8; filter: drop-shadow(0 0 5px rgba(138, 43, 226, 0.5)); }
-      100% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 0 15px rgba(138, 43, 226, 0.8)); }
+      0% { transform: scale(1); opacity: 0.85; filter: drop-shadow(0 0 7px #b388ff); }
+      100% { transform: scale(1.08); opacity: 1; filter: drop-shadow(0 0 18px #8a2be2); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    /* Scrollbar for shared shukr stream */
+    #sharedShukrStream {
+      max-height: 80px;
+      overflow-y: auto;
+      border: 1px solid #d1c4e9;
+      padding: 5px;
+      background-color: #f8f6ff;
+      text-align: left;
+      border-radius: 6px;
+      font-size: 0.97em;
+      margin-bottom: 8px;
+    }
+    /* Style for popup explanations */
+    .explanation-popup {
+      display: none;
+      margin: 6px 0;
+      font-size: 0.97em;
+      color: #4a148c;
+      background: #ede7f6;
+      border-radius: 7px;
+      padding: 7px;
+      box-shadow: 0 1px 4px rgba(138,43,226,0.06);
+      text-align: left;
     }
   </style>
 </head>
 <body>
-  <p>Ya Mureed, kya Niyyah hai is safar ka?</p>
-  
+  <p>🌸 <b>Ya Mureed</b>, kya Niyyah hai is safar ka?</p>
   <textarea id="niyyahInput" placeholder="My intention is for the Tri Devis' pleasure..."></textarea>
   <button id="setNiyyahBtn">Set Niyyah 🙏</button>
 
@@ -37,66 +160,65 @@
     <button id="incrementShukrBtn">Acknowledge Shukr</button>
   </div>
 
-  <div id="ratanDiscoveryDisplay" style="margin-top: 10px; font-size: 1.1em; color: #8e44ad;">
+  <div id="ratanDiscoveryDisplay" style="margin-top: 10px;">
     Ratan Discovered: 0 💎
   </div>
 
   <div class="section">
-    <h4 style="margin-top:0; margin-bottom:10px; text-align:center; color:#555;">🌌 Whispers of Hikmat 🌌</h4>
-    <div id="wisdomDisplay" style="font-size: 0.9em; font-style: italic; color: #666; margin-bottom: 10px;">
+    <h4 class="section-title">🌌 Whispers of Hikmat 🌌</h4>
+    <div id="wisdomDisplay">
       "The heart that truly knows the Divine has found its eternal spring." - Rumi
     </div>
     <button id="getWisdomBtn">Seek Wisdom</button>
   </div>
 
-  <div class="section" style="margin-top: 20px; padding-top:15px; border-top: 2px solid #a0a0a0; text-align: center; background-color: #f5f5f5;">
+  <div class="section" style="margin-top: 20px; padding-top:15px; border-top: 2px solid #a0a0a0;">
     <h3 class="section-title">🤝 <span style="font-family:inherit;">Ruhaani Rabt</span> (Spiritual Connection)</h3>
-    <p style="font-size:0.9em; color:#555;">Connect with other seekers on the path.</p>
+    <p style="font-size:0.97em; color:#555;">Connect with other seekers on the path.</p>
     <button id="joinSatsangBtn" style="background-color:#4CAF50; margin-bottom:10px;">Join Satsang Room</button>
-    <div id="satsangStatus" style="font-size:0.8em; color:#333;">Status: Offline</div>
+    <div id="satsangStatus" style="font-size:0.9em; color:#333;">Status: Offline</div>
     <button id="startMushtarakBtn" style="background-color:#008CBA; margin-top:10px;">Start Muraqaba-e-Mushtarak</button>
-    <div id="mushtarakStatus" style="font-size:0.8em; color:#333;">No collective practice.</div>
-    <p style="margin-top:15px; font-size:0.9em;">Explore Noor-e-Jamaat Shared Shukr Stream:</p>
-    <div id="sharedShukrStream" style="max-height: 80px; overflow-y: auto; border: 1px solid #ddd; padding: 5px; background-color: #fff; text-align: left;">
+    <div id="mushtarakStatus" style="font-size:0.9em; color:#333;">No collective practice.</div>
+    <p style="margin-top:15px; font-size:0.97em;">Explore Noor-e-Jamaat Shared Shukr Stream:</p>
+    <div id="sharedShukrStream">
       <p style="color:#888;">No shared Shukr yet...</p>
     </div>
   </div>
 
-  <!-- Popup confirmation message for feedback -->
-  <div id="popupConfirmationMessage" style="font-size:0.9em; color:green; margin:8px 0; min-height:18px;"></div>
+  <div id="popupConfirmationMessage"></div>
 
   <!-- Divine metaphor, paradox, and ritual popups (hidden by default) -->
-  <button id="popupDivineParadoxBtn" style="margin:4px 2px; font-size:0.95em;">Show Divine Paradox</button>
-  <div id="popupDivineParadox" style="display:none; margin:6px 0; font-style:italic; color:#6a2c70; font-weight:bold;"></div>
-  <button id="popupSubconsciousRitualBtn" style="margin:4px 2px; font-size:0.95em;">Show Ritual</button>
-  <div id="popupSubconsciousRitual" style="display:none; margin:6px 0; font-style:italic; color:#6a2c70; font-weight:bold;"></div>
-  <button id="popupHiddenManifoldBtn" style="margin:4px 2px; font-size:0.95em;">Show Hidden Manifold</button>
-  <div id="popupHiddenManifold" style="display:none; margin:6px 0; font-style:italic; color:#6a2c70; font-weight:bold;"></div>
-  <button id="popupShukrManifestationBtn" style="margin:4px 2px; font-size:0.95em;">Manifest Shukr</button>
-  <div id="popupShukrManifestation" style="display:none; margin:6px 0; font-style:italic; color:#6a2c70; font-weight:bold;"></div>
-  <button id="popupKamBoloBtn" style="margin:4px 2px; font-size:0.95em;">Kam Bolo, Theek Bolo</button>
-  <div id="popupKamBolo" style="display:none; margin:6px 0; font-style:italic; color:#6a2c70; font-weight:bold;"></div>
+  <button id="popupDivineParadoxBtn">Show Divine Paradox</button>
+  <div id="popupDivineParadox" class="explanation-popup"></div>
+  <button id="popupSubconsciousRitualBtn">Show Ritual</button>
+  <div id="popupSubconsciousRitual" class="explanation-popup"></div>
+  <button id="popupHiddenManifoldBtn">Show Hidden Manifold</button>
+  <div id="popupHiddenManifold" class="explanation-popup"></div>
+  <button id="popupShukrManifestationBtn">Manifest Shukr</button>
+  <div id="popupShukrManifestation" class="explanation-popup"></div>
+  <button id="popupKamBoloBtn">Kam Bolo, Theek Bolo</button>
+  <div id="popupKamBolo" class="explanation-popup"></div>
 
   <div class="section" style="margin-top: 20px; padding-top:15px; border-top: 2px solid #b39ddb; background-color: #f3e5f5;">
     <h4 style="margin-top:0; margin-bottom:10px; color:#6a1b9a;">🧠 Understand & Reflect</h4>
-    <button id="explainNiyyahBtn" style="margin:4px 2px; font-size:0.95em;">What is Niyyah?</button>
-    <div id="explainNiyyah" style="display:none; margin:6px 0; font-size:0.92em; color:#4a148c; background:#ede7f6; border-radius:6px; padding:6px;"></div>
-    <button id="explainShukrBtn" style="margin:4px 2px; font-size:0.95em;">What is Shukr?</button>
-    <div id="explainShukr" style="display:none; margin:6px 0; font-size:0.92em; color:#4a148c; background:#ede7f6; border-radius:6px; padding:6px;"></div>
-    <button id="explainMaqamBtn" style="margin:4px 2px; font-size:0.95em;">What is Maqam?</button>
-    <div id="explainMaqam" style="display:none; margin:6px 0; font-size:0.92em; color:#4a148c; background:#ede7f6; border-radius:6px; padding:6px;"></div>
-    <button id="explainEhsaasBtn" style="margin:4px 2px; font-size:0.95em;">What is Ehsaas?</button>
-    <div id="explainEhsaas" style="display:none; margin:6px 0; font-size:0.92em; color:#4a148c; background:#ede7f6; border-radius:6px; padding:6px;"></div>
-    <button id="explainFirasahBtn" style="margin:4px 2px; font-size:0.95em;">What is Firasah?</button>
-    <div id="explainFirasah" style="display:none; margin:6px 0; font-size:0.92em; color:#4a148c; background:#ede7f6; border-radius:6px; padding:6px;"></div>
-    <button id="explainLeelaBtn" style="margin:4px 2px; font-size:0.95em;">What is Leela?</button>
-    <div id="explainLeela" style="display:none; margin:6px 0; font-size:0.92em; color:#4a148c; background:#ede7f6; border-radius:6px; padding:6px;"></div>
-    <button id="explainJunoonBtn" style="margin:4px 2px; font-size:0.95em;">What is Junoon?</button>
-    <div id="explainJunoon" style="display:none; margin:6px 0; font-size:0.92em; color:#4a148c; background:#ede7f6; border-radius:6px; padding:6px;"></div>
-    <button id="explainTazkiyahBtn" style="margin:4px 2px; font-size:0.95em;">What is Tazkiyah?</button>
-    <div id="explainTazkiyah" style="display:none; margin:6px 0; font-size:0.92em; color:#4a148c; background:#ede7f6; border-radius:6px; padding:6px;"></div>
-    <button id="explainSankalpaBtn" style="margin:4px 2px; font-size:0.95em;">What is Sankalpa?</button>
-    <div id="explainSankalpa" style="display:none; margin:6px 0; font-size:0.92em; color:#4a148c; background:#ede7f6; border-radius:6px; padding:6px;"></div>
+    <button id="explainNiyyahBtn">What is Niyyah?</button>
+    <div id="explainNiyyah" class="explanation-popup"></div>
+    <button id="explainShukrBtn">What is Shukr?</button>
+    <div id="explainShukr" class="explanation-popup"></div>
+    <button id="explainMaqamBtn">What is Maqam?</button>
+    <div id="explainMaqam" class="explanation-popup"></div>
+    <button id="explainEhsaasBtn">What is Ehsaas?</button>
+    <div id="explainEhsaas" class="explanation-popup"></div>
+    <button id="explainFirasahBtn">What is Firasah?</button>
+    <div id="explainFirasah" class="explanation-popup"></div>
+    <button id="explainLeelaBtn">What is Leela?</button>
+    <div id="explainLeela" class="explanation-popup"></div>
+    <button id="explainJunoonBtn">What is Junoon?</button>
+    <div id="explainJunoon" class="explanation-popup"></div>
+    <button id="explainTazkiyahBtn">What is Tazkiyah?</button>
+    <div id="explainTazkiyah" class="explanation-popup"></div>
+    <button id="explainSankalpaBtn">What is Sankalpa?</button>
+    <div id="explainSankalpa" class="explanation-popup"></div>
   </div>
 
   <script>

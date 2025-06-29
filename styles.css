@@ -1,185 +1,263 @@
+/* --- South Asian & Southeast Asian Inspired Styles --- */
 body { 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: 20px;
-    background-color: #f0f4f8;
-    color: #333;
-    line-height: 1.6;
-    /* Ensure no unwanted scrollbars from fixed overlays */
+    font-family: 'Noto Nastaliq Urdu', 'Noto Sans Devanagari', 'Noto Sans Bengali', 'Noto Sans Gujarati', 'Noto Sans Tamil', 'Noto Sans Sinhala', 'Noto Sans Thai', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 24px;
+    background: linear-gradient(135deg, #fbeee6 0%, #e0f7fa 100%);
+    color: #2d1a0d;
+    line-height: 1.7;
     overflow-x: hidden;
-    overflow-y: auto; /* Allow vertical scrolling */
+    overflow-y: auto;
+    /* Subtle South Asian motif background (optional SVG pattern) */
+    /* background-image: url('images/patterns/indian_motif.svg'); */
 }
 
 h2 {
-    color: #2c3e50;
+    color: #8d153a;
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 32px;
+    font-family: 'Noto Nastaliq Urdu', 'Noto Sans Devanagari', 'Segoe UI', serif;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px #f8bbd0;
 }
 
 .section {
-    margin-bottom: 25px;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    margin-bottom: 28px;
+    padding: 22px 20px 20px 20px;
+    background: linear-gradient(120deg, #fff8e1 60%, #ffe0b2 100%);
+    border-radius: 12px;
+    box-shadow: 0 3px 14px rgba(141,21,58,0.07), 0 1.5px 6px 0 rgba(0,0,0,0.06);
+    border: 2px solid #f8bbd0;
 }
 
 .section-title {
-    font-size: 1.3em;
-    color: #34495e;
+    font-size: 1.35em;
+    color: #6a1b9a;
     margin-top: 0;
-    margin-bottom: 15px;
-    border-bottom: 2px solid #e0e0e0;
-    padding-bottom: 8px;
+    margin-bottom: 18px;
+    border-bottom: 2px dashed #f8bbd0;
+    padding-bottom: 10px;
+    font-family: 'Noto Nastaliq Urdu', 'Noto Sans Devanagari', 'Segoe UI', serif;
+    letter-spacing: 0.5px;
 }
 
 /* Toggle Switch Styles */
 .toggle-switch {
     position: relative;
     display: inline-block;
-    width: 50px;
-    height: 24px;
-    margin-left: 10px;
+    width: 54px;
+    height: 26px;
+    margin-left: 12px;
     vertical-align: middle;
 }
-
 .toggle-switch input {
     opacity: 0;
     width: 0;
     height: 0;
 }
-
 .slider {
     position: absolute;
     cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ffe082;
     transition: .4s;
-    border-radius: 24px;
+    border-radius: 26px;
+    border: 1.5px solid #f8bbd0;
 }
-
 .slider:before {
     position: absolute;
     content: "";
-    height: 16px;
-    width: 16px;
+    height: 18px;
+    width: 18px;
     left: 4px;
     bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
+    background-color: #fff;
     transition: .4s;
     border-radius: 50%;
+    box-shadow: 0 2px 6px #f8bbd0;
 }
-
 input:checked + .slider {
-    background-color: #8a2be2; /* Amethyst purple */
+    background: linear-gradient(90deg, #8d153a 0%, #ffd54f 100%);
 }
-
 input:focus + .slider {
-    box-shadow: 0 0 1px #8a2be2;
+    box-shadow: 0 0 2px #8d153a;
 }
-
-/* In styles.css */
-#dilKiDastakChupaHuaRatan {
-  /* Basic positioning and display properties are set in JS */
-  /* Refine visual aspects here */
-  font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Segoe UI Symbol'; /* Ensure emoji rendering */
-  text-shadow: 0 0 5px rgba(255, 255, 0, 0.7); /* A subtle glow */
-  user-select: none; /* Prevent text selection */
-  pointer-events: auto; /* Ensure it's clickable even if parent has pointer-events: none */
-}
-
-/* Optional: More distinct hover state */
-#dilKiDastakChupaHuaRatan:hover {
-  transform: scale(1.2); /* Grow slightly on hover */
-  filter: brightness(1.5); /* Brighten on hover */
-  transition: transform 0.2s ease-out, filter 0.2s ease-out;
-}
-
 input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
+    transform: translateX(28px);
 }
 
-/* ... existing styles ... */
-
-/* NEW: Styles for Ruhaani Rabt sections in popup/options */
-.toggle-switch { /* ... existing styles ... */ }
-.section-title { /* ... existing styles ... */ }
-
-/* General styles for buttons and textareas in new sections */
-.section button, .section textarea {
-    /* ... common button/textarea styles for consistency ... */
+/* Buttons */
+button {
+    padding: 11px 22px;
+    background: linear-gradient(90deg, #8d153a 60%, #ffd54f 100%);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 1.08em;
+    font-family: inherit;
+    font-weight: 600;
+    transition: background 0.3s, color 0.2s, transform 0.1s;
+    margin-right: 10px;
+    margin-top: 10px;
+    box-shadow: 0 2px 8px rgba(141,21,58,0.08);
+    letter-spacing: 0.2px;
+}
+button:hover {
+    background: linear-gradient(90deg, #ffd54f 0%, #8d153a 100%);
+    color: #fffde7;
+    transform: scale(1.04);
+}
+button#resetNuskhaBtn {
+    background: linear-gradient(90deg, #e74c3c 60%, #ffd54f 100%);
+}
+button#resetNuskhaBtn:hover {
+    background: linear-gradient(90deg, #c0392b 60%, #ffd54f 100%);
 }
 
-/* Specific style for Satsang Room / Muraqaba-e-Mushtarak status */
+/* Textarea for Ruhani Nuskha and others */
+textarea {
+    width: calc(100% - 20px);
+    height: 250px;
+    padding: 12px;
+    margin-bottom: 16px;
+    border: 1.5px solid #f8bbd0;
+    border-radius: 7px;
+    font-family: 'Noto Nastaliq Urdu', 'Noto Sans Devanagari', 'Consolas', 'Monaco', monospace;
+    font-size: 1em;
+    background: #fff8e1;
+    resize: vertical;
+    box-shadow: 0 1px 4px #ffe0b2;
+}
+
+/* Select elements */
+select {
+    padding: 9px;
+    border: 1.5px solid #f8bbd0;
+    border-radius: 5px;
+    margin-right: 10px;
+    background-color: #fffde7;
+    cursor: pointer;
+    font-size: 1em;
+    font-family: inherit;
+}
+
+/* Range sliders */
+input[type="range"] {
+    width: calc(100% - 20px);
+    margin-top: 10px;
+    accent-color: #8d153a;
+}
+
+/* Satsang/Muraqaba status */
 #satsangStatus, #mushtarakStatus {
     font-weight: bold;
-    margin-top: 5px;
-    color: #555;
+    margin-top: 7px;
+    color: #8d153a;
+    font-family: 'Noto Nastaliq Urdu', 'Noto Sans Devanagari', inherit;
 }
 
-/* Style for sharedShukrStream */
+/* Shared Shukr Stream */
 #sharedShukrStream {
-    /* ... styles for scrollable box ... */
+    max-height: 90px;
+    overflow-y: auto;
+    border: 1.5px solid #f8bbd0;
+    padding: 8px;
+    background: #fffde7;
+    border-radius: 7px;
+    font-size: 0.97em;
+    margin-bottom: 8px;
+    font-family: inherit;
 }
 
-/* NEW: Collective Aura for Muraqaba-e-Mushtarak (content_script.js) */
+/* Chupa Hua Ratan (Hidden Gem) */
+#dilKiDastakChupaHuaRatan {
+    font-family: 'Segoe UI Emoji', 'Noto Color Emoji', 'Apple Color Emoji', 'Segoe UI Symbol';
+    text-shadow: 0 0 7px #ffd54f, 0 0 2px #8d153a;
+    user-select: none;
+    pointer-events: auto;
+    border: 2px solid #ffd54f;
+    border-radius: 50%;
+    background: #fffde7;
+    transition: transform 0.2s, filter 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px #ffd54f;
+}
+#dilKiDastakChupaHuaRatan:hover {
+    transform: scale(1.25) rotate(-8deg);
+    filter: brightness(1.6) drop-shadow(0 0 8px #8d153a);
+    box-shadow: 0 4px 16px #ffd54f;
+}
+
+/* Collective Aura for Muraqaba-e-Mushtarak */
 #dilKiDastakCollectiveAura {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background-color: rgba(138, 43, 226, 0.05); /* Subtle purple overlay */
-    pointer-events: none; /* Allows clicks to pass through */
-    z-index: 9999; /* Ensure it's on top without blocking content */
-    animation: subtleGlow 5s infinite alternate ease-in-out; /* NEW Animation */
+    background: repeating-linear-gradient(135deg, #ffd54f 0 2px, #fff0 2px 8px), rgba(138, 43, 226, 0.07);
+    pointer-events: none;
+    z-index: 9999;
+    animation: subtleGlow 5s infinite alternate ease-in-out;
+    border-radius: 0 0 60px 60px;
 }
 
 @keyframes subtleGlow {
-    from { opacity: 0.8; }
+    from { opacity: 0.85; }
     to { opacity: 1; }
 }
 
-/* Other subtle cues/prompts */
+/* Prompts */
 .dil-ki-dastak-prompt {
-    /* Styles for conceptual prompts injected by content_script.js */
     position: fixed;
-    bottom: 20px;
+    bottom: 24px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: rgba(255, 255, 255, 0.9);
-    border: 1px solid #ddd;
-    padding: 10px 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    font-size: 0.9em;
-    color: #333;
+    background: linear-gradient(90deg, #fffde7 60%, #ffd54f 100%);
+    border: 1.5px solid #f8bbd0;
+    padding: 12px 18px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px #ffd54f;
+    font-size: 1em;
+    color: #8d153a;
     z-index: 10000;
+    font-family: inherit;
 }
 
-/* Body level Muraqaba effects (applied by content_script.js via class) */
+/* Body level Muraqaba effects */
 body.muraqaba-active {
-  /* This class can be toggled by content_script.js if needed for general body styles */
-  /* filter: saturate(90%); */ /* Example, but now handled by direct style on body/overlay */
+    /* Example: filter: sepia(0.1) hue-rotate(-10deg); */
 }
 
-/* Keyframes for the Subtle Pulse Muraqaba effect (for the overlay div) */
-/* These animations are injected by content_script.js into the document's <head> */
-/* to ensure they are available for the dynamic overlay element. */
-/* They are included here for documentation purposes. */
+/* --- Documentation for dynamic keyframes (not active here) --- */
 /*
 @keyframes dilKiDastakSubtlePulse {
   0% { opacity: 0.1; }
   50% { opacity: 0.2; }
   100% { opacity: 0.1; }
 }
-
 @keyframes dilKiDastakAuraPulse {
     0% { transform: scale(1); opacity: 0.05; }
     50% { transform: scale(1.1); opacity: 0.15; }
     100% { transform: scale(1); opacity: 0.05; }
 }
 */
+
+/* --- South Asian & Pacific Islander Inspired Details --- */
+::-webkit-scrollbar {
+    width: 10px;
+    background: #ffe0b2;
+}
+::-webkit-scrollbar-thumb {
+    background: #ffd54f;
+    border-radius: 6px;
+    border: 2px solid #fffde7;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #8d153a;
+}
+
+/* Fiji/Island touch: subtle wave border for sections */
+.section {
+    border-bottom: 4px wavy #ffd54f;
+    border-image: url('data:image/svg+xml;utf8,<svg width="40" height="8" xmlns="http://www.w3.org/2000/svg"><path d=\'M0,4 Q10,0 20,4 T40,4\' fill="none" stroke="%23ffd54f" stroke-width="4"/></svg>') 0 0 100 0 stretch;
+    border-image-slice: 0 0 100 0;
+}
+
+/* ...existing code... */
