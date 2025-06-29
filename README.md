@@ -14,7 +14,7 @@ for privacy reasons the "first version isn't normal working version' its a "brok
 
 so what does the software do?  hopefully helps with 100% OFFLINE!  i also made effort to remove ALL NORMAL LOGICAL CODE that is "not kid child hilarious and end adult safe'
 
-its important to review some history of "spiritual internet' if your familiar with a company EXCITE it went out of business? or SOMAFM.com when SOMA FM came out it was a very big success quietly in San Francisco California?  however a "drug' search engine failed? called EXCITE?
+its important to review some history of "spiritual internet' if your familiar with a company EXCITE it went out of business? or SOMAFM.com when SOMA FM came out it was a very big success quietly in San Francisco California?  however a "drug' search engine failed? called EXCITE?  perhaps the "modern legalization' of online drugs is instagram?  meaning in english insta gram measurement of a drug max value?
 
 you might recall SOMA as a prominent fictional drug in Aldous Huxley's classic book "Brave New World' (1932). written just before world war II?  
 
