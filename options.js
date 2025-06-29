@@ -714,3 +714,82 @@ function selfHealIfCorrupt() {
   });
 }
 setTimeout(selfHealIfCorrupt, 3000);
+
+// --- Debugging Helper ---
+function debugLog(msg, ...args) {
+  try {
+    console.debug('[Dil ki Dastak][Options]', msg, ...args);
+    // Optionally, also show in a visible debug area if present
+    let dbg = document.getElementById('firefoxDebugLog');
+    if (dbg) {
+      dbg.innerHTML += `[${new Date().toLocaleTimeString()}] ${msg}<br>`;
+      if (dbg.childNodes.length > 100) dbg.innerHTML = dbg.innerHTML.split('<br>').slice(-100).join('<br>');
+    }
+  } catch (e) {
+    // Fallback to console only
+    console.debug('[Dil ki Dastak][Options][DebugLogError]', e);
+  }
+}
+
+// --- Add debug log area if not present ---
+(function() {
+  if (!document.getElementById('firefoxDebugLog')) {
+    const dbg = document.createElement('div');
+    dbg.id = 'firefoxDebugLog';
+    dbg.style.background = '#fff3cd';
+    dbg.style.color = '#856404';
+    dbg.style.fontSize = '0.95em';
+    dbg.style.padding = '8px 12px';
+    dbg.style.margin = '12px 0 18px 0';
+    dbg.style.border = '1px solid #ffeeba';
+    dbg.style.borderRadius = '6px';
+    dbg.style.maxHeight = '120px';
+    dbg.style.overflowY = 'auto';
+    dbg.innerHTML = '<b>Debug Log:</b><br>';
+    document.body && document.body.insertBefore(dbg, document.body.firstChild);
+  }
+  debugLog('Options page JS loaded. UserAgent: ' + navigator.userAgent);
+  if (typeof browser !== 'undefined') {
+    debugLog('browser.* API detected (likely Firefox).');
+  } else if (typeof chrome !== 'undefined') {
+    debugLog('chrome.* API detected (likely Chromium).');
+  } else {
+    debugLog('No browser/chrome API detected!');
+  }
+})();
+
+document.addEventListener('DOMContentLoaded', () => {
+  debugLog('DOMContentLoaded event fired.');
+  // ...existing code...
+  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+    chrome.storage.local.get(null, function(items) {
+      if (chrome.runtime && chrome.runtime.lastError) {
+        debugLog('Storage get error: ' + chrome.runtime.lastError.message);
+      } else {
+        debugLog('Storage get success. Keys: ' + Object.keys(items).join(', '));
+      }
+    });
+  }
+  // ...existing code...
+});
+
+// Add debug logging to key actions
+[
+  'saveNuskhaBtn', 'loadNuskhaBtn', 'exportNuskhaBtn', 'importNuskhaFile', 'resetNuskhaBtn',
+  'saveAiSettingsBtn', 'refreshSnapshotBtn', 'submitAnamnesisBtn'
+].forEach(function(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.addEventListener('click', function() {
+      debugLog('Clicked: #' + id);
+    });
+  }
+});
+
+// Listen for errors globally
+window.addEventListener('error', function(e) {
+  debugLog('Global error: ' + e.message + ' at ' + e.filename + ':' + e.lineno);
+});
+window.addEventListener('unhandledrejection', function(e) {
+  debugLog('Unhandled promise rejection: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
+});

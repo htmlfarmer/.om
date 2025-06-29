@@ -146,6 +146,10 @@
   </style>
 </head>
 <body>
+  <!-- Debug log area for popup -->
+  <div id="popupDebugLog" style="background:#fff3cd;color:#856404;font-size:0.95em;padding:7px 10px;margin:8px 0 14px 0;border:1px solid #ffeeba;border-radius:6px;max-height:90px;overflow-y:auto;display:none;">
+    <b>Debug Log:</b><br>
+  </div>
   <p>🌸 <b>Ya Mureed</b>, kya Niyyah hai is safar ka?</p>
   <textarea id="niyyahInput" placeholder="My intention is for the Tri Devis' pleasure..."></textarea>
   <button id="setNiyyahBtn">Set Niyyah 🙏</button>
@@ -222,30 +226,72 @@
   </div>
 
   <script>
-    // Helper explanations for spiritual concepts
-    const explanations = {
-      explainNiyyah: "Niyyah means intention. In spiritual practice, it is the heartfelt purpose or aim behind every action, aligning your will with the Divine.",
-      explainShukr: "Shukr is gratitude. It is the act of recognizing and giving thanks for every blessing, big or small, as a form of worship.",
-      explainMaqam: "Maqam refers to a spiritual station or state on the path. Each Maqam reflects your current inner focus and relationship with the Divine.",
-      explainEhsaas: "Ehsaas is deep spiritual feeling or intuition. It is the subtle awareness that guides you beyond words, connecting you to the Divine.",
-      explainFirasah: "Firasah is spiritual foresight or insight. It is the ability to perceive hidden truths and subtle realities through inner wisdom.",
-      explainLeela: "Leela is Divine play. It is the joyful, spontaneous unfolding of creation, inviting you to participate with openness and wonder.",
-      explainJunoon: "Junoon is passionate devotion. It is the intense longing and drive that fuels your spiritual journey, balanced by wisdom.",
-      explainTazkiyah: "Tazkiyah means purification. It is the process of cleansing the heart and soul from negative traits, making space for Divine light.",
-      explainSankalpa: "Sankalpa is sacred intention or resolve. It is a focused, positive commitment to a spiritual goal, rooted in your deepest truth."
-    };
-    [
-      "explainNiyyahBtn","explainShukrBtn","explainMaqamBtn","explainEhsaasBtn","explainFirasahBtn",
-      "explainLeelaBtn","explainJunoonBtn","explainTazkiyahBtn","explainSankalpaBtn"
-    ].forEach(function(btnId) {
-      const btn = document.getElementById(btnId);
-      const div = document.getElementById(btnId.replace('Btn',''));
-      if (btn && div) {
-        btn.onclick = function() {
-          div.style.display = div.style.display === "none" ? "block" : "none";
-          div.textContent = explanations[btnId.replace('Btn','')];
-        };
+    // --- Debugging Helper for Popup ---
+    function popupDebugLog(msg, ...args) {
+      try {
+        console.debug('[Dil ki Dastak][Popup]', msg, ...args);
+        let dbg = document.getElementById('popupDebugLog');
+        if (dbg) {
+          dbg.style.display = 'block';
+          dbg.innerHTML += `[${new Date().toLocaleTimeString()}] ${msg}<br>`;
+          if (dbg.childNodes.length > 100) dbg.innerHTML = dbg.innerHTML.split('<br>').slice(-100).join('<br>');
+        }
+      } catch (e) {
+        // Fallback to console only
+        console.debug('[Dil ki Dastak][Popup][DebugLogError]', e);
       }
+    }
+
+    // Log startup and environment
+    popupDebugLog('Popup loaded. UserAgent: ' + navigator.userAgent);
+    if (typeof browser !== 'undefined') {
+      popupDebugLog('browser.* API detected (likely Firefox).');
+    } else if (typeof chrome !== 'undefined') {
+      popupDebugLog('chrome.* API detected (likely Chromium).');
+    } else {
+      popupDebugLog('No browser/chrome API detected!');
+    }
+
+    // Log DOMContentLoaded and window load
+    document.addEventListener('DOMContentLoaded', function() {
+      popupDebugLog('DOMContentLoaded event fired.');
+    });
+    window.addEventListener('load', function() {
+      popupDebugLog('Window load event fired.');
+    });
+
+    // Log storage access
+    try {
+      (chrome?.storage?.local || browser?.storage?.local).get(null, function(items) {
+        if (chrome.runtime && chrome.runtime.lastError) {
+          popupDebugLog('Storage get error: ' + chrome.runtime.lastError.message);
+        } else {
+          popupDebugLog('Storage get success. Keys: ' + Object.keys(items).join(', '));
+        }
+      });
+    } catch (e) {
+      popupDebugLog('Storage API test failed: ' + e.message);
+    }
+
+    // Log key UI actions
+    [
+      'setNiyyahBtn', 'incrementShukrBtn', 'getWisdomBtn', 'joinSatsangBtn', 'startMushtarakBtn',
+      'popupDivineParadoxBtn', 'popupSubconsciousRitualBtn', 'popupHiddenManifoldBtn', 'popupShukrManifestationBtn', 'popupKamBoloBtn'
+    ].forEach(function(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('click', function() {
+          popupDebugLog('Clicked: #' + id);
+        });
+      }
+    });
+
+    // Listen for errors globally
+    window.addEventListener('error', function(e) {
+      popupDebugLog('Global error: ' + e.message + ' at ' + e.filename + ':' + e.lineno);
+    });
+    window.addEventListener('unhandledrejection', function(e) {
+      popupDebugLog('Unhandled promise rejection: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
     });
   </script>
   <script src="popup_niyyah.js"></script>

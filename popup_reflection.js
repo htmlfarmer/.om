@@ -1,6 +1,51 @@
 // popup_reflection.js
 
+// --- Debugging Helper for Popup Reflection ---
+function popupReflectionDebugLog(msg, ...args) {
+  try {
+    console.debug('[Dil ki Dastak][Reflection]', msg, ...args);
+    let dbg = document.getElementById('reflectionDebugLog');
+    if (dbg) {
+      dbg.style.display = 'block';
+      dbg.innerHTML += `[${new Date().toLocaleTimeString()}] ${msg}<br>`;
+      if (dbg.childNodes.length > 100) dbg.innerHTML = dbg.innerHTML.split('<br>').slice(-100).join('<br>');
+    }
+  } catch (e) {
+    // Fallback to console only
+    console.debug('[Dil ki Dastak][Reflection][DebugLogError]', e);
+  }
+}
+
+// Add debug log area if not present
+(function() {
+  if (!document.getElementById('reflectionDebugLog')) {
+    const dbg = document.createElement('div');
+    dbg.id = 'reflectionDebugLog';
+    dbg.style.background = '#fff3cd';
+    dbg.style.color = '#856404';
+    dbg.style.fontSize = '0.95em';
+    dbg.style.padding = '7px 10px';
+    dbg.style.margin = '8px 0 14px 0';
+    dbg.style.border = '1px solid #ffeeba';
+    dbg.style.borderRadius = '6px';
+    dbg.style.maxHeight = '90px';
+    dbg.style.overflowY = 'auto';
+    dbg.style.display = 'none';
+    dbg.innerHTML = '<b>Debug Log:</b><br>';
+    document.body && document.body.insertBefore(dbg, document.body.firstChild);
+  }
+  popupReflectionDebugLog('Reflection popup JS loaded. UserAgent: ' + navigator.userAgent);
+  if (typeof browser !== 'undefined') {
+    popupReflectionDebugLog('browser.* API detected (likely Firefox).');
+  } else if (typeof chrome !== 'undefined') {
+    popupReflectionDebugLog('chrome.* API detected (likely Chromium).');
+  } else {
+    popupReflectionDebugLog('No browser/chrome API detected!');
+  }
+})();
+
 document.addEventListener('DOMContentLoaded', function() {
+  popupReflectionDebugLog('DOMContentLoaded event fired.');
   // Inject advanced styles for consistency
   if (!document.getElementById('advancedPopupStyles')) {
     const style = document.createElement('style');
@@ -209,6 +254,42 @@ document.addEventListener('DOMContentLoaded', function() {
   footer.innerHTML = `<span class="material-symbols-outlined" style="vertical-align:middle;">psychology</span>
     <span style="font-style:italic;">“Reflection is the lamp of the heart. Let it illuminate your path.”</span>`;
   document.body.appendChild(footer);
+
+  // Log storage access
+  try {
+    (chrome?.storage?.local || browser?.storage?.local).get(null, function(items) {
+      if (chrome.runtime && chrome.runtime.lastError) {
+        popupReflectionDebugLog('Storage get error: ' + chrome.runtime.lastError.message);
+      } else {
+        popupReflectionDebugLog('Storage get success. Keys: ' + Object.keys(items).join(', '));
+      }
+    });
+  } catch (e) {
+    popupReflectionDebugLog('Storage API test failed: ' + e.message);
+  }
+
+  // Log key UI actions
+  [
+    'studyDetailBtn', 'breathingExerciseBtn', 'hydrationReminderBtn', 'postureCheckBtn', 'lowIntensityBtn',
+    'inAppCommandBtn', 'globalCultureBtn', 'interfaithWisdomBtn', 'cultureCuriosityBtn',
+    'spiritualExciteBtn', 'sufiWhirlBtn', 'dhikrBtn', 'candleBtn', 'prayerBtn', 'blessingBtn',
+    'calendarBtn', 'spiritualNameBtn', 'tasbihBtn', 'journalBtn', 'funSecurityBtn'
+  ].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('click', function() {
+        popupReflectionDebugLog('Clicked: #' + id);
+      });
+    }
+  });
+
+  // Listen for errors globally
+  window.addEventListener('error', function(e) {
+    popupReflectionDebugLog('Global error: ' + e.message + ' at ' + e.filename + ':' + e.lineno);
+  });
+  window.addEventListener('unhandledrejection', function(e) {
+    popupReflectionDebugLog('Unhandled promise rejection: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
+  });
 });
 
 // --- Helper: Info about LM Studio and Llama for users ---
