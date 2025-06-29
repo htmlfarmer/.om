@@ -45,5 +45,11 @@ EnableKhidmatPortal: false
 EnableAnamnesisExchange: true
 EnableMuraqabaMushtarak: true
 
-// 100% OFFLINE PLEASE!
-
+// ╔══════════════════════════════════════════════════════════════════════╗
+// ║      "Let your heart be the artist, your breath the brush."         ║
+// ║      "May every toggle and intention be a petal in your garden."    ║
+// ╚══════════════════════════════════════════════════════════════════════╝
+// ╔══════════════════════════════════════════════════════════════════════╗
+// ║      "Let your heart be the artist, your breath the brush."         ║
+// ║      "May every toggle and intention be a petal in your garden."    ║
+// ╚══════════════════════════════════════════════════════════════════════╝
