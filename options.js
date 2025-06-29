@@ -1,806 +1,279 @@
 // options.js
 
-<<<<<<< HEAD
+// Ensure window.browser is polyfilled if it's not native
+if (typeof browser === 'undefined' && typeof chrome !== 'undefined') {
+  window.browser = chrome;
+  console.log("Polyfilling browser API with chrome in options.");
+} else if (typeof browser !== 'undefined') {
+  console.log("Using native browser API (Firefox) in options.");
+}
+
+function logDebug(message, ...args) {
+  // console.log(`[Options Page] ${message}`, ...args);
+}
+
 // Helper function to show confirmation messages
 function showConfirmation(message, isError = false) {
   const msgDiv = document.getElementById('confirmationMessage');
-  msgDiv.textContent = message;
-  msgDiv.style.color = isError ? 'red' : 'green';
-  setTimeout(() => {
-    msgDiv.textContent = '';
-  }, 3000); // Message disappears after 3 seconds
-=======
-[cite_start]// Helper function to show confirmation messages [cite: 4]
-[cite_start]function showConfirmation(message, isError = false) { [cite: 4]
-  [cite_start]const msgDiv = document.getElementById('confirmationMessage'); [cite: 4]
-  [cite_start]msgDiv.textContent = message; [cite: 4]
-  msgDiv.style.color = isError ? [cite_start]'red' : 'green'; [cite: 4]
-  [cite_start]setTimeout(() => { [cite: 4]
-    [cite_start]msgDiv.textContent = ''; [cite: 4]
-  }, 3000); [cite_start]// Message disappears after 3 seconds [cite: 4]
->>>>>>> 629352d85bffbd2217140e738305d72744c6a415
+  if (msgDiv) { // Ensure the element exists
+    msgDiv.textContent = message;
+    msgDiv.style.color = isError ? 'red' : 'green';
+    setTimeout(() => {
+      msgDiv.textContent = '';
+    }, 3000); // Message disappears after 3 seconds
+  }
 }
 
 // --- Default Ruhani Nuskha Content (for reset functionality) ---
-const defaultRuhaniNuskha = `[Goals]
-Goal1: Cultivate constant Taqwa during Browse.
-Sankalpa1: Deepen Ehsaas of Tri Devi presence.
-Focus1: Practice Shukr more actively.
-
-[DynamicState]
-CurrentDeviFocus: Maa Saraswati (Wisdom & Clarity)
-ReminderFrequency: Gentle
-WaqfaTheme: NatureSounds
-PluginMood: Calm
+const defaultRuhaniNuskha = `[ThematicDays]
+MondayTheme: 🌙 Peace & Reflection (FocusDevi: ChandraDeva, Muraqaba: calmBlue, DhikrKeywords: shanti, salam)
+FridayTheme: 💖 Love & Beauty (FocusDevi: Lakshmi/Venus, Muraqaba: goldenLight, BarakahKeywords: joy, love)
+SpecialDate_2024-03-15: 🙏 Day of Gratitude (PluginMood: Grateful, ShukrFocus: High)
 OverallEhsaasIntensity: 0.5
 
+[Goals]
+Goal1: 🌱 Cultivate constant Taqwa during Browse.
+Sankalpa1: 🕊️ Deepen Ehsaas of Tri Devi presence.
+Focus1: 💐 Practice Shukr more actively.
+CommunityNiyyah: 🤝 Foster genuine Ruhaani Rabt.
+SatsangParticipation: 🪔 Active
+
+[DynamicState]
+CurrentDeviFocus: 📚 Maa Saraswati (Wisdom & Clarity)
+ReminderFrequency: 🌸 Gentle
+WaqfaTheme: 🌳 NatureSounds
+PluginMood: 🌤️ Calm
+CurrentSatsangStatus: 📴 Offline
+LastSharedInsightId: 🧩 001_SufiMetaphor
+
 [UserParams]
-DhikrList: Om Aim Hrim Klim Chamundaye Vichche, Jai Mata Di, SubhanAllah
+DhikrList: 🕉️ Om Aim Hrim Klim Chamundaye Vichche, Jai Mata Di, SubhanAllah
 PositiveKeywordsForSankalpaSeed: research, learn, understand, create, complete, reflect
-MuraqabaThemePreference: gentlePulse
+MuraqabaThemePreference: 🎨 gentlePulse
 MuraqabaIntensityPreference: 30
-WaqfaChimeFile: sounds/chime1.mp3
-DhikrAudioFile: sounds/dhikr_om.mp3
-MuraqabaBackgroundImage: images/backgrounds/fractal_blue.png
-FirasahPromptFrequency: occasional
-MaqamAnalysisEnabled: true
-SubconsciousVerbalRituals: In this moment, I am peace.
-Divine wisdom guides my choices.
-
-[FeatureToggles]
-EnableMuraqaba: true
-EnableDhikr: true
-EnableShukr: true 
-EnableWaqfa: true
-EnableDhikrStreamSound: false
-EnableShukrAffirmationSound: true
-EnableNiyyahVisualizer: true
-EnableMaqamAnalysis: true
-EnableFirasahPrompts: true
-EnableSubconsciousVerbalRituals: true
-
-[ThematicDays]
-MondayTheme: Peace & Reflection (FocusDevi: ChandraDeva, Muraqaba: calmBlue, DhikrKeywords: shanti, salam)
-FridayTheme: Love & Beauty (FocusDevi: Lakshmi/Venus, Muraqaba: goldenLight, BarakahKeywords: joy, love)
-SpecialDate_2024-03-15: Day of Gratitude (PluginMood: Grateful, ShukrFocus: High)
+CommunityKeywords: service, contemplation, knowledge, inner-peace
+SubconsciousVerbalRituals:
+  - "In this moment, I am stillness."
+  - "Divine wisdom guides my every click."
+  - "My heart beats with Shukr."
+  - "Through every sight, I perceive the One."
+  - "I am a channel of peace and clarity."
+LanguageTerms:
+  Tazkiyah: Spiritual purification and growth.
+  Ghair-Lafzi Ishaara: Subtle, non-verbal signals or intuitions.
+  Hikmat: Divine wisdom or profound insight.
+  Maqam: Spiritual station or context.
+  Ehsaas: Deep spiritual feeling or intuition.
+  Firasah: Spiritual discernment or intuition.
+  Sankalpa: Heartfelt intention or resolve.
+  Tafakkur: Deep contemplation or reflection.
+  Leela: Divine play; creative exploration.
+  Junoon: Controlled, passionate devotion; disciplined adherence.
+  Wu Wei: Effortless alignment with divine flow.
+  Shukr: Profound gratitude.
+  Maya Devi Veil: Illusory covering or misunderstanding.
+  Kam Bolo, Theek Bolo: Speak less, speak correctly; concise wisdom.
+[Paradoxes]
+To gain everything, surrender all.
+The quieter you become, the more you can hear.
+The greatest strength is found in vulnerability.
+True freedom is discovered within the confines of discipline.
+To find your path, first lose your way.
+[DivineMetaphors]
+Your consciousness is a river flowing into the ocean of Divine Will.
+Every moment is a petal unfolding in the lotus of cosmic design.
+Truth is a diamond, reflecting light from countless facets.
+The path of devotion is a silken thread, weaving through the fabric of reality.
+Silence is the canvas upon which the Divine speaks.
+[SpiritualFractalsConcepts]
+Self-similarity of divine patterns in nature and thought.
+Recursive growth of spiritual understanding.
+Interconnectedness revealing divine order.
+The microcosm reflecting the macrocosm.
+[WuWeiBalancingParams]
+leelaWeight: 0.5
+junoonWeight: 0.5
+ehsaasSensitivity: 0.3
+[MaqamDefinitions]
+Beginner: {mood: "Encouraging", reminders: "Frequent", complexity: "Low"}
+Seeker: {mood: "Calm", reminders: "Gentle", complexity: "Medium"}
+Devotee: {mood: "Inspiring", reminders: "Occasional", complexity: "High"}
 `;
 
-// ...existing code...
-// Remove all [cite_start] and [cite: ...] artifacts from the rest of the file
-// ...existing code...
-        [cite_start]if (trimmedLine.startsWith('[') && trimmedLine.endsWith(']')) { [cite: 4]
-            [cite_start]currentSection = trimmedLine; [cite: 4]
-        [cite_start]} else if (trimmedLine && !trimmedLine.startsWith('//') && !trimmedLine.includes(':')) { [cite: 4]
-            [cite_start]// If it's not a comment and not a section, it should contain a ':' [cite: 4]
-            [cite_start]return { isValid: false, message: `Invalid line format outside of a section or missing colon: "${trimmedLine}".` }; [cite: 4]
+
+// --- Ruhani Nuskha Editor Functionality ---
+function loadRuhaniNuskhaToEditor() {
+  logDebug('Loading Ruhani Nuskha to editor...');
+  browser.storage.local.get('dilKiDastakSettings', function(items) {
+    if (items.dilKiDastakSettings) {
+      // Convert settings object back to RuhaniNuskha.txt format for editing
+      const settings = items.dilKiDastakSettings;
+      let textContent = '';
+      for (const section in settings) {
+        textContent += `\n[${section}]\n`;
+        for (const key in settings[section]) {
+          let value = settings[section][key];
+          if (Array.isArray(value)) {
+            value = value.join(', ');
+          } else if (typeof value === 'object' && value !== null) {
+            // For nested objects like MaqamDefinitions, stringify
+            value = JSON.stringify(value);
+          }
+          textContent += `${key}: ${value}\n`;
         }
+      }
+      document.getElementById('ruhaniNuskhaEditor').value = textContent.trim();
+      showConfirmation('Ruhani Nuskha loaded from storage.');
+      logDebug('Ruhani Nuskha loaded to editor successfully.');
+    } else {
+      document.getElementById('ruhaniNuskhaEditor').value = defaultRuhaniNuskha;
+      showConfirmation('No saved Ruhani Nuskha found, loaded default.', true);
+      logDebug('No saved Ruhani Nuskha, loaded default.');
     }
-    return { isValid: true, message: "Ruhani Nuskha format looks good." [cite_start]}; [cite: 4]
+  });
 }
 
-
-// options.js
-// ... (existing code) ...
-
-function updateRuhaniNuskhaStatus(message, isError = false) {
-    const statusDiv = document.getElementById('ruhaniNuskhaStatus');
-    if (statusDiv) {
-        statusDiv.textContent = message;
-        statusDiv.style.color = isError ? 'red' : '#555';
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    // ... (existing code) ...
-    const ruhaniNuskhaTextarea = document.getElementById('ruhaniNuskhaContent');
-    const saveNuskhaBtn = document.getElementById('saveNuskhaBtn');
-    const loadNuskhaBtn = document.getElementById('loadNuskhaBtn');
-
-    if (loadNuskhaBtn) {
-        loadNuskhaBtn.addEventListener('click', function() {
-            chrome.storage.local.get("ruhaniNuskhaContent", (data) => {
-                if (ruhaniNuskhaTextarea) {
-                    ruhaniNuskhaTextarea.value = data.ruhaniNuskhaContent || defaultRuhaniNuskha;
-                    showConfirmation('Lauh-e-Mahfooz loaded from storage.', false);
-                    [cite_start]updateRuhaniNuskhaStatus(`Last loaded: ${new Date().toLocaleTimeString()}`); // NEW [cite: 4]
-                }
-            });
-        });
-    }
-
-    if (saveNuskhaBtn) {
-        saveNuskhaBtn.addEventListener('click', function() {
-            // ... (existing validation and save logic) ...
-            if (validationResult.isValid) {
-                chrome.storage.local.set({ ruhaniNuskhaContent: content }, function() {
-                    [cite_start]showConfirmation('Lauh-e-Mahfooz saved.', false); [cite: 4]
-                    [cite_start]updateSnapshotDisplay(); [cite: 4]
-                    updateRuhaniNuskhaStatus(`Last saved: ${new Date().toLocaleTimeString()}`); [cite_start]// NEW [cite: 4]
-                    [cite_start]chrome.runtime.sendMessage({ action: "ruhaniNuskhaUpdated" }); [cite: 4]
-                });
+function saveRuhaniNuskhaFromEditor() {
+  logDebug('Saving Ruhani Nuskha from editor...');
+  const editorContent = document.getElementById('ruhaniNuskhaEditor').value;
+  try {
+    const parsedNuskha = parseRuhaniNuskha(editorContent); // Use the parse function from background
+    // Merge with current settings to preserve DynamicState, etc.
+    browser.storage.local.get('dilKiDastakSettings', function(items) {
+        let currentSettings = items.dilKiDastakSettings || {};
+        const newSettings = { ...currentSettings };
+        for (const section in parsedNuskha) {
+            if (newSettings[section]) {
+                Object.assign(newSettings[section], parsedNuskha[section]);
             } else {
-                [cite_start]showConfirmation(`Error: ${validationResult.message}`, true); [cite: 4]
-                updateRuhaniNuskhaStatus(`Error saving: ${validationResult.message}`, true); [cite_start]// NEW [cite: 4]
+                newSettings[section] = parsedNuskha[section];
+            }
+        }
+        browser.storage.local.set({ dilKiDastakSettings: newSettings }, function() {
+            if (browser.runtime.lastError) {
+                showConfirmation('Error saving Ruhani Nuskha: ' + browser.runtime.lastError.message, true);
+                logDebug('Error saving Ruhani Nuskha:', browser.runtime.lastError);
+            } else {
+                showConfirmation('Ruhani Nuskha saved successfully!');
+                logDebug('Ruhani Nuskha saved successfully.');
+                // Notify background script that settings are updated
+                browser.runtime.sendMessage({ action: "settingsUpdated", settings: newSettings })
+                    .then(response => logDebug("Settings update notification sent to background:", response))
+                    .catch(error => logDebug("Error notifying background of settings update:", error));
             }
         });
-    }
-});
+    });
+  } catch (e) {
+    showConfirmation('Error parsing Ruhani Nuskha: ' + e.message, true);
+    logDebug('Error parsing Ruhani Nuskha:', e);
+  }
+}
 
-[cite_start]document.addEventListener('DOMContentLoaded', () => { [cite: 4]
-  // ... existing DOMContentLoaded code ...
-
-  [cite_start]const ruhaniNuskhaTextarea = document.getElementById('ruhaniNuskhaContent'); [cite: 4]
-  [cite_start]const saveNuskhaBtn = document.getElementById('saveNuskhaBtn'); [cite: 4]
-  [cite_start]const loadNuskhaBtn = document.getElementById('loadNuskhaBtn'); [cite: 4]
-  [cite_start]const exportNuskhaBtn = document.getElementById('exportNuskhaBtn'); [cite: 4]
-  [cite_start]const importNuskhaFile = document.getElementById('importNuskhaFile'); [cite: 4]
-  [cite_start]const resetNuskhaBtn = document.getElementById('resetNuskhaBtn'); [cite: 4]
-
-  [cite_start]if (saveNuskhaBtn) { [cite: 4]
-    [cite_start]saveNuskhaBtn.addEventListener('click', function() { [cite: 4]
-      [cite_start]if (ruhaniNuskhaTextarea) { [cite: 4]
-        [cite_start]const content = ruhaniNuskhaTextarea.value; [cite: 4]
-        const validationResult = validateRuhaniNuskha(content); [cite_start]// NEW: Validate before saving [cite: 4]
-
-        [cite_start]if (validationResult.isValid) { [cite: 4]
-          [cite_start]chrome.storage.local.set({ ruhaniNuskhaContent: content }, function() { [cite: 4]
-            [cite_start]showConfirmation('Lauh-e-Mahfooz saved.', false); [cite: 4]
-            updateSnapshotDisplay(); [cite_start]// Refresh snapshot after saving [cite: 4]
-            [cite_start]// NEW: Potentially notify background script of a change in Ruhani Nuskha [cite: 4]
-            [cite_start]chrome.runtime.sendMessage({ action: "ruhaniNuskhaUpdated" }); [cite: 4]
-          });
-        [cite_start]} else { [cite: 4]
-          [cite_start]showConfirmation(`Error: ${validationResult.message}`, true); [cite: 4]
+function exportRuhaniNuskha() {
+  logDebug('Exporting Ruhani Nuskha...');
+  browser.storage.local.get('dilKiDastakSettings', function(items) {
+    if (items.dilKiDastakSettings) {
+      const settings = items.dilKiDastakSettings;
+      let textContent = '';
+      for (const section in settings) {
+        textContent += `\n[${section}]\n`;
+        for (const key in settings[section]) {
+          let value = settings[section][key];
+          if (Array.isArray(value)) {
+            value = value.join(', ');
+          } else if (typeof value === 'object' && value !== null) {
+            value = JSON.stringify(value);
+          }
+          textContent += `${key}: ${value}\n`;
         }
       }
-    });
-  }
-
-  // ... (rest of your existing options.js code) ...
-
-});
-
-// Helper function to show confirmation messages
-function showConfirmation(message, isError = false) {
-  const msgDiv = document.getElementById('confirmationMessage');
-  msgDiv.textContent = message;
-  msgDiv.style.color = isError ? 'red' : 'green';
-  setTimeout(() => {
-    msgDiv.textContent = '';
-  }, 3000); // Message disappears after 3 seconds
-}
-
-// --- Default Ruhani Nuskha Content (for reset functionality) ---
-const defaultRuhaniNuskha = `[Goals]
-Goal1: Cultivate constant Taqwa during Browse.
-Sankalpa1: Deepen Ehsaas of Tri Devi presence.
-Focus1: Practice Shukr more actively.
-
-[DynamicState]
-CurrentDeviFocus: Maa Saraswati (Wisdom & Clarity)
-ReminderFrequency: Gentle
-WaqfaTheme: NatureSounds
-PluginMood: Calm
-OverallEhsaasIntensity: 0.5
-
-[UserParams]
-DhikrList: Om Aim Hrim Klim Chamundaye Vichche, Jai Mata Di, SubhanAllah
-PositiveKeywordsForSankalpaSeed: research, learn, understand, create, complete, reflect
-MuraqabaThemePreference: gentlePulse
-MuraqabaIntensityPreference: 30
-WaqfaChimeFile: sounds/chime1.mp3
-DhikrAudioFile: sounds/dhikr_om.mp3
-MuraqabaBackgroundImage: images/backgrounds/fractal_blue.png
-FirasahPromptFrequency: occasional
-MaqamAnalysisEnabled: true
-SubconsciousVerbalRituals: In this moment, I am peace.
-Divine wisdom guides my choices.
-
-[FeatureToggles]
-EnableMuraqaba: true
-EnableDhikr: true
-EnableShukr: true 
-EnableWaqfa: true
-EnableDhikrStreamSound: false
-EnableShukrAffirmationSound: true
-EnableNiyyahVisualizer: true
-EnableMaqamAnalysis: true
-EnableFirasahPrompts: true
-EnableSubconsciousVerbalRituals: true
-
-[ThematicDays]
-MondayTheme: Peace & Reflection (FocusDevi: ChandraDeva, Muraqaba: calmBlue, DhikrKeywords: shanti, salam)
-FridayTheme: Love & Beauty (FocusDevi: Lakshmi/Venus, Muraqaba: goldenLight, BarakahKeywords: joy, love)
-SpecialDate_2024-03-15: Day of Gratitude (PluginMood: Grateful, ShukrFocus: High)
-`;
-
-// NEW: Input elements for Ruhaani Rabt
-const enableSatsangRoomToggle = document.getElementById('enableSatsangRoomToggle');
-const enableKhidmatPortalToggle = document.getElementById('enableKhidmatPortalToggle');
-const enableAnamnesisExchangeToggle = document.getElementById('enableAnamnesisExchangeToggle');
-const enableMuraqabaMushtarakToggle = document.getElementById('enableMuraqabaMushtarakToggle');
-const communityKeywordsInput = document.getElementById('communityKeywordsInput');
-const khidmatOfferInput = document.getElementById('khidmatOfferInput');
-const khidmatRequestInput = document.getElementById('khidmatRequestInput');
-const anamnesisInput = document.getElementById('anamnesisInput');
-const submitAnamnesisBtn = document.getElementById('submitAnamnesisBtn');
-const anamnesisConfirmationDiv = document.getElementById('anamnesisConfirmation');
-
-
-// Get references to HTML elements
-const refreshSnapshotBtn = document.getElementById('refreshSnapshotBtn');
-const ruhaniNuskhaTextarea = document.getElementById('ruhaniNuskhaContent');
-const loadNuskhaBtn = document.getElementById('loadNuskhaBtn');
-const saveNuskhaBtn = document.getElementById('saveNuskhaBtn');
-const exportNuskhaBtn = document.getElementById('exportNuskhaBtn');
-const importNuskhaFile = document.getElementById('importNuskhaFile');
-const resetNuskhaBtn = document.getElementById('resetNuskhaBtn');
-
-// Feature Toggles
-const enableMuraqabaToggle = document.getElementById('enableMuraqaba');
-const enableDhikrToggle = document.getElementById('enableDhikr');
-const enableDhikrStreamSoundToggle = document.getElementById('enableDhikrStreamSound');
-const enableShukrToggle = document.getElementById('enableShukr');
-const enableShukrAffirmationSoundToggle = document.getElementById('enableShukrAffirmationSound');
-const enableWaqfaToggle = document.getElementById('enableWaqfa');
-const enableNiyyahVisualizerToggle = document.getElementById('enableNiyyahVisualizer');
-const enableMaqamAnalysisToggle = document.getElementById('enableMaqamAnalysis');
-const enableFirasahPromptsToggle = document.getElementById('enableFirasahPrompts');
-const enableSubconsciousVerbalRitualsToggle = document.getElementById('enableSubconsciousVerbalRituals');
-
-
-// User Params
-const reminderFrequencySelect = document.getElementById('reminderFrequency');
-const waqfaChimeFileSelect = document.getElementById('waqfaChimeFile');
-const dhikrAudioFileSelect = document.getElementById('dhikrAudioFile');
-const muraqabaThemePreferenceSelect = document.getElementById('muraqabaThemePreference');
-const muraqabaBackgroundImageSelect = document.getElementById('muraqabaBackgroundImage');
-const muraqabaBackgroundImageWrapper = document.getElementById('muraqabaBackgroundImageWrapper');
-const muraqabaIntensityPreferenceRange = document.getElementById('muraqabaIntensityPreference');
-const muraqabaIntensityValueSpan = document.getElementById('muraqabaIntensityValue');
-const dhikrListInput = document.getElementById('dhikrList');
-const dhikrOpacityBaseRange = document.getElementById('dhikrOpacityBase');
-const dhikrOpacityBaseValueSpan = document.getElementById('dhikrOpacityBaseValue');
-const dhikrFontSizeBaseRange = document.getElementById('dhikrFontSizeBase');
-const dhikrFontSizeBaseValueSpan = document.getElementById('dhikrFontSizeBaseValue');
-const firasahPromptFrequencySelect = document.getElementById('firasahPromptFrequency');
-const subconsciousVerbalRitualsTextarea = document.getElementById('subconsciousVerbalRituals');
-
-
-// Snapshot Span IDs (ensure these match your HTML)
-const snapIntensity = document.getElementById('snapshotIntensity');
-const snapPluginMood = document.getElementById('snapshotPluginMood');
-const snapDeviFocus = document.getElementById('snapshotDeviFocus');
-const snapMuraqabaPref = document.getElementById('snapshotMuraqabaPref');
-const snapDhikrEnabled = document.getElementById('snapshotDhikrEnabled');
-
-
-// Load settings when the options page is opened
-document.addEventListener('DOMContentLoaded', function() {
-
-  // NEW: Initialize Ruhaani Rabt feature toggles
-  function initializeRuhaaniRabtToggles(settings) {
-      if (enableSatsangRoomToggle) enableSatsangRoomToggle.checked = settings?.featureToggles?.EnableSatsangRoom === true;
-      if (enableKhidmatPortalToggle) enableKhidmatPortalToggle.checked = settings?.featureToggles?.EnableKhidmatPortal === true;
-      if (enableAnamnesisExchangeToggle) enableAnamnesisExchangeToggle.checked = settings?.featureToggles?.EnableAnamnesisExchange === true;
-      if (enableMuraqabaMushtarakToggle) enableMuraqabaMushtarakToggle.checked = settings?.featureToggles?.EnableMuraqabaMushtarak === true;
-      if (communityKeywordsInput) communityKeywordsInput.value = settings?.userParams?.CommunityKeywords?.join(', ') || '';
-      if (khidmatOfferInput) khidmatOfferInput.value = settings?.userParams?.KhidmatOffer?.join(', ') || '';
-      if (khidmatRequestInput) khidmatRequestInput.value = settings?.userParams?.KhidmatRequest?.join(', ') || '';
-  }
-
-  // NEW: Save Ruhaani Rabt settings when saving Nuskha
-  saveNuskhaBtn.addEventListener('click', function() {
-    // ... existing save logic ...
-    
-    // Capture new Ruhaani Rabt settings
-    const currentNuskhaContent = ruhaniNuskhaTextarea.value;
-    let parsedSettings = parseRuhaniNuskha(currentNuskhaContent);
-
-    // Update feature toggles
-    parsedSettings.featureToggles.EnableSatsangRoom = enableSatsangRoomToggle.checked;
-    parsedSettings.featureToggles.EnableKhidmatPortal = enableKhidmatPortalToggle.checked;
-    parsedSettings.featureToggles.EnableAnamnesisExchange = enableAnamnesisExchangeToggle.checked;
-    parsedSettings.featureToggles.EnableMuraqabaMushtarak = enableMuraqabaMushtarakToggle.checked;
-
-    // Update userParams for communal interaction
-    parsedSettings.userParams.CommunityKeywords = communityKeywordsInput.value.split(',').map(s => s.trim()).filter(s => s.length > 0);
-    parsedSettings.userParams.KhidmatOffer = khidmatOfferInput.value.split(',').map(s => s.trim()).filter(s => s.length > 0);
-    parsedSettings.userParams.KhidmatRequest = khidmatRequestInput.value.split(',').map(s => s.trim()).filter(s => s.length > 0);
-
-    const updatedNuskhaContent = formatRuhaniNuskha(parsedSettings);
-    chrome.storage.local.set({ ruhaniNuskhaContent: updatedNuskhaContent }, function() {
-        showConfirmation('Lauh-e-Mahfooz saved!', false);
-        // Also ensure background.js gets updated settings immediately
-        chrome.runtime.sendMessage({ action: "settingsUpdated" }, (response) => {
-            console.log("Settings update broadcast response:", response);
-        });
-    });
-  });
-
-  // NEW: Submit Anamnesis Insight
-  if (submitAnamnesisBtn && anamnesisInput && anamnesisConfirmationDiv) {
-      submitAnamnesisBtn.addEventListener('click', () => {
-          const insight = anamnesisInput.value.trim();
-          if (insight) {
-              // SECURITY: Ensure insight is clean, although it's text for now
-              // If it were ever HTML, it would need sanitization.
-              chrome.runtime.sendMessage({ action: "submitAnamnesis", insight: insight }, (response) => {
-                  anamnesisConfirmationDiv.textContent = response.status;
-                  anamnesisInput.value = ''; // Clear input
-                  setTimeout(() => { anamnesisConfirmationDiv.textContent = ''; }, 3000);
-                  // Refresh snapshot or indicate success
-              });
-          } else {
-              showConfirmation('Please enter an insight to submit.', true);
-          }
-      });
-  }
-
-  // --- Nuskha Integrity Check (Conceptual for Security) ---
-  function validateRuhaniNuskhaFormat(nuskhaContent) {
-      const requiredSections = ['[Goals]', '[DynamicState]', '[UserParams]', '[FeatureToggles]'];
-      let isValid = true;
-      for (const section of requiredSections) {
-          if (!nuskhaContent.includes(section)) {
-              isValid = false;
-              console.error(`RuhaniNuskha missing critical section: ${section}`);
-              break;
-          }
-      }
-      // Add more rigorous parsing checks as needed (e.g., valid key-value pairs)
-      return isValid;
-  }
-
-  // Modify loadNuskhaBtn to include integrity check
-  if (loadNuskhaBtn) {
-    loadNuskhaBtn.addEventListener('click', function() {
-      chrome.storage.local.get('ruhaniNuskhaContent', function(data) {
-        if (data.ruhaniNuskhaContent) {
-          if (ruhaniNuskhaTextarea) ruhaniNuskhaTextarea.value = data.ruhaniNuskhaContent;
-          if (validateRuhaniNuskhaFormat(data.ruhaniNuskhaContent)) {
-              showConfirmation('Lauh-e-Mahfooz loaded from storage.', false);
-              // Also parse and apply to toggles and inputs
-              const settings = parseRuhaniNuskha(data.ruhaniNuskhaContent);
-              initializeFeatureToggles(settings); // Existing function
-              initializeRuhaaniRabtToggles(settings); // NEW: initialize new toggles/inputs
-              updateSnapshot(settings); // Update snapshot display
-          } else {
-              showConfirmation('Warning: Lauh-e-Mahfooz format seems invalid. Please review.', true);
-          }
-        } else {
-          showConfirmation('No Lauh-e-Mahfooz found in storage. Using default.', false);
-          if (ruhaniNuskhaTextarea) ruhaniNuskhaTextarea.value = defaultRuhaniNuskha;
-          // Also parse and apply to toggles and inputs for default
-          const settings = parseRuhaniNuskha(defaultRuhaniNuskha);
-          initializeFeatureToggles(settings);
-          initializeRuhaaniRabtToggles(settings);
-          updateSnapshot(settings);
-        }
-      });
-    });
-  }
-
-function loadSettings() {
-  chrome.storage.local.get(['ruhaniNuskhaContent', 'shukrCount', 'currentNiyyah',
-                            'EnableMuraqaba', 'EnableDhikr', 'EnableShukr', 'EnableWaqfa',
-                            'EnableDhikrStreamSound', 'EnableShukrAffirmationSound', 'EnableNiyyahVisualizer',
-                            'EnableMaqamAnalysis', 'EnableFirasahPrompts', 'EnableSubconsciousVerbalRituals', // New toggles
-                            'ReminderFrequency', 'WaqfaChimeFile', 'DhikrAudioFile', // New user params
-                            'MuraqabaThemePreference', 'MuraqabaIntensityPreference', 'MuraqabaBackgroundImage',
-                            'DhikrList', 'DhikrOpacity_Base', 'DhikrFontSize_Base', 'FirasahPromptFrequency',
-                            'SubconsciousVerbalRituals', // New user params
-                            'OverallEhsaasIntensity', 'PluginMood', 'CurrentDeviFocus' // Dynamic state from background
-                          ], function(items) {
-    // Populate RuhaniNuskha textarea
-    if (ruhaniNuskhaTextarea) {
-      ruhaniNuskhaTextarea.value = items.ruhaniNuskhaContent || defaultRuhaniNuskha;
-    }
-
-    // Populate Feature Toggles
-    if (enableMuraqabaToggle) enableMuraqabaToggle.checked = items.EnableMuraqaba !== false; // Default true
-    if (enableDhikrToggle) enableDhikrToggle.checked = items.EnableDhikr !== false; // Default true
-    if (enableShukrToggle) enableShukrToggle.checked = items.EnableShukr !== false; // Default true
-    if (enableWaqfaToggle) enableWaqfaToggle.checked = items.EnableWaqfa !== false; // Default true
-    if (enableDhikrStreamSoundToggle) enableDhikrStreamSoundToggle.checked = items.EnableDhikrStreamSound === true;
-    if (enableShukrAffirmationSoundToggle) enableShukrAffirmationSoundToggle.checked = items.EnableShukrAffirmationSound !== false;
-    if (enableNiyyahVisualizerToggle) enableNiyyahVisualizerToggle.checked = items.EnableNiyyahVisualizer !== false;
-    if (enableMaqamAnalysisToggle) enableMaqamAnalysisToggle.checked = items.EnableMaqamAnalysis !== false;
-    if (enableFirasahPromptsToggle) enableFirasahPromptsToggle.checked = items.EnableFirasahPrompts !== false;
-    if (enableSubconsciousVerbalRitualsToggle) enableSubconsciousVerbalRitualsToggle.checked = items.EnableSubconsciousVerbalRituals !== false;
-
-
-    // Populate User Params
-    if (reminderFrequencySelect) reminderFrequencySelect.value = items.ReminderFrequency || "Gentle";
-    if (waqfaChimeFileSelect) waqfaChimeFileSelect.value = items.WaqfaChimeFile || "sounds/chime1.mp3";
-    if (dhikrAudioFileSelect) dhikrAudioFileSelect.value = items.DhikrAudioFile || "sounds/dhikr_om.mp3";
-    if (muraqabaThemePreferenceSelect) muraqabaThemePreferenceSelect.value = items.MuraqabaThemePreference || "gentlePulse";
-    if (muraqabaBackgroundImageSelect) muraqabaBackgroundImageSelect.value = items.MuraqabaBackgroundImage || "images/backgrounds/fractal_blue.png";
-    if (muraqabaIntensityPreferenceRange) {
-        muraqabaIntensityPreferenceRange.value = items.MuraqabaIntensityPreference !== undefined ? items.MuraqabaIntensityPreference : 30;
-        muraqabaIntensityValueSpan.textContent = `${muraqabaIntensityPreferenceRange.value}%`;
-    }
-    if (dhikrListInput) dhikrListInput.value = items.DhikrList || "Om Aim Hrim Klim Chamundaye Vichche, Jai Mata Di, SubhanAllah";
-    if (dhikrOpacityBaseRange) {
-        dhikrOpacityBaseRange.value = items.DhikrOpacity_Base !== undefined ? items.DhikrOpacity_Base : 5; // Default low opacity
-        dhikrOpacityBaseValueSpan.textContent = `${dhikrOpacityBaseRange.value}%`;
-    }
-    if (dhikrFontSizeBaseRange) {
-        dhikrFontSizeBaseRange.value = items.DhikrFontSize_Base !== undefined ? items.DhikrFontSize_Base : 20;
-        dhikrFontSizeBaseValueSpan.textContent = `${dhikrFontSizeBaseRange.value}px`;
-    }
-    if (firasahPromptFrequencySelect) firasahPromptFrequencySelect.value = items.FirasahPromptFrequency || "occasional";
-    if (subconsciousVerbalRitualsTextarea) subconsciousVerbalRitualsTextarea.value = items.SubconsciousVerbalRituals || defaultRuhaniNuskha.split('[UserParams]')[1].split('[FeatureToggles]')[0].match(/SubconsciousVerbalRituals: (.*)/s)[1].trim().split('\n').map(line => line.trim()).join('\n'); // Extract from default string
-
-
-    // Update snapshot display (from dynamic state)
-    if (snapIntensity) snapIntensity.textContent = items.OverallEhsaasIntensity !== undefined ? `${(items.OverallEhsaasIntensity * 100).toFixed(0)}%` : 'N/A';
-    if (snapPluginMood) snapPluginMood.textContent = items.PluginMood || 'N/A';
-    if (snapDeviFocus) snapDeviFocus.textContent = items.CurrentDeviFocus || 'N/A';
-    if (snapMuraqabaPref) snapMuraqabaPref.textContent = items.MuraqabaThemePreference || 'N/A';
-    if (snapDhikrEnabled) snapDhikrEnabled.textContent = items.EnableDhikr ? 'Yes' : 'No';
-
-    // Toggle visibility of Muraqaba Background Image dropdown
-    updateMuraqabaBackgroundImageVisibility();
-  });
-}
-
-function saveSettings() {
-  const settingsToSave = {
-    // RuhaniNuskha.txt content
-    ruhaniNuskhaContent: ruhaniNuskhaTextarea ? ruhaniNuskhaTextarea.value : defaultRuhaniNuskha,
-
-    // Feature Toggles
-    EnableMuraqaba: enableMuraqabaToggle ? enableMuraqabaToggle.checked : true,
-    EnableDhikr: enableDhikrToggle ? enableDhikrToggle.checked : true,
-    EnableShukr: enableShukrToggle ? enableShukrToggle.checked : true,
-    EnableWaqfa: enableWaqfaToggle ? enableWaqfaToggle.checked : true,
-    EnableDhikrStreamSound: enableDhikrStreamSoundToggle ? enableDhikrStreamSoundToggle.checked : false,
-    EnableShukrAffirmationSound: enableShukrAffirmationSoundToggle ? enableShukrAffirmationSoundToggle.checked : true,
-    EnableNiyyahVisualizer: enableNiyyahVisualizerToggle ? enableNiyyahVisualizerToggle.checked : true,
-    EnableMaqamAnalysis: enableMaqamAnalysisToggle ? enableMaqamAnalysisToggle.checked : true,
-    EnableFirasahPrompts: enableFirasahPromptsToggle ? enableFirasahPromptsToggle.checked : true,
-    EnableSubconsciousVerbalRituals: enableSubconsciousVerbalRitualsToggle ? enableSubconsciousVerbalRitualsToggle.checked : true,
-
-    // User Params
-    ReminderFrequency: reminderFrequencySelect ? reminderFrequencySelect.value : "Gentle",
-    WaqfaChimeFile: waqfaChimeFileSelect ? waqfaChimeFileSelect.value : "sounds/chime1.mp3",
-    DhikrAudioFile: dhikrAudioFileSelect ? dhikrAudioFileSelect.value : "sounds/dhikr_om.mp3",
-    MuraqabaThemePreference: muraqabaThemePreferenceSelect ? muraqabaThemePreferenceSelect.value : "gentlePulse",
-    MuraqabaBackgroundImage: muraqabaBackgroundImageSelect ? muraqabaBackgroundImageSelect.value : "images/backgrounds/fractal_blue.png",
-    MuraqabaIntensityPreference: muraqabaIntensityPreferenceRange ? parseInt(muraqabaIntensityPreferenceRange.value) : 30,
-    DhikrList: dhikrListInput ? dhikrListInput.value : "Om Aim Hrim Klim Chamundaye Vichche, Jai Mata Di, SubhanAllah",
-    DhikrOpacity_Base: dhikrOpacityBaseRange ? parseInt(dhikrOpacityBaseRange.value) : 5,
-    DhikrFontSize_Base: dhikrFontSizeBaseRange ? parseInt(dhikrFontSizeBaseRange.value) : 20,
-    FirasahPromptFrequency: firasahPromptFrequencySelect ? firasahPromptFrequencySelect.value : "occasional",
-    SubconsciousVerbalRituals: subconsciousVerbalRitualsTextarea ? subconsciousVerbalRitualsTextarea.value : ""
-  };
-
-  chrome.storage.local.set(settingsToSave, function() {
-    if (chrome.runtime.lastError) {
-      showConfirmation('Error saving settings: ' + chrome.runtime.lastError.message, true);
-    } else {
-      showConfirmation('Settings saved! Alhamdulillah.', false);
-    }
-  });
-}
-
-// Event Listeners
-if (loadNuskhaBtn) loadNuskhaBtn.addEventListener('click', loadSettings); // Re-load all settings
-if (saveNuskhaBtn) saveNuskhaBtn.addEventListener('click', saveSettings);
-if (refreshSnapshotBtn) refreshSnapshotBtn.addEventListener('click', loadSettings); // Refresh snapshot
-
-if (exportNuskhaBtn) {
-    exportNuskhaBtn.addEventListener('click', function() {
-      const content = ruhaniNuskhaTextarea ? ruhaniNuskhaTextarea.value : defaultRuhaniNuskha;
-      const blob = new Blob([content], { type: 'text/plain' });
+      const blob = new Blob([textContent.trim()], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'RuhaniNuskha.txt';
+      a.download = 'RuhaniNuskha_Export.txt';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showConfirmation('Lauh-e-Mahfooz exported as RuhaniNuskha.txt.', false);
-    });
+      showConfirmation('Ruhani Nuskha exported.');
+      logDebug('Ruhani Nuskha exported successfully.');
+    } else {
+      showConfirmation('No Ruhani Nuskha to export.', true);
+      logDebug('No Ruhani Nuskha to export.');
+    }
+  });
 }
 
-if (importNuskhaFile) {
-    importNuskhaFile.addEventListener('change', function(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          if (ruhaniNuskhaTextarea) ruhaniNuskhaTextarea.value = e.target.result;
-          showConfirmation(`Loaded content from ${file.name}. Remember to 'Save to Storage'.`, false);
-        };
-        reader.readAsText(file);
-      }
-    });
-}
-  
-if (resetNuskhaBtn) {
-    resetNuskhaBtn.addEventListener('click', function() {
-      if (confirm("Are you sure you want to reset Lauh-e-Mahfooz to its default content? This cannot be undone from here.")) {
-        if (ruhaniNuskhaTextarea) ruhaniNuskhaTextarea.value = defaultRuhaniNuskha;
-        // Also save it to storage immediately
-        chrome.storage.local.set({ ruhaniNuskhaContent: defaultRuhaniNuskha }, function() {
-            showConfirmation('Lauh-e-Mahfooz reset to defaults and saved.', false);
-            loadSettings(); // Reload all settings to reflect default in other fields
+function importRuhaniNuskha(event) {
+  logDebug('Importing Ruhani Nuskha...');
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const content = e.target.result;
+      try {
+        const parsedNuskha = parseRuhaniNuskha(content);
+        // Merge with current settings, prioritizing imported content
+        browser.storage.local.get('dilKiDastakSettings', function(items) {
+            let currentSettings = items.dilKiDastakSettings || {};
+            const newSettings = { ...currentSettings };
+            for (const section in parsedNuskha) {
+                if (newSettings[section]) {
+                    Object.assign(newSettings[section], parsedNuskha[section]);
+                } else {
+                    newSettings[section] = parsedNuskha[section];
+                }
+            }
+            browser.storage.local.set({ dilKiDastakSettings: newSettings }, function() {
+                if (browser.runtime.lastError) {
+                    showConfirmation('Error importing Ruhani Nuskha: ' + browser.runtime.lastError.message, true);
+                    logDebug('Error importing Ruhani Nuskha:', browser.runtime.lastError);
+                } else {
+                    document.getElementById('ruhaniNuskhaEditor').value = content; // Update editor
+                    showConfirmation('Ruhani Nuskha imported successfully!');
+                    logDebug('Ruhani Nuskha imported successfully.');
+                    browser.runtime.sendMessage({ action: "settingsUpdated", settings: newSettings })
+                        .then(response => logDebug("Settings update notification sent to background after import:", response))
+                        .catch(error => logDebug("Error notifying background of settings update after import:", error));
+                }
+            });
         });
+      } catch (e) {
+        showConfirmation('Error parsing imported file: ' + e.message, true);
+        logDebug('Error parsing imported file:', e);
       }
-    });
-}
-
-// Event listeners for new UI elements to trigger save on change
-if (enableMuraqabaToggle) enableMuraqabaToggle.addEventListener('change', saveSettings);
-if (enableDhikrToggle) enableDhikrToggle.addEventListener('change', saveSettings);
-if (enableDhikrStreamSoundToggle) enableDhikrStreamSoundToggle.addEventListener('change', saveSettings);
-if (enableShukrToggle) enableShukrToggle.addEventListener('change', saveSettings);
-if (enableShukrAffirmationSoundToggle) enableShukrAffirmationSoundToggle.addEventListener('change', saveSettings);
-if (enableWaqfaToggle) enableWaqfaToggle.addEventListener('change', saveSettings);
-if (enableNiyyahVisualizerToggle) enableNiyyahVisualizerToggle.addEventListener('change', saveSettings);
-if (enableMaqamAnalysisToggle) enableMaqamAnalysisToggle.addEventListener('change', saveSettings);
-if (enableFirasahPromptsToggle) enableFirasahPromptsToggle.addEventListener('change', saveSettings);
-if (enableSubconsciousVerbalRitualsToggle) enableSubconsciousVerbalRitualsToggle.addEventListener('change', saveSettings);
-
-
-if (reminderFrequencySelect) reminderFrequencySelect.addEventListener('change', saveSettings);
-if (waqfaChimeFileSelect) waqfaChimeFileSelect.addEventListener('change', saveSettings);
-if (dhikrAudioFileSelect) dhikrAudioFileSelect.addEventListener('change', saveSettings);
-if (muraqabaThemePreferenceSelect) {
-    muraqabaThemePreferenceSelect.addEventListener('change', () => {
-        updateMuraqabaBackgroundImageVisibility();
-        saveSettings();
-    });
-}
-if (muraqabaBackgroundImageSelect) muraqabaBackgroundImageSelect.addEventListener('change', saveSettings);
-if (muraqabaIntensityPreferenceRange) {
-    muraqabaIntensityPreferenceRange.addEventListener('input', () => {
-        muraqabaIntensityValueSpan.textContent = `${muraqabaIntensityPreferenceRange.value}%`;
-    });
-    muraqabaIntensityPreferenceRange.addEventListener('change', saveSettings);
-}
-if (dhikrListInput) dhikrListInput.addEventListener('change', saveSettings);
-if (dhikrOpacityBaseRange) {
-    dhikrOpacityBaseRange.addEventListener('input', () => {
-        dhikrOpacityBaseValueSpan.textContent = `${dhikrOpacityBaseRange.value}%`;
-    });
-    dhikrOpacityBaseRange.addEventListener('change', saveSettings);
-}
-if (dhikrFontSizeBaseRange) {
-    dhikrFontSizeBaseRange.addEventListener('input', () => {
-        dhikrFontSizeBaseValueSpan.textContent = `${dhikrFontSizeBaseRange.value}px`;
-    });
-    dhikrFontSizeBaseRange.addEventListener('change', saveSettings);
-}
-if (firasahPromptFrequencySelect) firasahPromptFrequencySelect.addEventListener('change', saveSettings);
-if (subconsciousVerbalRitualsTextarea) subconsciousVerbalRitualsTextarea.addEventListener('change', saveSettings);
-
-function updateMuraqabaBackgroundImageVisibility() {
-    if (muraqabaThemePreferenceSelect && muraqabaBackgroundImageWrapper) {
-        if (muraqabaThemePreferenceSelect.value === 'backgroundImage') {
-            muraqabaBackgroundImageWrapper.style.display = 'block';
-        } else {
-            muraqabaBackgroundImageWrapper.style.display = 'none';
-        }
-    }
-}
-
-// In options.js, within DOMContentLoaded listener
-const geminiApiKeyInput = document.getElementById('geminiApiKey');
-const lmStudioEndpointInput = document.getElementById('lmStudioEndpoint');
-const saveAiSettingsBtn = document.getElementById('saveAiSettingsBtn');
-
-// Load settings
-chrome.storage.local.get(['geminiApiKey', 'lmStudioEndpoint'], (data) => {
-  if (geminiApiKeyInput) geminiApiKeyInput.value = data.geminiApiKey || '';
-  if (lmStudioEndpointInput) lmStudioEndpointInput.value = data.lmStudioEndpoint || 'http://localhost:1234/v1/chat/completions';
-});
-
-// Save settings
-if (saveAiSettingsBtn) {
-  saveAiSettingsBtn.addEventListener('click', () => {
-    chrome.storage.local.set({
-      geminiApiKey: geminiApiKeyInput.value,
-      lmStudioEndpoint: lmStudioEndpointInput.value
-    }, () => {
-      showConfirmation('saved?', false);
-    });
-  });
-}
-
-// --- Hidden/Advanced Options for App Integrity & Abuse Prevention ---
-
-// 1. Hidden Debug Mode Toggle (not visible in UI, but can be enabled via console)
-let _debugMode = false;
-window.enableDebugMode = function() {
-  _debugMode = true;
-  console.log("Debug mode enabled. Extra logs and diagnostics will be shown.");
-};
-window.disableDebugMode = function() {
-  _debugMode = false;
-  console.log("Debug mode disabled.");
-};
-
-// 2. Tamper Detection (detects if critical settings are changed too quickly)
-let lastSettingsSave = Date.now();
-function tamperDetection() {
-  const now = Date.now();
-  if (now - lastSettingsSave < 1000) {
-    alert("Settings are being changed too quickly. Please slow down.");
-    // Optionally, revert or lock out
-  }
-  lastSettingsSave = now;
-}
-if (typeof saveSettings === "function") {
-  const origSaveSettings = saveSettings;
-  window.saveSettings = function() {
-    tamperDetection();
-    origSaveSettings.apply(this, arguments);
-  };
-}
-
-// 3. Hidden "Safe Mode" (can be triggered via console to disable risky features)
-window.enableSafeMode = function() {
-  localStorage.setItem('safeMode', 'on');
-  alert("Safe Mode enabled. Some features will be disabled for stability.");
-  // Optionally, disable certain toggles or features here
-};
-window.disableSafeMode = function() {
-  localStorage.removeItem('safeMode');
-  alert("Safe Mode disabled.");
-};
-
-// 4. Hidden "Lockdown" (temporarily disables all user input)
-window.lockdownApp = function() {
-  document.body.innerHTML = "<div style='color:red;font-size:2em;text-align:center;margin-top:40px;'>App is in lockdown mode for security reasons.</div>";
-  setTimeout(() => location.reload(), 10000);
-};
-
-// 5. Hidden "Reset All" (wipe all settings, only via console)
-window.resetAllSettings = function() {
-  if (confirm("Are you sure you want to wipe all settings? This cannot be undone.")) {
-    chrome.storage.local.clear(() => {
-      localStorage.clear();
-      alert("All settings wiped. Reloading...");
-      location.reload();
-    });
-  }
-};
-
-// 6. Hidden "Block Annoying User" (simulate, for demo)
-window.blockAnnoyingUser = function() {
-  alert("You have been blocked for suspicious activity. Please contact support.");
-  document.body.innerHTML = "<div style='color:red;font-size:2em;text-align:center;margin-top:40px;'>Blocked for suspicious activity.</div>";
-};
-
-// 7. Hidden "Stealth Logging" (logs suspicious actions, not visible to user)
-function stealthLog(event, detail) {
-  let logs = JSON.parse(localStorage.getItem('stealthLogs') || "[]");
-  logs.push({ event, detail, time: new Date().toISOString() });
-  localStorage.setItem('stealthLogs', JSON.stringify(logs));
-}
-window._stealthLog = stealthLog;
-
-// 8. Hidden "Rate Limiting" (prevent rapid abuse)
-let lastActionTime = 0;
-function rateLimitCheck() {
-  const now = Date.now();
-  if (now - lastActionTime < 500) {
-    alert("You're doing that too fast. Please wait a moment.");
-    return false;
-  }
-  lastActionTime = now;
-  return true;
-}
-
-// Example: wrap a sensitive function
-// if (saveSettings) {
-//   const origSave = saveSettings;
-//   window.saveSettings = function() {
-//     if (rateLimitCheck()) origSave.apply(this, arguments);
-//   };
-// }
-
-// 9. Hidden "Admin Only" Feature (only works if a secret code is set)
-window.enableAdminFeatures = function(secret) {
-  if (secret === "letmein123") {
-    window._isAdmin = true;
-    alert("Admin features enabled.");
+    };
+    reader.readAsText(file);
   } else {
-    alert("Wrong secret.");
-  }
-};
-
-// 10. Hidden "Self-Heal" (restore defaults if corruption detected)
-function selfHealIfCorrupt() {
-  chrome.storage.local.get('ruhaniNuskhaContent', function(data) {
-    if (!data.ruhaniNuskhaContent || data.ruhaniNuskhaContent.length < 50) {
-      chrome.storage.local.set({ ruhaniNuskhaContent: defaultRuhaniNuskha }, function() {
-        showConfirmation('Corruption detected. Restored to default.', true);
-      });
-    }
-  });
-}
-setTimeout(selfHealIfCorrupt, 3000);
-
-// --- Debugging Helper ---
-function debugLog(msg, ...args) {
-  try {
-    console.debug('[Dil ki Dastak][Options]', msg, ...args);
-    // Optionally, also show in a visible debug area if present
-    let dbg = document.getElementById('firefoxDebugLog');
-    if (dbg) {
-      dbg.innerHTML += `[${new Date().toLocaleTimeString()}] ${msg}<br>`;
-      if (dbg.childNodes.length > 100) dbg.innerHTML = dbg.innerHTML.split('<br>').slice(-100).join('<br>');
-    }
-  } catch (e) {
-    // Fallback to console only
-    console.debug('[Dil ki Dastak][Options][DebugLogError]', e);
+    showConfirmation('No file selected.', true);
+    logDebug('No file selected for import.');
   }
 }
 
-// --- Add debug log area if not present ---
-(function() {
-  if (!document.getElementById('firefoxDebugLog')) {
-    const dbg = document.createElement('div');
-    dbg.id = 'firefoxDebugLog';
-    dbg.style.background = '#fff3cd';
-    dbg.style.color = '#856404';
-    dbg.style.fontSize = '0.95em';
-    dbg.style.padding = '8px 12px';
-    dbg.style.margin = '12px 0 18px 0';
-    dbg.style.border = '1px solid #ffeeba';
-    dbg.style.borderRadius = '6px';
-    dbg.style.maxHeight = '120px';
-    dbg.style.overflowY = 'auto';
-    dbg.innerHTML = '<b>Debug Log:</b><br>';
-    document.body && document.body.insertBefore(dbg, document.body.firstChild);
-  }
-  debugLog('Options page JS loaded. UserAgent: ' + navigator.userAgent);
-  if (typeof browser !== 'undefined') {
-    debugLog('browser.* API detected (likely Firefox).');
-  } else if (typeof chrome !== 'undefined') {
-    debugLog('chrome.* API detected (likely Chromium).');
-  } else {
-    debugLog('No browser/chrome API detected!');
-  }
-})();
-
-document.addEventListener('DOMContentLoaded', () => {
-  debugLog('DOMContentLoaded event fired.');
-  // ...existing code...
-  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-    chrome.storage.local.get(null, function(items) {
-      if (chrome.runtime && chrome.runtime.lastError) {
-        debugLog('Storage get error: ' + chrome.runtime.lastError.message);
+function resetRuhaniNuskha() {
+  logDebug('Resetting Ruhani Nuskha...');
+  if (confirm('Are you sure you want to reset to default Ruhani Nuskha? This cannot be undone.')) {
+    browser.storage.local.set({ dilKiDastakSettings: DEFAULT_SETTINGS }, function() {
+      if (browser.runtime.lastError) {
+        showConfirmation('Error resetting Ruhani Nuskha: ' + browser.runtime.lastError.message, true);
+        logDebug('Error resetting Ruhani Nuskha:', browser.runtime.lastError);
       } else {
-        debugLog('Storage get success. Keys: ' + Object.keys(items).join(', '));
+        document.getElementById('ruhaniNuskhaEditor').value = defaultRuhaniNuskha;
+        showConfirmation('Ruhani Nuskha reset to default!');
+        logDebug('Ruhani Nuskha reset to default.');
+        browser.runtime.sendMessage({ action: "settingsUpdated", settings: DEFAULT_SETTINGS })
+            .then(response => logDebug("Settings update notification sent to background after reset:", response))
+            .catch(error => logDebug("Error notifying background of settings update after reset:", error));
       }
     });
   }
-  // ...existing code...
-});
+}
 
-// Add debug logging to key actions
-[
-  'saveNuskhaBtn', 'loadNuskhaBtn', 'exportNuskhaBtn', 'importNuskhaFile', 'resetNuskhaBtn',
-  'saveAiSettingsBtn', 'refreshSnapshotBtn', 'submitAnamnesisBtn'
-].forEach(function(id) {
-  const el = document.getElementById(id);
-  if (el) {
-    el.addEventListener('click', function() {
-      debugLog('Clicked: #' + id);
-    });
-  }
-});
-
-// Listen for errors globally
-window.addEventListener('error', function(e) {
-  debugLog('Global error: ' + e.message + ' at ' + e.filename + ':' + e.lineno);
-});
-window.addEventListener('unhandledrejection', function(e) {
-  debugLog('Unhandled promise rejection: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
-});
+// Function to parse the Ruhani Nuskha text (copied from background.js for consistency)
+function parseRuhaniNuskha(text) {
+    const sections = {};
+    let currentSection = null;
+    text.split('\n').forEach(line => {
+      line = line.trim();
+      if (line.startsWith('//') || line === '' || line.startsWith('
