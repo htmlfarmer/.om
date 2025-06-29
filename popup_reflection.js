@@ -1,49 +1,5 @@
 // popup_reflection.js
 
-// --- Debugging Helper for Popup Reflection ---
-function popupReflectionDebugLog(msg, ...args) {
-  try {
-    console.debug('[Dil ki Dastak][Reflection]', msg, ...args);
-    let dbg = document.getElementById('reflectionDebugLog');
-    if (dbg) {
-      dbg.style.display = 'block';
-      dbg.innerHTML += `[${new Date().toLocaleTimeString()}] ${msg}<br>`;
-      if (dbg.childNodes.length > 100) dbg.innerHTML = dbg.innerHTML.split('<br>').slice(-100).join('<br>');
-    }
-  } catch (e) {
-    // Fallback to console only
-    console.debug('[Dil ki Dastak][Reflection][DebugLogError]', e);
-  }
-}
-
-// Add debug log area if not present
-(function() {
-  if (!document.getElementById('reflectionDebugLog')) {
-    const dbg = document.createElement('div');
-    dbg.id = 'reflectionDebugLog';
-    dbg.style.background = '#fff3cd';
-    dbg.style.color = '#856404';
-    dbg.style.fontSize = '0.95em';
-    dbg.style.padding = '7px 10px';
-    dbg.style.margin = '8px 0 14px 0';
-    dbg.style.border = '1px solid #ffeeba';
-    dbg.style.borderRadius = '6px';
-    dbg.style.maxHeight = '90px';
-    dbg.style.overflowY = 'auto';
-    dbg.style.display = 'none';
-    dbg.innerHTML = '<b>Debug Log:</b><br>';
-    document.body && document.body.insertBefore(dbg, document.body.firstChild);
-  }
-  popupReflectionDebugLog('Reflection popup JS loaded. UserAgent: ' + navigator.userAgent);
-  if (typeof browser !== 'undefined') {
-    popupReflectionDebugLog('browser.* API detected (likely Firefox).');
-  } else if (typeof chrome !== 'undefined') {
-    popupReflectionDebugLog('chrome.* API detected (likely Chromium).');
-  } else {
-    popupReflectionDebugLog('No browser/chrome API detected!');
-  }
-})();
-
 document.addEventListener('DOMContentLoaded', function() {
   popupReflectionDebugLog('DOMContentLoaded event fired.');
   // Inject advanced styles for consistency

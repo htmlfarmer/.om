@@ -1,5 +1,6 @@
 // options.js
 
+<<<<<<< HEAD
 // Helper function to show confirmation messages
 function showConfirmation(message, isError = false) {
   const msgDiv = document.getElementById('confirmationMessage');
@@ -8,6 +9,16 @@ function showConfirmation(message, isError = false) {
   setTimeout(() => {
     msgDiv.textContent = '';
   }, 3000); // Message disappears after 3 seconds
+=======
+[cite_start]// Helper function to show confirmation messages [cite: 4]
+[cite_start]function showConfirmation(message, isError = false) { [cite: 4]
+  [cite_start]const msgDiv = document.getElementById('confirmationMessage'); [cite: 4]
+  [cite_start]msgDiv.textContent = message; [cite: 4]
+  msgDiv.style.color = isError ? [cite_start]'red' : 'green'; [cite: 4]
+  [cite_start]setTimeout(() => { [cite: 4]
+    [cite_start]msgDiv.textContent = ''; [cite: 4]
+  }, 3000); [cite_start]// Message disappears after 3 seconds [cite: 4]
+>>>>>>> 629352d85bffbd2217140e738305d72744c6a415
 }
 
 // --- Default Ruhani Nuskha Content (for reset functionality) ---
