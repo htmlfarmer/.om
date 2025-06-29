@@ -2,7 +2,7 @@
 <html>
 <head> 
   <title>Niyyah</title>
-  <meta charset="UTF-8">
+  <meta charset=\"UTF-8\">
   <style>
     body {
       font-family: 'Segoe UI', 'Comic Sans MS', cursive, sans-serif;
@@ -34,266 +34,203 @@
       background: linear-gradient(90deg, #8a2be2 60%, #b388ff 100%);
       color: white;
       border: none;
-      cursor: pointer;
       border-radius: 7px;
-      font-size: 1em;
-      margin: 6px 4px 0 4px;
-      box-shadow: 0 2px 8px rgba(138,43,226,0.10);
-      transition: background 0.2s, transform 0.1s;
+      cursor: pointer;
+      font-size: 0.9em;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 9px rgba(138,43,226,0.15);
+      margin: 4px;
     }
     button:hover {
-      background: linear-gradient(90deg, #6a1b9a 60%, #9575cd 100%);
-      transform: scale(1.04);
+      background: linear-gradient(90deg, #6a1b9a 60%, #8e24aa 100%);
+      box-shadow: 0 4px 12px rgba(138,43,226,0.25);
+      transform: translateY(-1px);
     }
-    p {
-      font-style: italic;
-      color: #555;
-      margin-bottom: 7px;
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 1px 4px rgba(138,43,226,0.15);
     }
-    .section {
-      margin-top: 18px;
-      padding-top: 12px;
-      border-top: 2px dashed #d1c4e9;
-      text-align: center;
-      background: rgba(255,255,255,0.7);
-      border-radius: 10px;
-      box-shadow: 0 1px 6px rgba(138,43,226,0.04);
-    }
-    .niyyah-visualizer {
-      margin-top: 12px;
-      display: none;
-      animation: fadeIn 1s;
-    }
-    .niyyah-visualizer img {
-      max-width: 90px;
-      max-height: 90px;
-      margin: 0 auto;
-      display: block;
-      animation: pulseGlow 1.5s infinite alternate;
-      filter: drop-shadow(0 0 10px #b388ff);
-    }
-    .devi-symbol {
-      width: 44px;
-      height: 44px;
-      margin: 0 7px;
-      vertical-align: middle;
-      filter: drop-shadow(0 0 6px #ffd54f);
-    }
-    #shukrDisplay, #ratanDiscoveryDisplay {
-      font-weight: bold;
-      color: #6a1b9a;
-      font-size: 1.08em;
-      margin-bottom: 8px;
-    }
-    #wisdomDisplay {
-      font-size: 1em;
-      font-style: italic;
-      color: #6a1b9a;
-      margin-bottom: 10px;
-      background: #ede7f6;
-      border-radius: 7px;
-      padding: 7px 5px;
-      box-shadow: 0 1px 4px rgba(138,43,226,0.06);
+    .niyyah-section, .shukr-section, .wisdom-section, .community-section, .features-section {
+      background: rgba(255,255,255,0.95);
+      border-radius: 12px;
+      margin-bottom: 15px;
+      padding: 15px 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border: 1px solid #e0e0e0;
     }
     .section-title {
-      color: #6a1b9a;
       font-size: 1.1em;
-      margin-bottom: 8px;
+      color: #673ab7;
       margin-top: 0;
-      font-weight: bold;
-      letter-spacing: 0.5px;
-    }
-    #popupConfirmationMessage {
-      font-size: 1em;
-      color: #43a047;
-      margin: 10px 0 8px 0;
-      min-height: 18px;
+      margin-bottom: 10px;
       font-weight: bold;
     }
-    /* Fun fade and pulse effects */
-    @keyframes pulseGlow {
-      0% { transform: scale(1); opacity: 0.85; filter: drop-shadow(0 0 7px #b388ff); }
-      100% { transform: scale(1.08); opacity: 1; filter: drop-shadow(0 0 18px #8a2be2); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    /* Scrollbar for shared shukr stream */
-    #sharedShukrStream {
-      max-height: 80px;
-      overflow-y: auto;
-      border: 1px solid #d1c4e9;
-      padding: 5px;
-      background-color: #f8f6ff;
-      text-align: left;
-      border-radius: 6px;
-      font-size: 0.97em;
-      margin-bottom: 8px;
-    }
-    /* Style for popup explanations */
-    .explanation-popup {
-      display: none;
-      margin: 6px 0;
-      font-size: 0.97em;
+    #shukrDisplay, #wisdomDisplay {
+      margin-top: 10px;
+      font-size: 1.1em;
       color: #4a148c;
-      background: #ede7f6;
-      border-radius: 7px;
-      padding: 7px;
-      box-shadow: 0 1px 4px rgba(138,43,226,0.06);
-      text-align: left;
+      font-weight: 600;
     }
+    #wisdomDisplay {
+        font-style: italic;
+        padding: 5px;
+        background-color: #f3e5f5;
+        border-radius: 5px;
+    }
+    .wadud-blessing-area {
+        margin-top: 15px;
+        padding: 10px;
+        background-color: #ffebee;
+        border: 1px dashed #ffcdd2;
+        border-radius: 8px;
+    }
+    .wadud-blessing-area div {
+        margin-bottom: 5px;
+        color: #c62828;
+    }
+    .wadud-blessing-area div:first-child {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+    #copyWadudConfirmation {
+        font-size: 0.8em;
+        color: green;
+        margin-top: 5px;
+    }
+    .community-buttons button {
+        background: linear-gradient(90deg, #42a5f5 60%, #90caf9 100%);
+    }
+    .community-buttons button:hover {
+        background: linear-gradient(90deg, #1976d2 60%, #64b5f6 100%);
+    }
+    .features-section button {
+        background: linear-gradient(90deg, #ff9800 60%, #ffcc80 100%);
+    }
+    .features-section button:hover {
+        background: linear-gradient(90deg, #fb8c00 60%, #ffb74d 100%);
+    }
+    #niyyahVisualizer {
+      margin-top: 10px;
+      min-height: 50px; /* Placeholder */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #niyyahVisualImage {
+      max-width: 100%;
+      height: auto;
+      border-radius: 5px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .devi-focus-display {
+      margin-top: 15px;
+      padding: 8px;
+      background-color: #e8eaf6;
+      border-radius: 8px;
+      font-size: 0.9em;
+      color: #3f51b5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+    }
+    .devi-focus-display img {
+      height: 20px;
+      width: 20px;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    /* Ratan Discovery section styles */
+    .ratan-discovery-section {
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        border: 1px solid #90caf9;
+        margin-top: 15px;
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    #ratanDiscoveryDisplay {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #1a237e;
+        margin-bottom: 10px;
+    }
+    #muslimWomenIndiaFeatures button {
+        background: linear-gradient(90deg, #8bc34a 60%, #c5e1a5 100%);
+    }
+    #muslimWomenIndiaFeatures button:hover {
+        background: linear-gradient(90deg, #689f38 60%, #aed581 100%);
+    }
+
   </style>
 </head>
 <body>
-  <!-- Debug log area for popup -->
-  <div id="popupDebugLog" style="background:#fff3cd;color:#856404;font-size:0.95em;padding:7px 10px;margin:8px 0 14px 0;border:1px solid #ffeeba;border-radius:6px;max-height:90px;overflow-y:auto;display:none;">
-    <b>Debug Log:</b><br>
-  </div>
-  <p>🌸 <b>Ya Mureed</b>, kya Niyyah hai is safar ka?</p>
-  <textarea id="niyyahInput" placeholder="My intention is for the Tri Devis' pleasure..."></textarea>
-  <button id="setNiyyahBtn">Set Niyyah 🙏</button>
+  <h2>Dil ki Dastak</h2>
 
-  <div id="niyyahVisualizer" class="niyyah-visualizer">
-    <p>Your Niyyah blossoms:</p>
-    <img id="niyyahVisualImage" src="images/symbols/lamp.png" alt="Niyyah Symbol">
+  <div class="niyyah-section">
+    <div class="section-title">My Niyyah (Intention)</div>
+    <textarea id="niyyahInput" placeholder="Set your intention for this Browse session..."></textarea>
+    <button id="setNiyyahBtn">Set Niyyah</button>
+    <div id="niyyahVisualizer">
+      </div>
   </div>
 
-  <div class="section">
-    <p id="shukrDisplay">Shukr Count: 0 🙏</p>
-    <button id="incrementShukrBtn">Acknowledge Shukr</button>
+  <div class="shukr-section">
+    <div class="section-title">Shukr (Gratitude) Practice</div>
+    <div id="shukrDisplay">Shukr Count: 0</div>
+    <button id="incrementShukrBtn">Increment Shukr</button>
+    <button id="popupShukrManifestationBtn">Manifest Shukr</button>
   </div>
 
-  <div id="ratanDiscoveryDisplay" style="margin-top: 10px;">
-    Ratan Discovered: 0 💎
+  <div class="wisdom-section">
+    <div class="section-title">Divine Guidance</div>
+    <button id="getWisdomBtn">Receive Wisdom</button>
+    <div id="wisdomDisplay"></div>
+    <button id="popupDivineParadoxBtn">Contemplate Paradox</button>
+    <button id="popupSubconsciousRitualBtn">Activate Ritual</button>
+    <button id="popupHiddenManifoldBtn">Reveal Hidden Unity</button>
+    <button id="popupKamBoloBtn">Kam Bolo (Concise Wisdom)</button>
   </div>
 
-  <div class="section">
-    <h4 class="section-title">🌌 Whispers of Hikmat 🌌</h4>
-    <div id="wisdomDisplay">
-      "The heart that truly knows the Divine has found its eternal spring." - Rumi
+  <div class="ratan-discovery-section">
+    <div class="section-title">✨ Ratan (Gem) Discovery ✨</div>
+    <div id="ratanDiscoveryDisplay">0 Gems Found</div>
+    <button id="revealRatanBtn">Seek New Gem</button>
+  </div>
+
+
+  <div class="community-section">
+    <div class="section-title">Ruhaani Rabt (Spiritual Connection)</div>
+    <div class="community-buttons">
+      <button id="joinSatsangBtn">Join Satsang</button>
+      <button id="startMushtarakBtn">Start Mushtarak Muraqaba</button>
+      <button id="shareInsightBtn">Share Insight</button>
     </div>
-    <button id="getWisdomBtn">Seek Wisdom</button>
   </div>
 
-  <div class="section" style="margin-top: 20px; padding-top:15px; border-top: 2px solid #a0a0a0;">
-    <h3 class="section-title">🤝 <span style="font-family:inherit;">Ruhaani Rabt</span> (Spiritual Connection)</h3>
-    <p style="font-size:0.97em; color:#555;">Connect with other seekers on the path.</p>
-    <button id="joinSatsangBtn" style="background-color:#4CAF50; margin-bottom:10px;">Join Satsang Room</button>
-    <div id="satsangStatus" style="font-size:0.9em; color:#333;">Status: Offline</div>
-    <button id="startMushtarakBtn" style="background-color:#008CBA; margin-top:10px;">Start Muraqaba-e-Mushtarak</button>
-    <div id="mushtarakStatus" style="font-size:0.9em; color:#333;">No collective practice.</div>
-    <p style="margin-top:15px; font-size:0.97em;">Explore Noor-e-Jamaat Shared Shukr Stream:</p>
-    <div id="sharedShukrStream">
-      <p style="color:#888;">No shared Shukr yet...</p>
+    <div class="features-section" id="muslimWomenIndiaFeatures">
+        <div class="section-title">🌸 Muslim Women India Features 🌸</div>
+        <button id="offlineDuaBtn">Recite Dua</button>
+        <button id="offlineQuranBtn">Reflect on Quran</button>
+        <button id="offlineGratitudeBtn">Gratitude Journal</button>
+        <button id="offlineBlessSisterBtn">Bless a Sister</button>
+        <button id="offlineHennaBtn">Henna/Mehndi Ritual</button>
+        <button id="offlineSadaqahBtn">Sadaqah (Charity) Intention</button>
+        <button id="offlineSalaamBtn">Offer Salaam</button>
+        <button id="offlineFamilyHonorBtn">Reflect on Family Honor</button>
+        <button id="offlineCelebrateWomenBtn">Celebrate Achievements</button>
     </div>
+
+
+  <div class="devi-focus-display">
+    <img id="deviSymbolPopup" src="images/icons/icon48.png" alt="Devi Symbol">
+    Current Focus: <span id="currentDeviFocusPopup">Loading...</span>
   </div>
 
-  <div id="popupConfirmationMessage"></div>
-
-  <!-- Divine metaphor, paradox, and ritual popups (hidden by default) -->
-  <button id="popupDivineParadoxBtn">Show Divine Paradox</button>
-  <div id="popupDivineParadox" class="explanation-popup"></div>
-  <button id="popupSubconsciousRitualBtn">Show Ritual</button>
-  <div id="popupSubconsciousRitual" class="explanation-popup"></div>
-  <button id="popupHiddenManifoldBtn">Show Hidden Manifold</button>
-  <div id="popupHiddenManifold" class="explanation-popup"></div>
-  <button id="popupShukrManifestationBtn">Manifest Shukr</button>
-  <div id="popupShukrManifestation" class="explanation-popup"></div>
-  <button id="popupKamBoloBtn">Kam Bolo, Theek Bolo</button>
-  <div id="popupKamBolo" class="explanation-popup"></div>
-
-  <div class="section" style="margin-top: 20px; padding-top:15px; border-top: 2px solid #b39ddb; background-color: #f3e5f5;">
-    <h4 style="margin-top:0; margin-bottom:10px; color:#6a1b9a;">🧠 Understand & Reflect</h4>
-    <button id="explainNiyyahBtn">What is Niyyah?</button>
-    <div id="explainNiyyah" class="explanation-popup"></div>
-    <button id="explainShukrBtn">What is Shukr?</button>
-    <div id="explainShukr" class="explanation-popup"></div>
-    <button id="explainMaqamBtn">What is Maqam?</button>
-    <div id="explainMaqam" class="explanation-popup"></div>
-    <button id="explainEhsaasBtn">What is Ehsaas?</button>
-    <div id="explainEhsaas" class="explanation-popup"></div>
-    <button id="explainFirasahBtn">What is Firasah?</button>
-    <div id="explainFirasah" class="explanation-popup"></div>
-    <button id="explainLeelaBtn">What is Leela?</button>
-    <div id="explainLeela" class="explanation-popup"></div>
-    <button id="explainJunoonBtn">What is Junoon?</button>
-    <div id="explainJunoon" class="explanation-popup"></div>
-    <button id="explainTazkiyahBtn">What is Tazkiyah?</button>
-    <div id="explainTazkiyah" class="explanation-popup"></div>
-    <button id="explainSankalpaBtn">What is Sankalpa?</button>
-    <div id="explainSankalpa" class="explanation-popup"></div>
-  </div>
-
-  <script>
-    // --- Debugging Helper for Popup ---
-    function popupDebugLog(msg, ...args) {
-      try {
-        console.debug('[Dil ki Dastak][Popup]', msg, ...args);
-        let dbg = document.getElementById('popupDebugLog');
-        if (dbg) {
-          dbg.style.display = 'block';
-          dbg.innerHTML += `[${new Date().toLocaleTimeString()}] ${msg}<br>`;
-          if (dbg.childNodes.length > 100) dbg.innerHTML = dbg.innerHTML.split('<br>').slice(-100).join('<br>');
-        }
-      } catch (e) {
-        // Fallback to console only
-        console.debug('[Dil ki Dastak][Popup][DebugLogError]', e);
-      }
-    }
-
-    // Log startup and environment
-    popupDebugLog('Popup loaded. UserAgent: ' + navigator.userAgent);
-    if (typeof browser !== 'undefined') {
-      popupDebugLog('browser.* API detected (likely Firefox).');
-    } else if (typeof chrome !== 'undefined') {
-      popupDebugLog('chrome.* API detected (likely Chromium).');
-    } else {
-      popupDebugLog('No browser/chrome API detected!');
-    }
-
-    // Log DOMContentLoaded and window load
-    document.addEventListener('DOMContentLoaded', function() {
-      popupDebugLog('DOMContentLoaded event fired.');
-    });
-    window.addEventListener('load', function() {
-      popupDebugLog('Window load event fired.');
-    });
-
-    // Log storage access
-    try {
-      (chrome?.storage?.local || browser?.storage?.local).get(null, function(items) {
-        if (chrome.runtime && chrome.runtime.lastError) {
-          popupDebugLog('Storage get error: ' + chrome.runtime.lastError.message);
-        } else {
-          popupDebugLog('Storage get success. Keys: ' + Object.keys(items).join(', '));
-        }
-      });
-    } catch (e) {
-      popupDebugLog('Storage API test failed: ' + e.message);
-    }
-
-    // Log key UI actions
-    [
-      'setNiyyahBtn', 'incrementShukrBtn', 'getWisdomBtn', 'joinSatsangBtn', 'startMushtarakBtn',
-      'popupDivineParadoxBtn', 'popupSubconsciousRitualBtn', 'popupHiddenManifoldBtn', 'popupShukrManifestationBtn', 'popupKamBoloBtn'
-    ].forEach(function(id) {
-      const el = document.getElementById(id);
-      if (el) {
-        el.addEventListener('click', function() {
-          popupDebugLog('Clicked: #' + id);
-        });
-      }
-    });
-
-    // Listen for errors globally
-    window.addEventListener('error', function(e) {
-      popupDebugLog('Global error: ' + e.message + ' at ' + e.filename + ':' + e.lineno);
-    });
-    window.addEventListener('unhandledrejection', function(e) {
-      popupDebugLog('Unhandled promise rejection: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
-    });
-  </script>
+  <script src="compat.js"></script>
   <script src="popup_niyyah.js"></script>
 </body>
 </html>

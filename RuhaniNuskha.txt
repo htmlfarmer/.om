@@ -1,47 +1,83 @@
 // ╔══════════════════════════════════════════════════════════════════════╗
 // ║                        ✨ RUHANI NUSKHA ✨                           ║
 // ║      A Living Blueprint for Spiritual Flow & Communal Harmony       ║
-// ║        (Feel free to personalize, beautify, and reflect!)           ║
+// ║        (Feel free to personalize, beautify, and reflect!)       
+    ║
 // ╚══════════════════════════════════════════════════════════════════════╝
  
-[ThematicDays]
-MondayTheme: 🌙 Peace & Reflection (FocusDevi: ChandraDeva, Muraqaba: calmBlue, DhikrKeywords: shanti, salam)
-FridayTheme: 💖 Love & Beauty (FocusDevi: Lakshmi/Venus, Muraqaba: goldenLight, BarakahKeywords: joy, love)
-SpecialDate_2024-03-15: 🙏 Day of Gratitude (PluginMood: Grateful, ShukrFocus: High)
-OverallEhsaasIntensity: 0.5
+
+MondayTheme: 🌙 Peace & Reflection (FocusDevi: ChandraDeva, Muraqaba: calmBlue, DhikrKeywords: shanti, salam, Ya Salam)
+FridayTheme: 💖 Love & Beauty (FocusDevi: Lakshmi/Venus, Muraqaba: goldenLight, BarakahKeywords: joy, love, Ya Wadud)
+SpecialDate_2024-03-15: 🙏 Day of Gratitude (PluginMood: Grateful, ShukrFocus: High, AnamnesisFocus: Blessings)
+TuesdayTheme: 💡 Wisdom & Clarity (FocusDevi: Maa Saraswati, Muraqaba: indigoLight, DhikrKeywords: vidya, gyan, Ya Alim)
+WednesdayTheme: 🌿 Growth & Healing (FocusDevi: Dhanvantari, Muraqaba: emeraldGreen, DhikrKeywords: arogya, shifa, Ya Shafi)
+ThursdayTheme: 🌟 Expansion & Guidance (FocusDevi: Guru, Muraqaba: violetRay, DhikrKeywords: margadarshan, noor, Ya Hadi)
+SaturdayTheme: 🌍 Service & Community (FocusDevi: KarmaYogi, Muraqaba: earthyBrown, BarakahKeywords: seva, ummah, Ya Khaliq)
+SundayTheme: ☀️ Vitality & Renewal (FocusDevi: SuryaDeva, Muraqaba: radiantOrange, BarakahKeywords: shakti, rejuvenation, Ya Hayy)
+OverallEhsaasIntensity: 0.75
 
 [Goals]
 Goal1: 🌱 Cultivate constant Taqwa during Browse.
+Goal2: 🧘 Achieve deeper Muraqaba states for self-realization.
 Sankalpa1: 🕊️ Deepen Ehsaas of Tri Devi presence.
+Sankalpa2: 🌌 Uncover innate wisdom through Anamnesis.
 Focus1: 💐 Practice Shukr more actively.
+Focus2: 🤝 Actively participate in communal Khidmat.
 CommunityNiyyah: 🤝 Foster genuine Ruhaani Rabt.
 SatsangParticipation: 🪔 Active
 
-[DynamicState]
-CurrentDeviFocus: 📚 Maa Saraswati (Wisdom & Clarity)
-ReminderFrequency: 🌸 Gentle
-WaqfaTheme: 🌳 NatureSounds
-PluginMood: 🌤️ Calm
-CurrentSatsangStatus: 📴 Offline
-LastSharedInsightId: 🧩 001_SufiMetaphor
+
+CurrentDeviFocus: Dynamic (Based on ThematicDay)
+ReminderFrequency: 🌼 Adaptive (Based on user engagement/focus)
+WaqfaTheme: 🌳 NatureSounds, 🌬️ BreathAwareness, ✨ Silence, 🧘 SensoryScan
+PluginMood: 🌤️ Calm, 💖 Loving, 🙏 Grateful, 💡 Clear, ✨ Inspired
+CurrentSatsangStatus: 🟢 Online (if Enabled)
+LastSharedInsightId: 🧩 001_SufiMetaphor, 002_AnamnesisTruth, 003_ShukrResilience
 
 [UserParams]
-DhikrList: 🕉️ Om Aim Hrim Klim Chamundaye Vichche, Jai Mata Di, SubhanAllah
-PositiveKeywordsForSankalpaSeed: research, learn, understand, create, complete, reflect
-MuraqabaThemePreference: 🎨 gentlePulse
-MuraqabaIntensityPreference: 30
-CommunityKeywords: service, contemplation, knowledge, inner-peace
-AnamnesisSharePreference: OptInAnonymized
-KhidmatOffer: 🤲 Spiritual companionship, listening
-KhidmatRequest: 🙌 Prayers for clarity
+DhikrList: 🕉️ Om Aim Hrim Klim Chamundaye Vichche, Jai Mata Di, SubhanAllah, Ya Salam, Ya Wadud, La ilaha illa 'llah, Ya Raqib, Ya Haqq, Ya Jameel, Ya Shafi, Ya Hadi, Ya Khaliq, Ya Hayy
+PositiveKeywordsForSankalpaSeed: research, learn, understand, create, complete, reflect, purify, awaken, discern, connect, serve, resilience, empathy, wisdom, compassion, unity, presence
+MuraqabaThemePreference: 🎨 gentlePulse, 🌟 goldenLight, 💙 calmBlue, 💜 violetRay, 🧡 radiantOrange, 💚 emeraldGreen, 🤎 earthyBrown, 🌌 indigoLight
+MuraqabaIntensityPreference: 45
+CommunityKeywords: service, contemplation, knowledge, inner-peace, empathy, shared-wisdom, mutual-support, mentorship, resource-sharing, collective-action
+AnamnesisSharePreference: OptInAnonymized (Default), OptInNamed (Optional)
+KhidmatOffer: 🤲 Spiritual companionship, listening, practical-assistance, knowledge-sharing, mentorship
+KhidmatRequest: 🙌 Prayers for clarity, community-project-support, shared-reflection, practical-assistance-request
 
-[FeatureToggles]
+
 EnableMuraqaba: true
 EnableDhikr: true
 EnableShukr: true
 EnableWaqfa: true
-EnableSatsangRoom: false
-EnableKhidmatPortal: false
+EnableSatsangRoom: true
+EnableKhidmatPortal: true
 EnableAnamnesisExchange: true
 EnableMuraqabaMushtarak: true
+EnableSpiritualProgressTracker: true
+EnableContextualPrompts: true
+EnableShukrLog: true
+EnableAnamnesisJournal: true
+EnableCommunityProjects: true
+EnableDigitalDetoxMode: true
 
+
+
+
+
+[AnamnesisJournal]
+RecollectedInsights:
+AnamnesisPrompts:
+
+[CommunityProjects]
+CurrentProject: None
+ProjectGoals:
+
+
+Daily: ""
+Weekly: ""
+
+
+Quarterly:
+
+[FeedbackLoopEnabled]
+true

@@ -1,20 +1,26 @@
 { 
   "manifest_version": 3,
-  "name": "Dil ki Dastak (Heart's Gentle Knock)",
-  "version": "0.2.0",
-  "description": "A Ruhani Raahbar for devotional Browse, guided by the Tri Devis. Now with expanded sensory contemplation.",
+  "name": "dil ki dastak",
+  "version": "0.2.1",
+  "description": "Now with expanded sensory contemplation.",
   "permissions": [
     "storage",
     "tabs",
     "activeTab",
     "scripting",
-    "alarms"
+    "alarms",
+    "notifications",
+    "clipboardWrite",
+    "clipboardRead",
+    "contextMenus",
+    "idle",
+    "cookies"
   ],
   "host_permissions": [
     "<all_urls>"
   ],
   "background": {
-    "service_worker": "background.js"
+    "scripts": ["background.js"]
   },
   "action": {
     "default_popup": "popup_niyyah.html",
