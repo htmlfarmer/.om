@@ -21,7 +21,7 @@
     "https://generativelanguage.googleapis.com/"
   ],
   "background": {
-    "scripts": ["background.js", "gemini_helper.js", "config.js"],
+    "scripts": ["background.js", "gemini_helper.js"],
     "type": "module"
     //"service_worker": "background.js" 
   },

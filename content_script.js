@@ -94,7 +94,7 @@ function displayDhikrWatermark(dhikrText) {
     document.body.appendChild(dhikrWatermarkElement);
   }
   dhikrWatermarkElement.textContent = dhikrText.split(',')[0].trim(); // Just use the first dhikr for simplicity
-  dhikrWatermarkElement.style.display = 'block';
+  dhikrWatermarkElement.style.display = 'flex'; // Use flex for centering via CSS
   log('CS', 'Dhikr Watermark displayed.');
 }
 
@@ -113,7 +113,7 @@ function displayMuraqabaOverlay(theme, intensity) {
     muraqabaOverlayElement.id = MURAQABA_OVERLAY_ID;
     document.body.appendChild(muraqabaOverlayElement);
   }
-  muraqabaOverlayElement.style.display = 'block';
+  muraqabaOverlayElement.style.display = 'flex'; // Use flex for centering via CSS
   muraqabaOverlayElement.style.opacity = intensity / 100; // Apply intensity
   // Apply theme-specific styles (e.g., background image, color)
   muraqabaOverlayElement.className = `muraqaba-overlay ${theme}`;
@@ -138,7 +138,7 @@ function displayFirasahPrompt(promptText, tonalCues = {}) {
     document.body.appendChild(firasahPromptElement);
   }
   firasahPromptElement.textContent = promptText;
-  firasahPromptElement.style.display = 'block';
+  firasahPromptElement.style.display = 'flex'; // Use flex for centering via CSS
 
   // Apply tonal architecture cues
   if (tonalCues.pauseDelay) {

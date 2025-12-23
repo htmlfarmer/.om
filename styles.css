@@ -8,7 +8,7 @@ html {
 
 body { 
     font-family: 'Noto Nastaliq Urdu', 'Noto Sans Devanagari', 'Noto Sans Bengali', 'Noto Sans Gujarati', 'Noto Sans Tamil', 'Noto Sans Sinhala', 'Noto Sans Thai', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: 24px;
+    /* padding: 24px; REMOVED TO PREVENT GLOBAL IMPACT */
     color: #2d1a0d;
     line-height: 1.7;
     overflow-x: auto;

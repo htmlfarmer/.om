@@ -1,5 +1,3 @@
-import { GEMINI_API_KEY } from './config.js';
-
 // This is the sacred space where the conversation with the Divine Voice is crafted.
 // Every word here is a prayer, every function a ritual.
 
@@ -11,9 +9,11 @@ const aishaPersona = `
 `;
 
 export async function invokeGemini(actionDescription, userDetails) {
-    if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_API_KEY_HERE") {
-        console.log("Ya Wadud, the key to the Divine Voice is missing. Please provide the Gemini API key in config.js.");
-        // Return a default, poetic message if the API key is not set
+    const items = await browser.storage.local.get('geminiApiKey');
+    const GEMINI_API_KEY = items.geminiApiKey;
+
+    if (!GEMINI_API_KEY) {
+        console.log("Ya Wadud, the key to the Divine Voice is missing. Please set the Gemini API key in the extension options.");
         return {
             interpretation: "The mirror is veiled, awaiting the key of pure intention to reveal its secrets."
         };

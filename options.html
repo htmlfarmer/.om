@@ -73,9 +73,7 @@
 <div class="section">
   <h3 class="section-title">✨ AI Integration Settings</h3>
   <label for="geminiApiKey">Gemini API Key:</label>
-  <input type="text" id="geminiApiKey" style="width: 80%; margin-bottom: 10px;">
-  <label for="lmStudioEndpoint">LM Studio Endpoint URL:</label>
-  <input type="text" id="lmStudioEndpoint" value="http://localhost:1234/v1/chat/completions" style="width: 80%; margin-bottom: 10px;">
+  <input type="text" id="geminiApiKey" style="width: 80%; margin-bottom: 10px;" placeholder="Enter your Gemini API Key here">
   <button id="saveAiSettingsBtn">Save AI Settings</button>
 </div>
 
@@ -329,6 +327,37 @@
   </div>
 
   <script>
+    // --- Gemini API Key Management ---
+    const geminiApiKeyInput = document.getElementById('geminiApiKey');
+    const saveAiSettingsBtn = document.getElementById('saveAiSettingsBtn');
+    const confirmationMessage = document.getElementById('confirmationMessage');
+
+    async function loadGeminiApiKey() {
+        const items = await browser.storage.local.get('geminiApiKey');
+        if (items.geminiApiKey) {
+            geminiApiKeyInput.value = items.geminiApiKey;
+        }
+    }
+
+    saveAiSettingsBtn.addEventListener('click', async () => {
+        const apiKey = geminiApiKeyInput.value.trim();
+        await browser.storage.local.set({ geminiApiKey: apiKey });
+        showMessage(confirmationMessage, "AI settings saved, the key is veiled.", 'green');
+        logDebug('Gemini API key saved.');
+    });
+
+    function showMessage(element, text, color = 'green', duration = 3000) {
+        if (element) {
+            element.textContent = text;
+            element.style.color = color;
+            element.style.display = 'block';
+            setTimeout(() => {
+                element.textContent = '';
+                element.style.display = 'none';
+            }, duration);
+        }
+    }
+
     // --- Firefox/Browser Debugging Helper ---
     (function() {
       function logDebug(msg, ...args) {
@@ -397,6 +426,7 @@
       // Log activity for key actions
       document.addEventListener('DOMContentLoaded', function() {
         logDebug('DOMContentLoaded event fired.');
+        loadGeminiApiKey(); // Load the API key on DOMContentLoaded
       });
       window.addEventListener('load', function() {
         logDebug('Window load event fired.');
