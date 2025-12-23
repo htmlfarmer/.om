@@ -174,6 +174,7 @@
     <div class="section-title">My Niyyah (Intention)</div>
     <textarea id="niyyahInput" placeholder="Set your intention for this Browse session..."></textarea>
     <button id="setNiyyahBtn">Set Niyyah</button>
+    <div id="niyyahMessage" class="message-display" style="min-height: 1.2em; margin-top: 10px; font-size: 0.9em;"></div>
     <div id="niyyahVisualizer">
       </div>
   </div>
@@ -183,12 +184,14 @@
     <div id="shukrDisplay">Shukr Count: 0</div>
     <button id="incrementShukrBtn">Increment Shukr</button>
     <button id="popupShukrManifestationBtn">Manifest Shukr</button>
+    <div id="shukrMessage" class="message-display" style="min-height: 1.2em; margin-top: 10px; font-size: 0.9em;"></div>
   </div>
 
   <div class="wisdom-section">
     <div class="section-title">Divine Guidance</div>
     <button id="getWisdomBtn">Receive Wisdom</button>
     <div id="wisdomDisplay"></div>
+    <div id="wisdomMessage" class="message-display" style="min-height: 1.2em; margin-top: 10px; font-size: 0.9em;"></div>
     <button id="popupDivineParadoxBtn">Contemplate Paradox</button>
     <button id="popupSubconsciousRitualBtn">Activate Ritual</button>
     <button id="popupHiddenManifoldBtn">Reveal Hidden Unity</button>
@@ -199,6 +202,7 @@
     <div class="section-title">✨ Ratan (Gem) Discovery ✨</div>
     <div id="ratanDiscoveryDisplay">0 Gems Found</div>
     <button id="revealRatanBtn">Seek New Gem</button>
+    <div id="ratanMessage" class="message-display" style="min-height: 1.2em; margin-top: 10px; font-size: 0.9em;"></div>
   </div>
 
 
@@ -213,6 +217,7 @@
 
     <div class="features-section" id="muslimWomenIndiaFeatures">
         <div class="section-title">🌸 Muslim Women India Features 🌸</div>
+        <div id="muslimWomenIndiaFeaturesMessage" class="message-display" style="min-height: 1.2em; margin-top: 10px; font-size: 0.9em;"></div>
         <button id="offlineDuaBtn">Recite Dua</button>
         <button id="offlineQuranBtn">Reflect on Quran</button>
         <button id="offlineGratitudeBtn">Gratitude Journal</button>
@@ -229,6 +234,15 @@
     <img id="deviSymbolPopup" src="images/icons/icon48.png" alt="Devi Symbol">
     Current Focus: <span id="currentDeviFocusPopup">Loading...</span>
   </div>
+
+  <div class="section">
+    <div class="section-title">App Control</div>
+    <label class="toggle-switch">
+        <input type="checkbox" id="appActiveToggle">
+        <span class="slider round"></span>
+    </label>
+    <span>Enable Dil ki Dastak</span>
+</div>
 
   <script src="compat.js"></script>
   <script src="popup_niyyah.js"></script>

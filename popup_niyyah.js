@@ -31,7 +31,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     const popupKamBoloBtn = document.getElementById('popupKamBoloBtn');
     const revealRatanBtn = document.getElementById('revealRatanBtn');
     const ratanDiscoveryDisplay = document.getElementById('ratanDiscoveryDisplay');
-
+    const appActiveToggle = document.getElementById('appActiveToggle');
+    const niyyahMessage = document.getElementById('niyyahMessage');
 
     // Load and display initial settings
     async function loadAndDisplaySettings() {
@@ -78,13 +79,14 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const response = await browser.runtime.sendMessage({ action: "setNiyyah", niyyah: niyyah });
                 if (response && response.status === "Niyyah set") {
                     popupDebugLog("Niyyah successfully set.");
-                    // Optionally provide visual feedback
+                    showMessage(niyyahMessage, "Niyyah successfully set!");
                 }
             } catch (error) {
                 popupDebugLog("Error setting Niyyah:", error);
+                showMessage(niyyahMessage, "Error setting Niyyah.", '#d32f2f');
             }
         } else {
-            alert("Please enter your Niyyah.");
+            showMessage(niyyahMessage, "Please enter your Niyyah.", '#d32f2f');
         }
     });
 
@@ -147,7 +149,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Reveal Hidden Unity (Placeholder functionality)
     if (popupHiddenManifoldBtn) {
         popupHiddenManifoldBtn.addEventListener('click', () => {
-            alert("Contemplate the 'Hidden Manifold' that connects seemingly disparate realities. All is One.");
+            showMessage(wisdomMessage, "Contemplate the 'Hidden Manifold' that connects seemingly disparate realities. All is One.", '#4a148c', 5000);
             // In a real implementation, this would trigger a more guided reflection or a visual.
         });
     }
@@ -155,7 +157,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Kam Bolo (Concise Wisdom) - Placeholder
     if (popupKamBoloBtn) {
         popupKamBoloBtn.addEventListener('click', () => {
-            alert("Kam Bolo, Theek Bolo. Less talk, more truth. Seek the core Hikmat.");
+            showMessage(wisdomMessage, "Kam Bolo, Theek Bolo. Less talk, more truth. Seek the core Hikmat.", '#4a148c', 5000);
             // This could trigger a specific concise wisdom prompt.
         });
     }
@@ -163,7 +165,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Shukr Manifestation - Placeholder
     if (popupShukrManifestationBtn) {
         popupShukrManifestationBtn.addEventListener('click', () => {
-            alert("Your profound Shukr is manifesting! Feel the divine blessings unfold.");
+            showMessage(shukrMessage, "Your profound Shukr is manifesting! Feel the divine blessings unfold.", '#4a148c', 5000);
             // This would trigger a visual/auditory manifestation.
         });
     }
@@ -171,7 +173,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Ratan Discovery - Placeholder
     if (revealRatanBtn) {
         revealRatanBtn.addEventListener('click', async () => {
-            alert("A new Ratan (Gem) of insight reveals itself! Observe the subtle blessings around you.");
+            showMessage(ratanMessage, "A new Ratan (Gem) of insight reveals itself! Observe the subtle blessings around you.", '#1a237e', 5000);
             // This would update a count in storage and reflect it.
             // Example:
             // let settings = (await browser.storage.local.get('dilKiDastakSettings')).dilKiDastakSettings;
@@ -197,47 +199,47 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // 1. Dua (Prayer)
     addMuslimWomenIndiaFeatureBtn('offlineDuaBtn', 'Recite Dua', function() {
-        alert("Recite a personal Dua, seeking closeness to the Divine.");
+        showMessage(muslimWomenIndiaFeaturesMessage, "Recite a personal Dua, seeking closeness to the Divine.", '#6d4c41', 5000);
     }, { bg: '#ffee58' });
 
     // 2. Quran Reflection
     addMuslimWomenIndiaFeatureBtn('offlineQuranBtn', 'Reflect on Quran', function() {
-        alert("Choose an Ayah and reflect on its meaning for your life today.");
+        showMessage(muslimWomenIndiaFeaturesMessage, "Choose an Ayah and reflect on its meaning for your life today.", '#6d4c41', 5000);
     }, { bg: '#81c784' });
 
     // 3. Gratitude Journal
     addMuslimWomenIndiaFeatureBtn('offlineGratitudeBtn', 'Gratitude Journal', function() {
-        alert("List 3 things you are grateful for right now. Feel the Shukr.");
+        showMessage(muslimWomenIndiaFeaturesMessage, "List 3 things you are grateful for right now. Feel the Shukr.", '#6d4c41', 5000);
     }, { bg: '#ffb74d' });
 
     // 4. Blessing a Sister
     addMuslimWomenIndiaFeatureBtn('offlineBlessSisterBtn', 'Bless a Sister', function() {
-        alert("Send a silent blessing to a sister, mother, daughter, or friend. Pray for her happiness, health, and spiritual growth.");
+        showMessage(muslimWomenIndiaFeaturesMessage, "Send a silent blessing to a sister, mother, daughter, or friend. Pray for her happiness, health, and spiritual growth.", '#6d4c41', 5000);
     }, { bg: '#f06292' });
 
     // 6. Henna/Mehndi Ritual
     addMuslimWomenIndiaFeatureBtn('offlineHennaBtn', 'Henna/Mehndi Ritual', function() {
-        alert("Draw a simple henna/mehndi design on your hand or paper. Let it be a symbol of beauty, joy, and tradition.");
+        showMessage(muslimWomenIndiaFeaturesMessage, "Draw a simple henna/mehndi design on your hand or paper. Let it be a symbol of beauty, joy, and tradition.", '#6d4c41', 5000);
     }, { bg: '#ffb300' });
 
     // 7. Sadaqah (Charity) Intention
     addMuslimWomenIndiaFeatureBtn('offlineSadaqahBtn', 'Sadaqah (Charity) Intention', function() {
-        alert("Set aside a coin or small gift for someone in need. Even a smile or kind word is sadaqah.");
+        showMessage(muslimWomenIndiaFeaturesMessage, "Set aside a coin or small gift for someone in need. Even a smile or kind word is sadaqah.", '#6d4c41', 5000);
     }, { bg: '#43a047' });
 
     // 8. Salaam Ritual
     addMuslimWomenIndiaFeatureBtn('offlineSalaamBtn', 'Offer Salaam', function() {
-        alert("Say 'Assalamu Alaikum' (Peace be upon you) to someone, or silently in your heart to all beings.");
+        showMessage(muslimWomenIndiaFeaturesMessage, "Say 'Assalamu Alaikum' (Peace be upon you) to someone, or silently in your heart to all beings.", '#6d4c41', 5000);
     }, { bg: '#0288d1' });
 
     // 9. Family Honor Reflection
     addMuslimWomenIndiaFeatureBtn('offlineFamilyHonorBtn', 'Reflect on Family Honor', function() {
-        alert("Reflect on what honor means to you, beyond tradition or expectation. Affirm your worth and the worth of all women.");
+        showMessage(muslimWomenIndiaFeaturesMessage, "Reflect on what honor means to you, beyond tradition or expectation. Affirm your worth and the worth of all women.", '#6d4c41', 5000);
     }, { bg: '#6d4c41' });
 
     // 10. Celebrate Achievements
     addMuslimWomenIndiaFeatureBtn('offlineCelebrateWomenBtn', 'Celebrate Achievements', function() {
-        alert("Acknowledge and celebrate the achievements of women around you and throughout history. Their success is our collective strength.");
+        showMessage(muslimWomenIndiaFeaturesMessage, "Acknowledge and celebrate the achievements of women around you and throughout history. Their success is our collective strength.", '#6d4c41', 5000);
     }, { bg: '#9c27b0' });
 
     // Call this when the popup loads
@@ -291,6 +293,31 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
       }
     });
+
+    // Load initial app active state
+    async function loadAppActiveState() {
+        const settings = await browser.runtime.sendMessage({ action: 'getSettings' }); // Request settings from background script
+        if (settings && typeof settings.enableApp !== 'undefined') { // Assuming a new 'enableApp' setting
+            appActiveToggle.checked = settings.enableApp;
+        } else {
+            // Default to true if not set (app is on by default)
+            appActiveToggle.checked = true;
+        }
+    }
+
+    // Save app active state when toggle changes
+    appActiveToggle.addEventListener('change', async () => {
+        const enableApp = appActiveToggle.checked;
+        await browser.runtime.sendMessage({
+            action: 'updateSetting',
+            setting: 'enableApp', // Name of your new setting
+            value: enableApp
+        });
+        // You might want to display a temporary message like "App state updated"
+    });
+
+    loadAppActiveState(); // Call this to set initial toggle state
+
 
     // Listen for errors globally
     window.addEventListener('error', function(e) {

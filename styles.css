@@ -1,12 +1,19 @@
 /* --- South Asian & Southeast Asian Inspired Styles --- */
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #fbeee6 0%, #e0f7fa 100%);
+}
+
 body { 
     font-family: 'Noto Nastaliq Urdu', 'Noto Sans Devanagari', 'Noto Sans Bengali', 'Noto Sans Gujarati', 'Noto Sans Tamil', 'Noto Sans Sinhala', 'Noto Sans Thai', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 24px;
-    background: linear-gradient(135deg, #fbeee6 0%, #e0f7fa 100%);
     color: #2d1a0d;
     line-height: 1.7;
     overflow-x: hidden;
     overflow-y: auto;
+    min-height: 100%;
     /* Subtle South Asian motif background (optional SVG pattern) */
     /* background-image: url('images/patterns/indian_motif.svg'); */
 }
@@ -26,7 +33,6 @@ h2 {
     background: linear-gradient(120deg, #fff8e1 60%, #ffe0b2 100%);
     border-radius: 12px;
     box-shadow: 0 3px 14px rgba(141,21,58,0.07), 0 1.5px 6px 0 rgba(0,0,0,0.06);
-    border: 2px solid #f8bbd0;
 }
 
 .section-title {
