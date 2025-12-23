@@ -11,7 +11,7 @@ body {
     padding: 24px;
     color: #2d1a0d;
     line-height: 1.7;
-    overflow-x: hidden;
+    overflow-x: auto;
     overflow-y: auto;
     min-height: 100%;
     /* Subtle South Asian motif background (optional SVG pattern) */
@@ -266,4 +266,72 @@ body.muraqaba-active {
     border-image-slice: 0 0 100 0;
 }
 
-/* ...existing code... */
+/* --- Extension Overlays & Prompts --- */
+#dilKiDastakDhikrWatermark_ID,
+#dilKiDastakMuraqabaOverlay_ID,
+#dilKiDastakFirasahPrompt_ID,
+#dilKiDastakVerbalRitual {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none; /* Allows clicks/scrolls to pass through */
+    z-index: 9999; /* High z-index to be on top, adjust if needed */
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 2em;
+    font-weight: bold;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#dilKiDastakDhikrWatermark_ID {
+    background: rgba(255, 255, 255, 0.05); /* Very subtle background */
+    font-size: 4em; /* Larger for watermark */
+    color: rgba(141, 21, 58, 0.1);
+}
+
+#dilKiDastakMuraqabaOverlay_ID {
+    background: linear-gradient(135deg, rgba(251, 238, 230, 0.1) 0%, rgba(224, 247, 250, 0.1) 100%);
+    /* Individual theme classes will override/add to this */
+}
+
+#dilKiDastakFirasahPrompt_ID {
+    top: auto;
+    bottom: 24px;
+    height: auto;
+    width: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(90deg, #fffde7 60%, #ffd54f 100%);
+    border: 1.5px solid #f8bbd0;
+    padding: 12px 18px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px #ffd54f;
+    font-size: 1.2em;
+    color: #8d153a;
+    white-space: pre-wrap; /* Preserve formatting from prompt text */
+    pointer-events: auto; /* This one *is* interactive for clicks to dismiss */
+    z-index: 10000;
+}
+
+#dilKiDastakVerbalRitual {
+    top: auto;
+    bottom: 20px;
+    height: auto;
+    width: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 10px 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    font-size: 1.1em;
+    color: #4a148c;
+    transition: opacity 1s ease-in-out;
+    white-space: pre-wrap; /* Preserve formatting from ritual text */
+}

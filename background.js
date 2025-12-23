@@ -1,4 +1,5 @@
 // background.js
+import { invokeGemini } from './gemini_helper.js';
 
 // --- GLOBALS ---
 let currentDilKiDastakSettings = {};
@@ -275,74 +276,114 @@ function injectClipboardListener() {
     });
 }
 
+// --- UNIFIED MESSAGE LISTENER ---
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === "sensitiveDataCopied") {
-        if (request.data && /(credit card|ssn|social security|bank account)/i.test(request.data)) {
-            browser.notifications.create({
-                type: "basic",
-                iconUrl: "images/icons/icon128.png",
-                title: "Dil ki Dastak Security",
-                message: "Be careful: You just copied sensitive information. Make sure you trust where you paste it."
-            });
+    (async () => {
+        backgroundDebugLog("Unified listener received action:", request.action);
+
+        // Gemini action is the highest priority
+        if (request.action === "invokeGemini") {
+            backgroundDebugLog("A whisper received by the heart... Action:", request.actionDescription);
+            const settings = await getSettings();
+            const userDetails = { 
+                currentMaqam: settings.MaqamDefinitions ? settings.MaqamDefinitions.Seeker.mood : "Seeker of Yaqeen",
+                statedGoal: settings.Goals ? settings.Goals.Goal1 : "To align every action with the Divine Will.",
+                currentDeviFocus: settings.DynamicState.CurrentDeviFocus
+            };
+            try {
+                const response = await invokeGemini(request.actionDescription, userDetails);
+                backgroundDebugLog("Reflection from the mirror:", response.interpretation);
+                sendResponse({ status: "Wisdom received", data: response });
+            } catch (error) {
+                console.error("A disturbance in the reflection:", error);
+                sendResponse({ status: "Error in reflection", error: error.message });
+            }
+            return; 
         }
-    }
-    // ...existing code... (other message handlers)
-    if (request.action === "updateShukrCount") {
-        backgroundDebugLog("Received request to update Shukr count.");
-        currentDilKiDastakSettings.DynamicState.ShukrCount = request.newCount;
-        saveSettings(currentDilKiDastakSettings);
-        sendResponse({ status: "Shukr count updated" });
-    } else if (request.action === "getSettings") {
-        backgroundDebugLog("Settings requested by popup/content script.");
-        sendResponse({ settings: currentDilKiDastakSettings });
-    } else if (request.action === "setNiyyah") {
-        backgroundDebugLog("Received Niyyah:", request.niyyah);
-        currentDilKiDastakSettings.Goals.CurrentNiyyah = request.niyyah;
-        saveSettings(currentDilKiDastakSettings);
-        sendResponse({ status: "Niyyah set" });
-    } else if (request.action === "getWisdom") {
-        backgroundDebugLog("Wisdom requested.");
-        const wisdom = "Seek silence, for in its embrace, the Devi's true voice resonates."; // Example
-        sendResponse({ wisdom: wisdom });
-    } else if (request.action === "playAudio") {
-        backgroundDebugLog("Audio play request:", request.audioUrl);
-        // This would typically involve playing audio in the background script
-        // For simplicity, we'll assume content script handles specific audios
-        // or a dedicated background audio player (not fully implemented in snippet)
-        sendResponse({ status: "Audio play initiated" });
-    } else if (request.action === "displayFirasahPrompt") {
-        const promptText = currentDilKiDastakSettings.DivineMetaphors[Math.floor(Math.random() * currentDilKiDastakSettings.DivineMetaphors.length)];
-        browser.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-            if (tabs[0] && tabs[0].id) {
-                browser.tabs.sendMessage(tabs[0].id, {
-                    action: "displayFirasahPrompt",
-                    promptText: promptText,
-                    tonalArchitectureCues: { /* Add dynamic cues here based on settings */ }
-                });
-            }
-        });
-        sendResponse({ status: "Firasah prompt sent" });
-    } else if (request.action === "triggerSubconsciousVerbalRitual") {
-        const ritualText = currentDilKiDastakSettings.UserParams.SubconsciousVerbalRituals[Math.floor(Math.random() * currentDilKiDastakSettings.UserParams.SubconsciousVerbalRituals.length)];
-        browser.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-            if (tabs[0] && tabs[0].id) {
-                browser.tabs.sendMessage(tabs[0].id, {
-                    action: "triggerSubconsciousVerbalRitual",
-                    ritualText: ritualText
-                });
-            }
-        });
-        sendResponse({ status: "Ritual sent" });
-    } else if (request.action === "displayDivineParadox") {
-        const paradoxText = currentDilKiDastakSettings.Paradoxes[Math.floor(Math.random() * currentDilKiDastakSettings.Paradoxes.length)];
-        browser.runtime.sendMessage({
-            action: "showPopupReflection",
-            type: "paradox",
-            content: paradoxText
-        });
-        sendResponse({ status: "Paradox sent to reflection popup" });
-    }
+
+        // Handle other actions
+        switch (request.action) {
+            case "sensitiveDataCopied":
+                if (request.data && /(credit card|ssn|social security|bank account)/i.test(request.data)) {
+                    browser.notifications.create({
+                        type: "basic",
+                        iconUrl: "images/icons/icon128.png",
+                        title: "Dil ki Dastak Security",
+                        message: "Be careful: You just copied sensitive information. Make sure you trust where you paste it."
+                    });
+                }
+                sendResponse({ status: "Notification shown" });
+                break;
+            case "updateShukrCount":
+                await updateSettings({ DynamicState: { ...currentDilKiDastakSettings.DynamicState, ShukrCount: request.newCount } });
+                sendResponse({ status: "Shukr count updated" });
+                break;
+            case "getSettings":
+                const settings = await getSettings();
+                sendResponse({ settings: settings });
+                break;
+            case "setNiyyah":
+                await updateSettings({ Goals: { ...currentDilKiDastakSettings.Goals, CurrentNiyyah: request.niyyah } });
+                sendResponse({ status: "Niyyah set" });
+                break;
+            case "getWisdom":
+                const wisdom = currentDilKiDastakSettings.Paradoxes[Math.floor(Math.random() * currentDilKiDastakSettings.Paradoxes.length)];
+                sendResponse({ wisdom: wisdom });
+                break;
+            case "playAudio":
+                sendResponse({ status: "Audio play initiated" });
+                break;
+            case "displayFirasahPrompt":
+                const promptText = currentDilKiDastakSettings.DivineMetaphors[Math.floor(Math.random() * currentDilKiDastakSettings.DivineMetaphors.length)];
+                const activeTabFirasah = await getActiveTab();
+                if (activeTabFirasah) {
+                    browser.tabs.sendMessage(activeTabFirasah.id, { action: "displayFirasahPrompt", promptText: promptText });
+                }
+                sendResponse({ status: "Firasah prompt sent" });
+                break;
+            case "triggerSubconsciousVerbalRitual":
+                const ritualText = currentDilKiDastakSettings.UserParams.SubconsciousVerbalRituals[Math.floor(Math.random() * currentDilKiDastakSettings.UserParams.SubconsciousVerbalRituals.length)];
+                const activeTabRitual = await getActiveTab();
+                if (activeTabRitual) {
+                    browser.tabs.sendMessage(activeTabRitual.id, { action: "triggerSubconsciousVerbalRitual", ritualText: ritualText });
+                }
+                sendResponse({ status: "Ritual sent" });
+                break;
+            case "displayDivineParadox":
+                const paradoxText = currentDilKiDastakSettings.Paradoxes[Math.floor(Math.random() * currentDilKiDastakSettings.Paradoxes.length)];
+                browser.runtime.sendMessage({ action: "showPopupReflection", type: "paradox", content: paradoxText });
+                sendResponse({ status: "Paradox sent" });
+                break;
+            default:
+                backgroundDebugLog("Unknown action received in unified listener:", request.action);
+                sendResponse({ status: "Unknown action" });
+        }
+    })();
+    return true; // Keep the message channel open for async response
 });
+
+// Helper to get the currently active tab
+async function getActiveTab() {
+    try {
+        const tabs = await browser.tabs.query({ active: true, currentWindow: true });
+        return tabs[0];
+    } catch (error) {
+        backgroundDebugLog("Could not get active tab:", error);
+        return null;
+    }
+}
+
+// A new unified function to update parts of the settings
+async function updateSettings(settingsUpdate) {
+    const newSettings = { 
+        ...currentDilKiDastakSettings, 
+        ...settingsUpdate,
+        Goals: { ...currentDilKiDastakSettings.Goals, ...settingsUpdate.Goals },
+        DynamicState: { ...currentDilKiDastakSettings.DynamicState, ...settingsUpdate.DynamicState },
+        UserParams: { ...currentDilKiDastakSettings.UserParams, ...settingsUpdate.UserParams },
+    };
+    await saveSettings(newSettings);
+}
 
 
 // 6. Security: Notify user if settings are changed from an unknown source

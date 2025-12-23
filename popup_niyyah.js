@@ -33,6 +33,68 @@ document.addEventListener('DOMContentLoaded', async function() {
     const ratanDiscoveryDisplay = document.getElementById('ratanDiscoveryDisplay');
     const appActiveToggle = document.getElementById('appActiveToggle');
     const niyyahMessage = document.getElementById('niyyahMessage');
+    const openOptionsPageBtn = document.getElementById('openOptionsPage');
+
+    // Debounce function to prevent excessive API calls
+    let debounceTimer;
+    function debounce(func, delay) {
+        return function(...args) {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                func.apply(this, args);
+            }, delay);
+        };
+    }
+
+    if (openOptionsPageBtn) {
+        openOptionsPageBtn.addEventListener('click', () => {
+            browser.runtime.openOptionsPage();
+        });
+    }
+
+    // Real-time Niyyah reflection
+    const handleNiyyahInput = debounce(async (niyyah) => {
+        if (niyyah) {
+            try {
+                showMessage(niyyahMessage, "Contemplating the reflection...");
+
+                const response = await browser.runtime.sendMessage({
+                    action: "invokeGemini",
+                    actionDescription: `The user is typing their Niyyah (intention) and has paused. The current intention is: "${niyyah}"`
+                });
+
+                if (response && response.data && response.data.interpretation) {
+                    showMessage(niyyahMessage, response.data.interpretation, '#4a148c', 7000);
+                } else {
+                    showMessage(niyyahMessage, "The mirror is still.", '#6d4c41', 3000);
+                }
+            } catch (error) {
+                popupDebugLog("Error during real-time Niyyah reflection:", error);
+                showMessage(niyyahMessage, "A veil descends.", '#d32f2f');
+            }
+        }
+    }, 1500); // 1.5-second pause
+
+    niyyahInput.addEventListener('input', () => {
+        const niyyah = niyyahInput.value.trim();
+        handleNiyyahInput(niyyah);
+    });
+
+    // Set Niyyah button now only saves the final intention
+    setNiyyahBtn.addEventListener('click', async () => {
+        const niyyah = niyyahInput.value.trim();
+        if (niyyah) {
+            try {
+                await browser.runtime.sendMessage({ action: "setNiyyah", niyyah: niyyah });
+                showMessage(niyyahMessage, "Niyyah has been sealed in the heart.", 'green', 3000);
+            } catch (error) {
+                popupDebugLog("Error saving final Niyyah:", error);
+                showMessage(niyyahMessage, "Could not seal the Niyyah.", '#d32f2f');
+            }
+        } else {
+            showMessage(niyyahMessage, "Please state your Niyyah before sealing it.", '#d32f2f');
+        }
+    });
 
     // Load and display initial settings
     async function loadAndDisplaySettings() {
@@ -74,16 +136,26 @@ document.addEventListener('DOMContentLoaded', async function() {
     setNiyyahBtn.addEventListener('click', async () => {
         const niyyah = niyyahInput.value.trim();
         if (niyyah) {
-            popupDebugLog("Sending Niyyah to background script:", niyyah);
             try {
-                const response = await browser.runtime.sendMessage({ action: "setNiyyah", niyyah: niyyah });
-                if (response && response.status === "Niyyah set") {
-                    popupDebugLog("Niyyah successfully set.");
-                    showMessage(niyyahMessage, "Niyyah successfully set!");
+                // First, set the Niyyah in storage
+                await browser.runtime.sendMessage({ action: "setNiyyah", niyyah: niyyah });
+                showMessage(niyyahMessage, "Niyyah set. Seeking reflection...");
+
+                // Then, invoke Gemini for wisdom on this action
+                const response = await browser.runtime.sendMessage({
+                    action: "invokeGemini",
+                    actionDescription: `The user has set a new Niyyah (intention): "${niyyah}"`
+                });
+
+                if (response && response.data && response.data.interpretation) {
+                    showMessage(niyyahMessage, response.data.interpretation, '#4a148c', 6000);
+                } else {
+                    showMessage(niyyahMessage, "The mirror remains silent for now.", '#6d4c41', 3000);
                 }
+
             } catch (error) {
-                popupDebugLog("Error setting Niyyah:", error);
-                showMessage(niyyahMessage, "Error setting Niyyah.", '#d32f2f');
+                popupDebugLog("Error during Niyyah process:", error);
+                showMessage(niyyahMessage, "An error occurred. Please try again.", '#d32f2f');
             }
         } else {
             showMessage(niyyahMessage, "Please enter your Niyyah.", '#d32f2f');
@@ -92,34 +164,53 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // Increment Shukr
     incrementShukrBtn.addEventListener('click', async () => {
-        popupDebugLog("Incrementing Shukr...");
         try {
-            const currentSettingsResponse = await browser.runtime.sendMessage({ action: "getSettings" });
-            if (currentSettingsResponse && currentSettingsResponse.settings) {
-                let currentCount = currentSettingsResponse.settings.DynamicState.ShukrCount || 0;
-                currentCount++;
-                const response = await browser.runtime.sendMessage({ action: "updateShukrCount", newCount: currentCount });
-                if (response && response.status === "Shukr count updated") {
-                    shukrDisplayElement.textContent = `Shukr Count: ${currentCount}`;
-                    popupDebugLog("Shukr count updated to:", currentCount);
-                }
+            const settingsResponse = await browser.runtime.sendMessage({ action: "getSettings" });
+            if (!settingsResponse || !settingsResponse.settings) return;
+
+            let currentCount = settingsResponse.settings.DynamicState.ShukrCount || 0;
+            currentCount++;
+            
+            // Update the count in storage
+            await browser.runtime.sendMessage({ action: "updateShukrCount", newCount: currentCount });
+            shukrDisplayElement.textContent = `Shukr Count: ${currentCount}`;
+            showMessage(shukrMessage, "Shukr offered. Seeking reflection...");
+
+            // Invoke Gemini for wisdom on this act of gratitude
+            const geminiResponse = await browser.runtime.sendMessage({
+                action: "invokeGemini",
+                actionDescription: `The user has just performed an act of Shukr (gratitude), incrementing their count to ${currentCount}.`
+            });
+
+            if (geminiResponse && geminiResponse.data && geminiResponse.data.interpretation) {
+                showMessage(shukrMessage, geminiResponse.data.interpretation, '#4a148c', 6000);
+            } else {
+                 showMessage(shukrMessage, "The mirror remains silent for now.", '#6d4c41', 3000);
             }
+
         } catch (error) {
             popupDebugLog("Error incrementing Shukr:", error);
+            showMessage(shukrMessage, "An error occurred.", '#d32f2f');
         }
     });
 
     // Get Wisdom
     getWisdomBtn.addEventListener('click', async () => {
-        popupDebugLog("Requesting wisdom...");
         try {
-            const response = await browser.runtime.sendMessage({ action: "getWisdom" });
-            if (response && response.wisdom) {
-                wisdomDisplayDiv.textContent = response.wisdom;
-                popupDebugLog("Received wisdom:", response.wisdom);
+            showMessage(wisdomDisplayDiv, "Receiving wisdom...");
+            const response = await browser.runtime.sendMessage({
+                action: "invokeGemini",
+                actionDescription: "The user has clicked the 'Receive Wisdom' button, seeking a moment of Hikmat."
+            });
+
+            if (response && response.data && response.data.interpretation) {
+                wisdomDisplayDiv.textContent = response.data.interpretation;
+            } else {
+                wisdomDisplayDiv.textContent = "Silence is also an answer.";
             }
         } catch (error) {
             popupDebugLog("Error getting wisdom:", error);
+            wisdomDisplayDiv.textContent = "The connection is veiled at this moment.";
         }
     });
 

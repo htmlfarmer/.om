@@ -17,10 +17,12 @@
     "cookies"
   ],
   "host_permissions": [
-    "<all_urls>"
+    "<all_urls>",
+    "https://generativelanguage.googleapis.com/"
   ],
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["background.js", "gemini_helper.js", "config.js"],
+    "type": "module"
     //"service_worker": "background.js" 
   },
   "action": {
