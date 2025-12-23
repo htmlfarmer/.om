@@ -139,26 +139,26 @@ document.addEventListener('DOMContentLoaded', async function() {
             try {
                 // First, set the Niyyah in storage
                 await browser.runtime.sendMessage({ action: "setNiyyah", niyyah: niyyah });
-                showMessage(niyyahMessage, "Niyyah set. Seeking reflection...");
+                showMessage(niyyahMessage, "Niyyah sealed. Seeking final reflection...");
 
-                // Then, invoke Gemini for wisdom on this action
+                // Then, invoke Gemini for wisdom on this final action
                 const response = await browser.runtime.sendMessage({
                     action: "invokeGemini",
-                    actionDescription: `The user has set a new Niyyah (intention): "${niyyah}"`
+                    actionDescription: `The user has finalized their Niyyah (intention): "${niyyah}"`
                 });
 
                 if (response && response.data && response.data.interpretation) {
                     showMessage(niyyahMessage, response.data.interpretation, '#4a148c', 6000);
                 } else {
-                    showMessage(niyyahMessage, "The mirror remains silent for now.", '#6d4c41', 3000);
+                    showMessage(niyyahMessage, "The final mirror remains silent for now.", '#6d4c41', 3000);
                 }
 
             } catch (error) {
-                popupDebugLog("Error during Niyyah process:", error);
-                showMessage(niyyahMessage, "An error occurred. Please try again.", '#d32f2f');
+                popupDebugLog("Error during Niyyah sealing process:", error);
+                showMessage(niyyahMessage, "An error occurred while sealing Niyyah.", '#d32f2f');
             }
         } else {
-            showMessage(niyyahMessage, "Please enter your Niyyah.", '#d32f2f');
+            showMessage(niyyahMessage, "Please state your Niyyah before sealing it.", '#d32f2f');
         }
     });
 
