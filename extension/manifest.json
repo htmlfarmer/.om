@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Sacred Silence",
+  "version": "1.0",
+  "description": "A minimal tool for creating space for worship.",
+  "permissions": [
+    "storage",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "scripts": ["rl_core.js", "background.js"]
+  },
+  "action": {
+    "default_title": "Sacred Silence"
+  }
+}
